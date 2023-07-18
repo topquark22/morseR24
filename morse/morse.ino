@@ -1,7 +1,7 @@
 /*
  * Send Morse code to GPIO pin and optional RF24 radio
  * 
- * @version 4.2
+ * @version 4.3
  * @author topquark22
  */
 
@@ -680,9 +680,6 @@ void setup() {
     Serial.print(t_pause);
     Serial.println(" ms");
     Serial.println("Accepting input from serial console");
-  
-
-    
     Serial.println("Commands:");
     Serial.println("*speed <dot ms>");
     Serial.println("*pause <pause ms>");
@@ -703,6 +700,7 @@ void setup() {
 
   if (!transmitMode && !radioEnabled) {
     Serial.println("Unsupported configuration");
+    digitalWrite(PIN_RED, HIGH);
   }
 }
 
