@@ -1,7 +1,7 @@
 /*
  * Send Morse code to GPIO pin and optional RF24 radio
  * 
- * @version 4.3
+ * @version 4.4
  * @author topquark22
  */
 
@@ -633,28 +633,11 @@ void setup() {
       radio.openWritingPipe(deviceID); // Get NRF24L01 ready to transmit
       radio.stopListening();
 
-      if (testMode) {
-        Serial.println("Test mode");
-        while (1) {
-          transmit(1);
-          delay(1000);
-          transmit(0);
-          delay(1000);
-        }
-      }
-      
     } else { // recv mode
  
       radio.openReadingPipe(1, deviceID); // Get NRF24L01 ready to receive
       radio.startListening(); // Listen to see if information received
       
-      if (testMode) {
-        Serial.println("Test mode");
-        while(1) {
-          setOutput(!digitalRead(PIN_BUTTON_));
-          delay(10);
-        }
-      }
     }
   } else {
     Serial.println("radio disabled");
@@ -662,6 +645,16 @@ void setup() {
   
   if (transmitMode) {
 
+    if (testMode) {
+      Serial.println("Test mode");
+      while (1) {
+        transmit(1);
+        delay(1000);
+        transmit(0);
+        delay(1000);
+      }
+    }
+      
     if (0xFF == EEPROM.read(0)) { // new Arduino
       EEPROM.write(0, 0);
       message[0] = 0;
@@ -696,11 +689,20 @@ void setup() {
     } else {
       Serial.println("-- Transmitting");
     }
-  }
+  } else { // recv mode
 
-  if (!transmitMode && !radioEnabled) {
-    Serial.println("Unsupported configuration");
-    digitalWrite(PIN_RED, HIGH);
+    if (testMode) {
+      Serial.println("Test mode");
+      while(1) {
+        setOutput(!digitalRead(PIN_BUTTON_));
+        delay(10);
+      }
+    }
+
+    if (!radioEnabled) {
+      Serial.println("Unsupported configuration");
+      digitalWrite(PIN_RED, HIGH);
+    }
   }
 }
 
