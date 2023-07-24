@@ -20,7 +20,7 @@ const int PIN_DISABLE_ = 4; // wire to GND to disable radio
 
 const int PIN_XRMODE = 8; // wire to GND for recv mode; else xmit mode
 
-const int PIN_TEST_ = 7; // jumper to GND for transmitter test mode (will send 1 sec pulses)
+const int PIN_TEST_ = 7; // jumper to GND for test mode
 
 const int PIN_BUTTON_ = 6; // code key switch for manual input
 
