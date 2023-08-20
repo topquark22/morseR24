@@ -799,7 +799,6 @@ void loop_RECV() {
   
   if (radioEnabled) {
     if (radio.available()) {
-      Serial.println("Radio data is available");
       radio.read(msg, PAYLOAD_LEN); // Read data from the nRF24L01
       if (0 == msg[0]) { // special case manual transmission
         setOutput(0);
@@ -811,13 +810,11 @@ void loop_RECV() {
         setPause((msg[1] << 24) + (msg[2] << 16) + (msg[3] << 8) + msg[4]);
       } else { // message was transmitted
         String message = decodeMsg();
-        Serial.println("Received message: " + message);
         writeMessageToEEPROM(message);
       }
     }
   }
   String message = readMessageFromEEPROM();
-  Serial.println("outputting message: " + message);
   displayMessage(message);
-  delay(10);
+  delay(t_pause);
 }
