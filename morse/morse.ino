@@ -1,7 +1,7 @@
 /*
  * Send Morse code to GPIO pin and optional RF24 radio
  * 
- * @version 5.0
+ * @version 6.0
  * @author topquark22
  */
 
@@ -40,11 +40,37 @@ const int PIN_CH20 = A3; // if not wired low, add 20 to CHANNEL_BASE
 const int PIN_CH40 = A4; // if not wired low, add 40 t0 CHANNEL_BASE
 
 // Device ID setting. Must match transmitter and receiver
-const uint64_t DEVICE_ID_BASE = 0x600DFF2410LL;
+const uint64_t DEVICE_ID_BASE = 0x600DFF2420LL;
 const int PIN_ID1 = A5; // if wired low, add 0x1 to ID_BASE
 
 // analog input for PWM (wire to +5V normally)
 const int PIN_PWM = A7;
+
+// defaults
+const int t_DOT = 100;
+const int t_PAUSE = 3000;
+
+// Serial transmission rate
+const int BAUD_RATE = 9600;
+
+// max serial buffer length
+const int BUFLEN = 64;
+
+// EEPROM addresses
+const int ADDR_SPEED = 0x3F0;
+const int ADDR_PAUSE = 0x3F4;
+
+// packet type tokens (first byte of payload)
+const int TOKEN_ZERO = 0;
+const int TOKEN_ONE = 1;
+const int TOKEN_SPEED = 2;
+const int TOKEN_PAUSE = 3;
+const int TOKEN_MESSAGE = 4;
+
+int t_dot;
+int t_dash;
+int t_space;
+int t_pause;
 
 bool transmitMode; // else receive mode
 
@@ -80,25 +106,12 @@ void setOutput(bool value) {
   analogWrite(PIN_OUT_, 255 - (value * pwmWidth));
 }
 
-// codes for sending test 0, 1 without affecting EEPROM
-const int TEST_ZERO = 0x80;
-const int TEST_ONE = 0x81;
-
 void transmitTestByte(bool value) {
   if (radioEnabled) {
-    msg[0] = value ? TEST_ONE : TEST_ZERO;
+    msg[0] = value ? TOKEN_ONE : TOKEN_ZERO;
     radio.write(msg, PAYLOAD_LEN);
   }
 }
-
-// defaults
-const int t_DOT = 100;
-const int t_PAUSE = 3000;
-
-int t_dot;
-int t_dash;
-int t_space;
-int t_pause;
 
 int parseInt(String s) {
   int res = 0;
@@ -134,15 +147,7 @@ const char SW_CHESS = '%';
 // Width of serial console
 const int CONSOLE_WIDTH = 100;
 
-// Serial transmission rate
-const int BAUD_RATE = 9600;
 
-// max serial buffer length
-const int BUFLEN = 64;
-
-// EEPROM addresses. Also used as codes to transmit speed, pause values to receiver
-const int ADDR_SPEED = 0xF0;
-const int ADDR_PAUSE = 0xF8;
 
 void writeMessageToEEPROM(String message) {
   int i = 0;
@@ -440,17 +445,16 @@ void displayChess(char c) {
 
 void transmitMessage(String message) {
   if (radioEnabled) {
-
+    msg[0] = TOKEN_MESSAGE; // indicates that what follows is message text
     if (message.length() == 0) {
       Serial.println("Transmitting null message");
       msg[0] = 0;
       radio.write(msg, PAYLOAD_LEN);
     } else {
-      Serial.println("Transmitting message: " + message);
       int i;
       char c;
-      for (i = 0, c = message[0]; i < PAYLOAD_LEN; i++) {
-        msg[i] = message[i];
+      for (i = 0, c = message[0]; i < message.length() && i < PAYLOAD_LEN - 1; i++) {
+        msg[i + 1] = message[i];
       }
       radio.write(msg, PAYLOAD_LEN);
     }
@@ -703,7 +707,7 @@ void setSpeed(int t_dot_ms) {
   Serial.print("-- speed set to ");
   Serial.println(t_dot);
   if (radioEnabled && transmitMode) {
-    msg[0] = ADDR_SPEED;
+    msg[0] = TOKEN_SPEED;
     msg[1] = (t_dot >> 24) & 0xFF;
     msg[2] = (t_dot >> 16) & 0xFF;
     msg[3] = (t_dot >> 8) & 0xFF;
@@ -722,7 +726,7 @@ void setPause(int t_pause_ms) {
   Serial.print("-- pause set to ");
   Serial.println(t_pause);
   if (radioEnabled && transmitMode) {
-    msg[0] = ADDR_PAUSE;
+    msg[0] = TOKEN_PAUSE;
     msg[1] = (t_pause >> 24) & 0xFF;
     msg[2] = (t_pause >> 16) & 0xFF;
     msg[3] = (t_pause >> 8) & 0xFF;
@@ -811,7 +815,7 @@ void loop_XMIT() {
 
 String decodeMsg() {
   String message = "";
-  for (int i = 0; i < PAYLOAD_LEN && msg[i] > 0; i++) {
+  for (int i = 1; i < PAYLOAD_LEN && msg[i] > 0; i++) {
     message = message + (char)msg[i];
   }
   return message;
@@ -824,20 +828,25 @@ void loop_RECV() {
   if (radioEnabled) {
     if (radio.available()) {
       radio.read(msg, PAYLOAD_LEN); // Read data from the nRF24L01
-      if (TEST_ZERO == msg[0]) { // special case manual transmission
+      if (TOKEN_ZERO == msg[0]) { // special case manual transmission
         setOutput(0);
         displayDisabled = true;
-      } else if (TEST_ONE == msg[0]) { // special case manual transmission
+      } else if (TOKEN_ONE == msg[0]) { // special case manual transmission
         setOutput(1);
         displayDisabled = true;
-      } else if (ADDR_SPEED == msg[0]) { // speed was transmitted
+      } else if (TOKEN_SPEED == msg[0]) { // speed was transmitted
         setSpeed((msg[1] << 24) + (msg[2] << 16) + (msg[3] << 8) + msg[4]);
-      } else if (ADDR_PAUSE == msg[0]) { // pause was transmitted
+      } else if (TOKEN_PAUSE == msg[0]) { // pause was transmitted
         setPause((msg[1] << 24) + (msg[2] << 16) + (msg[3] << 8) + msg[4]);
-      } else { // message was transmitted
+      } else if (TOKEN_MESSAGE == msg[0]) { // message was transmitted
         String message = decodeMsg();
         writeMessageToEEPROM(message);
         displayDisabled = false;
+      } else { // invalid token in msg[0]
+        Serial.println("Invalid packet received");
+        digitalWrite(PIN_RED, HIGH);
+        delay(100);
+        digitalWrite(PIN_RED, LOW);    
       }
     }
   }
