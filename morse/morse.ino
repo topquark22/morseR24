@@ -80,12 +80,15 @@ void setOutput(bool value) {
   analogWrite(PIN_OUT_, 255 - (value * pwmWidth));
 }
 
-void transmitBit(bool value) {
+// codes for sending test 0, 1 without affecting EEPROM
+const int TEST_ZERO = 0x80;
+const int TEST_ONE = 0x81;
+
+void transmitTestByte(bool value) {
   if (radioEnabled) {
-    msg[0] = value;
+    msg[0] = value ? TEST_ONE : TEST_ZERO;
     radio.write(msg, PAYLOAD_LEN);
   }
-  setOutput(value); 
 }
 
 // defaults
@@ -138,8 +141,8 @@ const int BAUD_RATE = 9600;
 const int BUFLEN = 64;
 
 // EEPROM addresses. Also used as codes to transmit speed, pause values to receiver
-const int ADDR_SPEED = 240;
-const int ADDR_PAUSE = 250;
+const int ADDR_SPEED = 0xF0;
+const int ADDR_PAUSE = 0xF8;
 
 void writeMessageToEEPROM(String message) {
   int i = 0;
@@ -617,10 +620,12 @@ void setup() {
       Serial.println("Test mode");
       while(1) {
         setOutput(1);
-        transmitBit(1);
+        transmitTestByte(true);
+        setOutput(1);
         delay(1000);
         setOutput(0);
-        transmitBit(0);
+        transmitTestByte(false);
+        setOutput(0);
         delay(1000);
       }
     }
@@ -795,15 +800,20 @@ String decodeMsg() {
   return message;
 }
 
+bool displayDisabled = false;
+
 void loop_RECV() {
   
   if (radioEnabled) {
     if (radio.available()) {
       radio.read(msg, PAYLOAD_LEN); // Read data from the nRF24L01
-      if (0 == msg[0]) { // special case manual transmission
+Serial.print("DEBUG: Byte 0 = "); Serial.println(msg[0]);
+      if (TEST_ZERO == msg[0]) { // special case manual transmission
         setOutput(0);
-      } else if (1 == msg[0]) { // special case manual transmission
+        displayDisabled = true;
+      } else if (TEST_ONE == msg[0]) { // special case manual transmission
         setOutput(1);
+        displayDisabled = true;
       } else if (ADDR_SPEED == msg[0]) { // speed was transmitted
         setSpeed((msg[1] << 24) + (msg[2] << 16) + (msg[3] << 8) + msg[4]);
       } else if (ADDR_PAUSE == msg[0]) { // pause was transmitted
@@ -811,10 +821,13 @@ void loop_RECV() {
       } else { // message was transmitted
         String message = decodeMsg();
         writeMessageToEEPROM(message);
+        displayDisabled = false;
       }
     }
   }
-  String message = readMessageFromEEPROM();
-  displayMessage(message);
-  delay(t_pause);
+  if (!displayDisabled) {
+    String message = readMessageFromEEPROM();
+    displayMessage(message);
+    delay(t_pause);
+  }
 }
