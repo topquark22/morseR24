@@ -618,15 +618,26 @@ void setup() {
 
     if (testMode) {
       Serial.println("Test mode");
+      bool buttonUsed = false;
       while(1) {
-        setOutput(1);
-        transmitTestByte(true);
-        setOutput(1);
-        delay(1000);
-        setOutput(0);
-        transmitTestByte(false);
-        setOutput(0);
-        delay(1000);
+        if (!digitalRead(PIN_BUTTON_)) {
+          buttonUsed = true;
+        }
+        if (buttonUsed) {
+          bool value = !digitalRead(PIN_BUTTON_);
+          setOutput(value);
+          transmitTestByte(value);
+          delay(10);
+        } else { // beep at 1 second intervals
+          setOutput(1);
+          transmitTestByte(true);
+          setOutput(1);
+          delay(1000);
+          setOutput(0);
+          transmitTestByte(false);
+          setOutput(0);
+          delay(1000);
+        }
       }
     }
     
@@ -745,20 +756,26 @@ void loop_XMIT() {
   Serial.println("in loop_XMIT, serial available ");
     String line = readLine();
     Serial.println("Got line : " + line);
+
+    if (line.substring(0,1).equals("*")) {
+      if (line.substring(0, 7).equals("*speed ")) {
+        Serial.println("matched *speed cmd");
+        String speedStr = line.substring(7, line.length());
+        int speed = parseInt(speedStr);
+        setSpeed(speed);
+        return;
+      }
     
-    if (line.substring(0, 7).equals("*speed ")) {
-      Serial.println("matched *speed cmd");
-      String speedStr = line.substring(7, line.length());
-      int speed = parseInt(speedStr);
-      setSpeed(speed);
-      return;
-    }
-  
-    if (line.substring(0, 7).equals("*pause ")) {
-      String pauseStr = line.substring(7, line.length());
-      int pause = parseInt(pauseStr);
-      setPause(pause);
-      return;
+      if (line.substring(0, 7).equals("*pause ")) {
+        String pauseStr = line.substring(7, line.length());
+        int pause = parseInt(pauseStr);
+        setPause(pause);
+        return;
+      }
+      else {
+        Serial.println("-- Invalid * command");
+        return;
+      }
     }
   
     Serial.println("-- Enter message (max 32 chars)");
@@ -807,7 +824,6 @@ void loop_RECV() {
   if (radioEnabled) {
     if (radio.available()) {
       radio.read(msg, PAYLOAD_LEN); // Read data from the nRF24L01
-Serial.print("DEBUG: Byte 0 = "); Serial.println(msg[0]);
       if (TEST_ZERO == msg[0]) { // special case manual transmission
         setOutput(0);
         displayDisabled = true;
