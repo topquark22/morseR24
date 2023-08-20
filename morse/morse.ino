@@ -1,7 +1,7 @@
 /*
  * Send Morse code to GPIO pin and optional RF24 radio
  * 
- * @version 4.4
+ * @version 5.0
  * @author topquark22
  */
 
