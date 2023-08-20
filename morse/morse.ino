@@ -512,6 +512,30 @@ void displayMessage(String message) {
   interpretTextAs = MORSE;
 }
 
+void testRoutine() {
+  Serial.println("Test mode");
+  bool buttonUsed = false;
+  while(1) {
+    if (!digitalRead(PIN_BUTTON_)) {
+      buttonUsed = true;
+    }
+    if (buttonUsed) {
+      bool value = !digitalRead(PIN_BUTTON_);
+      setOutput(value);
+      transmitTestByte(value);
+      delay(10);
+    } else { // beep at 1 second intervals
+      setOutput(1);
+      transmitTestByte(true);
+      setOutput(1);
+      delay(1000);
+      setOutput(0);
+      transmitTestByte(false);
+      setOutput(0);
+      delay(1000);
+    }
+  }
+}
 void setup() {
 
   Serial.begin(BAUD_RATE);
@@ -621,28 +645,7 @@ void setup() {
   if (transmitMode) {
 
     if (testMode) {
-      Serial.println("Test mode");
-      bool buttonUsed = false;
-      while(1) {
-        if (!digitalRead(PIN_BUTTON_)) {
-          buttonUsed = true;
-        }
-        if (buttonUsed) {
-          bool value = !digitalRead(PIN_BUTTON_);
-          setOutput(value);
-          transmitTestByte(value);
-          delay(10);
-        } else { // beep at 1 second intervals
-          setOutput(1);
-          transmitTestByte(true);
-          setOutput(1);
-          delay(1000);
-          setOutput(0);
-          transmitTestByte(false);
-          setOutput(0);
-          delay(1000);
-        }
-      }
+      testRoutine();
     }
     
     Serial.print("Dot duration: ");
@@ -746,6 +749,10 @@ bool messageChanged = true;
 
 void loop_XMIT() {
 
+  if (!digitalRead(PIN_BUTTON_)) {
+    testRoutine();
+  }
+  
   if (!Serial.available()) {
 
     if (messageChanged) {
