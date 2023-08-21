@@ -1,7 +1,7 @@
 /*
  * Send Morse code to GPIO pin and optional RF24 radio
  * 
- * @version 6.0
+ * @version 7.0
  * @author topquark22
  */
 
@@ -40,7 +40,7 @@ const int PIN_CH20 = A3; // if not wired low, add 20 to CHANNEL_BASE
 const int PIN_CH40 = A4; // if not wired low, add 40 t0 CHANNEL_BASE
 
 // Device ID setting. Must match transmitter and receiver
-const uint64_t DEVICE_ID_BASE = 0x600DFF2420LL;
+const uint64_t DEVICE_ID_BASE = 0x600DFF2430LL;
 const int PIN_ID1 = A5; // if wired low, add 0x1 to ID_BASE
 
 // analog input for PWM (wire to +5V normally)
@@ -444,13 +444,6 @@ void transmitMessage(String message) {
     return;
   }
 
-  if (message.length() == 0) {
-    msg[0] = TOKEN_MESSAGE_COMPLETE;
-    msg[1] = 0;
-    radio.write(msg, PAYLOAD_LEN);
-    return;
-  }
-
   msg[0] = TOKEN_MESSAGE_INCOMPLETE;
   // Break messages into chunks of 31 characters
   // First make life easy by making a zero-terminated byte array
@@ -462,20 +455,27 @@ void transmitMessage(String message) {
   }
   messageBytes[i] = 0;
 
-  const int BLOCK_SIZE = PAYLOAD_LEN - 1;
+  const int BLOCK_SIZE = PAYLOAD_LEN - 2;
 
   int j = 0;
   while (j < BUF_LEN) {
     msg[j % BLOCK_SIZE + 1] = messageBytes[j];
-
+    
     // zero-pad last block (not strictly necessary)
     if (0 == messageBytes[j]) {
       msg[0] = TOKEN_MESSAGE_COMPLETE;
-      for (int k = j % BLOCK_SIZE + 2; k < PAYLOAD_LEN; k++) {
+      for (int k = j % BLOCK_SIZE + 2; k < PAYLOAD_LEN - 1; k++) {
         msg[k] = 0;
       }
     }
+    
+    byte checksum = 0;
+    for (int k = 0; k < PAYLOAD_LEN - 1; k++) {
+      checksum ^= msg[k];
+    }
+    
     if (0 == messageBytes[j] ||  (j + 1) % BLOCK_SIZE == 0) {
+      msg[PAYLOAD_LEN - 1] = checksum;
       radio.write(msg, PAYLOAD_LEN);
     }
     j++;
@@ -485,7 +485,10 @@ void transmitMessage(String message) {
 void displayMessage(String message) {
   int i;
   char c;
-  for (i = 0, c = message.charAt(0); c != 0 && (!transmitMode || !Serial.available()); c = message.charAt(++i)) {
+  for (i = 0, c = message.charAt(0); c != 0; c = message.charAt(++i)) {
+    if ((transmitMode && Serial.available()) || (!transmitMode && radio.available())) {
+      break;
+    }
     if (SW_HEXADECIMAL == c) {
       if (interpretTextAs != HEXADECIMAL)
         Serial.print(SW_HEXADECIMAL);
@@ -815,7 +818,7 @@ void loop_XMIT() {
     String message = line;
     Serial.println();
     Serial.print(message);
-    Serial.println("|");
+    Serial.println("<");
       
     line = readLine();
     while (line.length() > 0) {
@@ -828,19 +831,26 @@ void loop_XMIT() {
     if (message.length() == 0) {
       Serial.println("-- Message cleared");
     }
+    transmitMessage(message);
     writeMessageToEEPROM(message);
     messageChanged = true;
     Serial.println("-- Transmitting");
   }
   String message = readMessageFromEEPROM();
-  transmitMessage(message);
   displayMessage(message);
 }
 
 String decodeMsg() {
   String message = "";
-  for (int i = 1; i < PAYLOAD_LEN && msg[i] > 0; i++) {
+  for (int i = 1; i < PAYLOAD_LEN - 1 && msg[i] > 0; i++) {
     message = message + (char)msg[i];
+  }
+  byte checksum = 0;
+  for (int i = 0; i < PAYLOAD_LEN - 1; i++) {
+    checksum ^= msg[i];
+  }
+  if (msg[PAYLOAD_LEN - 1] != checksum) {
+    digitalWrite(PIN_RED, HIGH);
   }
   return message;
 }
@@ -865,6 +875,7 @@ void loop_RECV() {
   
   if (radioEnabled) {
     if (radio.available()) {
+      digitalWrite(PIN_RED, LOW);
       radio.read(msg, PAYLOAD_LEN); // Read data from the nRF24L01
       if (TOKEN_MESSAGE_COMPLETE == msg[0]) {
         String message = decodeMsg();
