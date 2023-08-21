@@ -887,7 +887,6 @@ void loop_RECV() {
     if (radio.available()) {
       digitalWrite(PIN_RED, LOW);
       radio.read(msg, PAYLOAD_LEN); // Read data from the nRF24L01
- Serial.println("DEBUG: Token = " + msg[0]);
       if (TOKEN_MESSAGE_COMPLETE == msg[0]) {
         String message = decodeMsg();
         writeMessageToEEPROM(message);
