@@ -544,14 +544,16 @@ void testRoutine() {
       delay(10);
     }
   } else { // beep at 1 second intervals
+    while (1) {
       setOutput(1);
-      transmitInteger(TOKEN_TEST, 0);
-      setOutput(1);
-      delay(1000);
-      setOutput(0);
       transmitInteger(TOKEN_TEST, 1);
+      setOutput(1);
+      delay(1000);
+      setOutput(0);
+      transmitInteger(TOKEN_TEST, 0);
       setOutput(0);
       delay(1000);
+    }
   }
 }
 void setup() {
@@ -584,9 +586,6 @@ void setup() {
   } else {
     Serial.println("Configured as receiver");
   }
-
-  pinMode(PIN_TEST_, INPUT_PULLUP);
-  testMode = !digitalRead(PIN_TEST_);
   
   pinMode(PIN_PWM, INPUT);
   int pwm = getPWM();
@@ -662,12 +661,14 @@ void setup() {
   } else {
     Serial.println("radio disabled");
   }
-  
-  if (transmitMode) {
 
-    if (testMode) {
-      testRoutine();
-    }
+  pinMode(PIN_TEST_, INPUT_PULLUP);
+  testMode = !digitalRead(PIN_TEST_);
+  if (testMode) {
+    testRoutine();
+  }
+
+  if (transmitMode) {
     
     Serial.print("Dot duration: ");
     Serial.print(t_dot);
@@ -756,6 +757,7 @@ void transmitPause() {
 
 void loop() {
   if (!digitalRead(PIN_BUTTON_)) {
+    Serial.println("DEBUG: Entered test routine from loop");
     testRoutine();
   }
   if (transmitMode) {
