@@ -485,7 +485,7 @@ void transmitMessage(String message) {
 void displayMessage(String message) {
   int i;
   char c;
-  for (i = 0, c = message.charAt(0); c != 0 && !Serial.available(); c = message.charAt(++i)) {
+  for (i = 0, c = message.charAt(0); c != 0 && (!transmitMode || !Serial.available()); c = message.charAt(++i)) {
     if (SW_HEXADECIMAL == c) {
       if (interpretTextAs != HEXADECIMAL)
         Serial.print(SW_HEXADECIMAL);
