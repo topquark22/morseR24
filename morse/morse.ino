@@ -445,7 +445,6 @@ void transmitMessage(String message) {
   }
 
   if (message.length() == 0) {
-    Serial.println("Transmitting null message");
     msg[0] = TOKEN_MESSAGE_COMPLETE;
     msg[1] = 0;
     radio.write(msg, PAYLOAD_LEN);
@@ -579,7 +578,7 @@ void setup() {
   
   // device ID jumpers
   pinMode(PIN_ID1, INPUT_PULLUP);
-  uint64_t deviceID = DEVICE_ID_BASE + 0x1 * (1 - digitalRead(PIN_ID1));
+  uint64_t deviceID = DEVICE_ID_BASE + 0x1 * !digitalRead(PIN_ID1);
 
   pinMode(PIN_XRMODE, INPUT_PULLUP);
   transmitMode = digitalRead(PIN_XRMODE);
@@ -706,15 +705,19 @@ void setup() {
   }
 }
 
-String readLine() {
-
-  String line = "";
-  while (Serial.available()) {
-    char c = Serial.read();
-    line = line + c;
+void transmitInteger(int token, int value) {
+  if (radioEnabled && transmitMode) {
+    msg[0] = token;
+    msg[1] = (value >> 24) & 0xFF;
+    msg[2] = (value >> 16) & 0xFF;
+    msg[3] = (value >> 8) & 0xFF;
+    msg[4] = value & 0xFF;
+    // zero fill rest of packet (not strictly necessary)
+    for (int i = 5; i < PAYLOAD_LEN; i++) {
+      msg[i] = 0;
+    }
+    radio.write(msg, PAYLOAD_LEN);
   }
-  line.trim();
-  return line;
 }
 
 /*
@@ -731,14 +734,7 @@ void setSpeed(int t_dot_ms) {
   writeSpeedToEEPROM();
   Serial.print("-- speed set to ");
   Serial.println(t_dot);
-  if (radioEnabled && transmitMode) {
-    msg[0] = TOKEN_SPEED;
-    msg[1] = (t_dot >> 24) & 0xFF;
-    msg[2] = (t_dot >> 16) & 0xFF;
-    msg[3] = (t_dot >> 8) & 0xFF;
-    msg[4] = t_dot & 0xFF;
-    radio.write(msg, PAYLOAD_LEN);
-  }
+  transmitInteger(TOKEN_SPEED, t_dot);
 }
 
 void setPause(int t_pause_ms) {
@@ -750,15 +746,9 @@ void setPause(int t_pause_ms) {
   writePauseToEEPROM();
   Serial.print("-- pause set to ");
   Serial.println(t_pause);
-  if (radioEnabled && transmitMode) {
-    msg[0] = TOKEN_PAUSE;
-    msg[1] = (t_pause >> 24) & 0xFF;
-    msg[2] = (t_pause >> 16) & 0xFF;
-    msg[3] = (t_pause >> 8) & 0xFF;
-    msg[4] = t_pause & 0xFF;
-    radio.write(msg, PAYLOAD_LEN);
-  }
+  transmitInteger(TOKEN_PAUSE, t_pause);
 }
+
 void loop() {
   if (transmitMode) {
     loop_XMIT();
@@ -767,16 +757,27 @@ void loop() {
   }
 }
 
+String readLine() {
+
+  String line = "";
+  while (!Serial.available()) {
+    delay(10);
+  }
+  while (Serial.available()) {
+    char c = Serial.read();
+    if ('\n' != c && '\r' != c) {
+      line = line + c;
+    }
+  }
+  return line;
+}
+
 const int INPUT_LEN = 64;
 
 bool messageChanged = true;
 
 void loop_XMIT() {
 
-  if (!digitalRead(PIN_BUTTON_)) {
-    testRoutine();
-  }
-  
   if (!Serial.available()) {
 
     if (messageChanged) {
@@ -790,11 +791,9 @@ void loop_XMIT() {
 
   Serial.println("in loop_XMIT, serial available ");
     String line = readLine();
-    Serial.println("Got line : " + line);
 
     if (line.substring(0,1).equals("*")) {
       if (line.substring(0, 7).equals("*speed ")) {
-        Serial.println("matched *speed cmd");
         String speedStr = line.substring(7, line.length());
         int speed = parseInt(speedStr);
         setSpeed(speed);
@@ -813,25 +812,21 @@ void loop_XMIT() {
       }
     }
   
-    Serial.println("-- Enter message (max 64 chars)");
+    Serial.println("-- Append to message (max 64 chars per line. Blank line commits message)");
   
-    String message = "";
-  
+    String message = line;
+    Serial.println();
+    Serial.print(message);
+    Serial.println("|");
+      
+    line = readLine();
     while (line.length() > 0) {
-      Serial.println(line);
-      int pos = message.length();
-      for (int i = 0; i < line.length() && pos < INPUT_LEN; i++) {
-        char c = line.charAt(i);
-        if (c != '\n' && c != '\r') {
-          message += c;
-          pos++;
-        }
-      }
-      if (pos == PAYLOAD_LEN) {
-        Serial.println("--  Maximum message length reached");
-      }
-      line = readLine();  // blocking
+      message = message + line;
+      Serial.print(message);
+      Serial.println("<");
+      line = readLine();
     }
+
     if (message.length() == 0) {
       Serial.println("-- Message cleared");
     }
