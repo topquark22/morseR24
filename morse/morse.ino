@@ -531,21 +531,19 @@ void displayMessage(String message) {
 
 void testRoutine() {
   Serial.println("Test mode");
-  bool buttonUsed = false;
-  while(1) {
-    if (!digitalRead(PIN_BUTTON_)) {
-      buttonUsed = true;
-    }
+  bool useButton = !digitalRead(PIN_BUTTON_);
+  if (useButton) {
     int prevValue = -1;
-    if (buttonUsed) {
+    while (1) {
       int value = !digitalRead(PIN_BUTTON_);
       if (value != prevValue) {
+        prevValue = value;
         setOutput(value);
         transmitInteger(TOKEN_TEST, value);
-        prevValue = value;
       }
       delay(10);
-    } else { // beep at 1 second intervals
+    }
+  } else { // beep at 1 second intervals
       setOutput(1);
       transmitInteger(TOKEN_TEST, 0);
       setOutput(1);
@@ -554,7 +552,6 @@ void testRoutine() {
       transmitInteger(TOKEN_TEST, 1);
       setOutput(0);
       delay(1000);
-    }
   }
 }
 void setup() {
@@ -735,8 +732,8 @@ void setPause(int t_pause_ms) {
   Serial.println(t_pause);
 }
 
-void transmitInteger(int token, int value) {
-  msg[0] = token;
+void transmitInteger(int tokenType, int value) {
+  msg[0] = tokenType;
   msg[1] = (value >> 24) & 0xFF;
   msg[2] = (value >> 16) & 0xFF;
   msg[3] = (value >> 8) & 0xFF;
@@ -844,7 +841,6 @@ void loop_XMIT() {
     transmitMessage(message);
     writeMessageToEEPROM(message);
     messageChanged = true;
-    Serial.println("-- Transmitting");
   }
   String message = readMessageFromEEPROM();
   displayMessage(message);
