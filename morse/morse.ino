@@ -61,8 +61,7 @@ const int ADDR_SPEED = 0x3F0;
 const int ADDR_PAUSE = 0x3F4;
 
 // packet type tokens (first byte of payload)
-const int TOKEN_ZERO = 0;
-const int TOKEN_ONE = 1;
+const int TOKEN_TEST = 1;
 const int TOKEN_SPEED = 2;
 const int TOKEN_PAUSE = 3;
 const int TOKEN_MESSAGE_COMPLETE = 4;
@@ -436,7 +435,8 @@ void transmitMessage(String message) {
   if (!radioEnabled) {
     return;
   }
-
+  Serial.println("-- Transmitting message");
+  
   msg[0] = TOKEN_MESSAGE_INCOMPLETE;
   // Break messages into chunks of 31 characters
   // First make life easy by making a zero-terminated byte array
@@ -541,17 +541,17 @@ void testRoutine() {
       int value = !digitalRead(PIN_BUTTON_);
       if (value != prevValue) {
         setOutput(value);
-        transmitInteger(value ? TOKEN_ONE : TOKEN_ZERO, 0);
+        transmitInteger(TOKEN_TEST, value);
         prevValue = value;
       }
       delay(10);
     } else { // beep at 1 second intervals
       setOutput(1);
-      transmitInteger(TOKEN_ZERO, 0);
+      transmitInteger(TOKEN_TEST, 0);
       setOutput(1);
       delay(1000);
       setOutput(0);
-      transmitInteger(TOKEN_ONE, 0);
+      transmitInteger(TOKEN_TEST, 1);
       setOutput(0);
       delay(1000);
     }
@@ -896,11 +896,8 @@ void loop_RECV() {
         String message = decodeAllPackets();
         writeMessageToEEPROM(message);
         displayDisabled = false;
-      } else if (TOKEN_ZERO == msg[0]) { // special case manual transmission
-        setOutput(0);
-        displayDisabled = true;
-      } else if (TOKEN_ONE == msg[0]) { // special case manual transmission
-        setOutput(1);
+      } else if (TOKEN_TEST == msg[0]) { // special case manual transmission
+        setOutput(msg[4]);
         displayDisabled = true;
       } else if (TOKEN_SPEED == msg[0]) { // speed was transmitted
         setSpeed((msg[1] << 24) + (msg[2] << 16) + (msg[3] << 8) + msg[4]);
