@@ -761,6 +761,9 @@ void transmitPause() {
 
 
 void loop() {
+  if (!digitalRead(PIN_BUTTON_)) {
+    testRoutine();
+  }
   if (transmitMode) {
     loop_XMIT();
   } else {
