@@ -65,7 +65,8 @@ const int TOKEN_ZERO = 0;
 const int TOKEN_ONE = 1;
 const int TOKEN_SPEED = 2;
 const int TOKEN_PAUSE = 3;
-const int TOKEN_MESSAGE = 4;
+const int TOKEN_MESSAGE_COMPLETE = 4;
+const int TOKEN_MESSAGE_INCOMPLETE = 5;
 
 int t_dot;
 int t_dash;
@@ -147,26 +148,21 @@ const char SW_CHESS = '%';
 // Width of serial console
 const int CONSOLE_WIDTH = 100;
 
-
+const int EEPROM_LEN = 0x3F0; // leave room for speed, pause
 
 void writeMessageToEEPROM(String message) {
-  int i = 0;
-  for (i = 0; i < message.length(); i++) {
+  int i;
+  for (i = 0; i < message.length() && i < EEPROM_LEN - 1; i++) {
     EEPROM.update(i, message[i]);
   }
-  if (i < PAYLOAD_LEN) {
-    EEPROM.update(i, 0);
-  } else {
-    Serial.println("Warning: EEPROM length exceeded");
-    EEPROM.update(PAYLOAD_LEN - 1, 0);
-  }
+  EEPROM.update(i, 0);
 }
 
 String readMessageFromEEPROM() {
   String message = "";
   int i = 0;
   byte b = EEPROM.read(0);
-  while (i < PAYLOAD_LEN - 1 && b > 0) {
+  while (i < EEPROM_LEN && b > 0) {
     message += (char)b;
     b = EEPROM.read(++i);
   }
@@ -444,20 +440,46 @@ void displayChess(char c) {
 }
 
 void transmitMessage(String message) {
-  if (radioEnabled) {
-    msg[0] = TOKEN_MESSAGE; // indicates that what follows is message text
-    if (message.length() == 0) {
-      Serial.println("Transmitting null message");
-      msg[0] = 0;
-      radio.write(msg, PAYLOAD_LEN);
-    } else {
-      int i;
-      char c;
-      for (i = 0, c = message[0]; i < message.length() && i < PAYLOAD_LEN - 1; i++) {
-        msg[i + 1] = message[i];
+  if (!radioEnabled) {
+    return;
+  }
+
+  if (message.length() == 0) {
+    Serial.println("Transmitting null message");
+    msg[0] = TOKEN_MESSAGE_COMPLETE;
+    msg[1] = 0;
+    radio.write(msg, PAYLOAD_LEN);
+    return;
+  }
+
+  msg[0] = TOKEN_MESSAGE_INCOMPLETE;
+  // Break messages into chunks of 31 characters
+  // First make life easy by making a zero-terminated byte array
+  const int BUF_LEN = message.length() + 1;
+  byte messageBytes[BUF_LEN];
+  int i;
+  for (i = 0; i < message.length(); i++) {
+    messageBytes[i] = message[i];
+  }
+  messageBytes[i] = 0;
+
+  const int BLOCK_SIZE = PAYLOAD_LEN - 1;
+
+  int j = 0;
+  while (j < BUF_LEN) {
+    msg[j % BLOCK_SIZE + 1] = messageBytes[j];
+
+    // zero-pad last block (not strictly necessary)
+    if (0 == messageBytes[j]) {
+      msg[0] = TOKEN_MESSAGE_COMPLETE;
+      for (int k = j % BLOCK_SIZE + 2; k < PAYLOAD_LEN; k++) {
+        msg[k] = 0;
       }
+    }
+    if (0 == messageBytes[j] ||  (j + 1) % BLOCK_SIZE == 0) {
       radio.write(msg, PAYLOAD_LEN);
     }
+    j++;
   }
 }
 
@@ -745,6 +767,8 @@ void loop() {
   }
 }
 
+const int INPUT_LEN = 64;
+
 bool messageChanged = true;
 
 void loop_XMIT() {
@@ -789,14 +813,14 @@ void loop_XMIT() {
       }
     }
   
-    Serial.println("-- Enter message (max 32 chars)");
+    Serial.println("-- Enter message (max 64 chars)");
   
     String message = "";
   
     while (line.length() > 0) {
       Serial.println(line);
       int pos = message.length();
-      for (int i = 0; i < line.length() && pos < PAYLOAD_LEN; i++) {
+      for (int i = 0; i < line.length() && pos < INPUT_LEN; i++) {
         char c = line.charAt(i);
         if (c != '\n' && c != '\r') {
           message += c;
@@ -828,6 +852,20 @@ String decodeMsg() {
   return message;
 }
 
+String decodeAllPackets() {
+  String message = decodeMsg(); // first packet already in buffer
+  while (TOKEN_MESSAGE_INCOMPLETE == msg[0]) {
+    // expecting another packet; might need to wait for it to arrive
+    while (!radio.available()) {
+      delay(1);
+    }
+    radio.read(msg, PAYLOAD_LEN);
+    String next = decodeMsg();
+    message = message + next;
+  }
+  return message;
+}
+
 bool displayDisabled = false;
 
 void loop_RECV() {
@@ -835,7 +873,15 @@ void loop_RECV() {
   if (radioEnabled) {
     if (radio.available()) {
       radio.read(msg, PAYLOAD_LEN); // Read data from the nRF24L01
-      if (TOKEN_ZERO == msg[0]) { // special case manual transmission
+      if (TOKEN_MESSAGE_COMPLETE == msg[0]) {
+        String message = decodeMsg();
+        writeMessageToEEPROM(message);
+        displayDisabled = false;
+      } else if (TOKEN_MESSAGE_INCOMPLETE == msg[0]) {
+        String message = decodeAllPackets();
+        writeMessageToEEPROM(message);
+        displayDisabled = false;
+      } else if (TOKEN_ZERO == msg[0]) { // special case manual transmission
         setOutput(0);
         displayDisabled = true;
       } else if (TOKEN_ONE == msg[0]) { // special case manual transmission
@@ -845,10 +891,6 @@ void loop_RECV() {
         setSpeed((msg[1] << 24) + (msg[2] << 16) + (msg[3] << 8) + msg[4]);
       } else if (TOKEN_PAUSE == msg[0]) { // pause was transmitted
         setPause((msg[1] << 24) + (msg[2] << 16) + (msg[3] << 8) + msg[4]);
-      } else if (TOKEN_MESSAGE == msg[0]) { // message was transmitted
-        String message = decodeMsg();
-        writeMessageToEEPROM(message);
-        displayDisabled = false;
       } else { // invalid token in msg[0]
         Serial.println("Invalid packet received");
         digitalWrite(PIN_RED, HIGH);
