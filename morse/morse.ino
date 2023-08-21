@@ -656,8 +656,8 @@ void setup() {
       radio.openWritingPipe(deviceID); // Get NRF24L01 ready to transmit
       radio.stopListening();
 
-      transmitInteger(TOKEN_SPEED, t_dot);
-      transmitInteger(TOKEN_PAUSE, t_pause);
+      transmitSpeed();
+      transmitPause();
 
     } else { // recv mode
  
@@ -711,21 +711,6 @@ void setup() {
   }
 }
 
-void transmitInteger(int token, int value) {
-  if (radioEnabled && transmitMode) {
-    msg[0] = token;
-    msg[1] = (value >> 24) & 0xFF;
-    msg[2] = (value >> 16) & 0xFF;
-    msg[3] = (value >> 8) & 0xFF;
-    msg[4] = value & 0xFF;
-    // zero fill rest of packet (not strictly necessary)
-    for (int i = 5; i < PAYLOAD_LEN; i++) {
-      msg[i] = 0;
-    }
-    radio.write(msg, PAYLOAD_LEN);
-  }
-}
-
 /*
  * Sets the duration of 1 dot in ms
  */
@@ -740,7 +725,6 @@ void setSpeed(int t_dot_ms) {
   writeSpeedToEEPROM();
   Serial.print("-- speed set to ");
   Serial.println(t_dot);
-  transmitInteger(TOKEN_SPEED, t_dot);
 }
 
 void setPause(int t_pause_ms) {
@@ -752,8 +736,29 @@ void setPause(int t_pause_ms) {
   writePauseToEEPROM();
   Serial.print("-- pause set to ");
   Serial.println(t_pause);
+}
+
+void transmitInteger(int token, int value) {
+  msg[0] = token;
+  msg[1] = (value >> 24) & 0xFF;
+  msg[2] = (value >> 16) & 0xFF;
+  msg[3] = (value >> 8) & 0xFF;
+  msg[4] = value & 0xFF;
+  // zero fill rest of packet (not strictly necessary)
+  for (int i = 5; i < PAYLOAD_LEN; i++) {
+    msg[i] = 0;
+  }
+  radio.write(msg, PAYLOAD_LEN);
+}
+
+void transmitSpeed() {
+  transmitInteger(TOKEN_SPEED, t_dot);
+}
+
+void transmitPause() {
   transmitInteger(TOKEN_PAUSE, t_pause);
 }
+
 
 void loop() {
   if (transmitMode) {
@@ -801,6 +806,7 @@ void loop_XMIT() {
         String speedStr = line.substring(7, line.length());
         int speed = parseInt(speedStr);
         setSpeed(speed);
+        transmitSpeed();
         return;
       }
     
@@ -808,6 +814,7 @@ void loop_XMIT() {
         String pauseStr = line.substring(7, line.length());
         int pause = parseInt(pauseStr);
         setPause(pause);
+        transmitPause();
         return;
       }
       else {
