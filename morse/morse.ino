@@ -107,13 +107,6 @@ void setOutput(bool value) {
   analogWrite(PIN_OUT_, 255 - (value * pwmWidth));
 }
 
-void transmitTestByte(bool value) {
-  if (radioEnabled) {
-    msg[0] = value ? TOKEN_ONE : TOKEN_ZERO;
-    radio.write(msg, PAYLOAD_LEN);
-  }
-}
-
 int parseInt(String s) {
   int res = 0;
   for (int i = 0; i < s.length(); i++) {
@@ -543,18 +536,22 @@ void testRoutine() {
     if (!digitalRead(PIN_BUTTON_)) {
       buttonUsed = true;
     }
+    int prevValue = -1;
     if (buttonUsed) {
-      bool value = !digitalRead(PIN_BUTTON_);
-      setOutput(value);
-      transmitTestByte(value);
+      int value = !digitalRead(PIN_BUTTON_);
+      if (value != prevValue) {
+        setOutput(value);
+        transmitInteger(value ? TOKEN_ONE : TOKEN_ZERO, 0);
+        prevValue = value;
+      }
       delay(10);
     } else { // beep at 1 second intervals
       setOutput(1);
-      transmitTestByte(true);
+      transmitInteger(TOKEN_ZERO, 0);
       setOutput(1);
       delay(1000);
       setOutput(0);
-      transmitTestByte(false);
+      transmitInteger(TOKEN_ONE, 0);
       setOutput(0);
       delay(1000);
     }
@@ -890,6 +887,7 @@ void loop_RECV() {
     if (radio.available()) {
       digitalWrite(PIN_RED, LOW);
       radio.read(msg, PAYLOAD_LEN); // Read data from the nRF24L01
+ Serial.println("DEBUG: Token = " + msg[0]);
       if (TOKEN_MESSAGE_COMPLETE == msg[0]) {
         String message = decodeMsg();
         writeMessageToEEPROM(message);
