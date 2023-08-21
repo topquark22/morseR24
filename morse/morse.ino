@@ -757,7 +757,6 @@ void transmitPause() {
 
 void loop() {
   if (!digitalRead(PIN_BUTTON_)) {
-    Serial.println("DEBUG: Entered test routine from loop");
     testRoutine();
   }
   if (transmitMode) {
