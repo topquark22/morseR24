@@ -24,7 +24,7 @@ The important point for the integrated board is that you must use CE=10 and CSN=
 
 ### Master (transmitter) mode
 
-For master mode, leave pin D8 unconnected. The text to transmit is entered in the serial monitor console. It accepts multiple lines (as the serial input buffer can only accept 64 characters at a time,) and concatenates them together. Enter a blank line to commit the message.
+For master mode, leave pin D8 unconnected. The message to transmit is entered in the serial monitor console. It accepts multiple lines (as the serial input buffer can only accept 64 characters at a time,) and concatenates them together. Enter a blank line to commit the message.
 
 The following in-line characters will cause the text to be interpreted in several different ways:
 
@@ -35,8 +35,8 @@ The following in-line characters will cause the text to be interpreted in severa
 
 The speed (dot length in ms) and pause (time between broadcasts of the material) can be changed using the following commands, for example:
 
-- *speed 100
-- *pause 3000
+- ***speed 100**
+- ***pause 3000**
 
 The command will be transmitted to the slave. Issuing one of these commands will interrupt and restart any broadcast in progress.
 
