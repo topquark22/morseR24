@@ -3,7 +3,6 @@
  * 
  * Send text to slave via optional nRF24L01 radio.
  * 
- * @version 7.0
  * @author topquark22
  */
 
