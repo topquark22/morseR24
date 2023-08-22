@@ -35,16 +35,16 @@ The following in-line characters will cause the text to be interpreted in severa
 
 The speed (dot length in ms) and pause (time between outputs of the entire text) can be changed using the following commands, for example:
 
-- ** *speed 100**
-- ** *pause 3000**
+- *speed 100
+- *pause 3000
 
-Issuing one of these commands will interrupt and restart the broadcast in progress.
+The command will be transmitted to the slave. Issuing one of these commands will interrupt and restart any broadcast in progress.
 
 ### Slave (receiver) mode
 
 For slave mode, wire pin D8 to ground.
 
-The serial monitor will display the characters as they are transmitted.
+The serial monitor will display the characters as they are transmitted, as well as any speed and pause timing changes.
 
 ## Error conditions
 
