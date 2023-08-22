@@ -54,7 +54,7 @@ Fast blink: Radio is not connected properly. You can use this code in master mod
 
 Solid red can mean one of two things:
 
--  If it happens immediately, that means you are configured as a receiver and the radio is disabled. This is obviously a limited configuration because it can only replay what's already in its EEPROM, not receive new messages.
+-  If red LED lights immediately, that means you are configured as a receiver and the radio is disabled. This configuration is unsupported.
     
 -  If it happens during transmission of a message, the PIN_RED will light up on the slave to indicate a bad checksum of the data packet. This can be cleared by retransmitting the data from the master.
 
