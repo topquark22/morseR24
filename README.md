@@ -12,7 +12,7 @@ This code will work with a fresh Arduino from the factory. The EEPROM location 0
 
 The hardware for this project is based around the Arduino Nano3 and/or a board with an integrated radio.
 
-In fact, it looks like the Uno doesn't even have a pin A7, so you may have to use a Nano.
+We use pin A7 for PWM control. In fact, it looks like the Uno doesn't even have a pin A7, so you may have to use a Nano.
 
 ## CE and CSN
 
