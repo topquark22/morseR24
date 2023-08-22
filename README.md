@@ -10,11 +10,11 @@ This code will work with a fresh Arduino from the factory. The EEPROM location 0
 
 ## Hardware
 
-This project requires the Arduino Nano3 and/or a Nano board with an integrated radio. Other boards may work, but they must have A7 analog input. So a Uno won't work.
+This project requires the Arduino Nano v3 and/or a Nano board with an integrated radio. Other boards may work, but they must have A7 analog input. So a Uno won't work.
 
 ## PWM wiring
 
-The output pins D5 and inverted output D3 support PWM, if you really need it. This is controlled by the voltage on pin A7, which is usually wired to +5V. If you leave A7 unconnected, you will get erratic results. On the Nano3, it is easy to wire A7 to +5 because the two pins are right next to each other. In most cases that's what you will do unless you really want to use PWM.
+The output pins D5 and inverted output D3 support PWM, if you really need it. This is controlled by the voltage on pin A7, which is usually wired to +5V. If you leave A7 unconnected, you will get erratic results. On the Nano v3, it is easy to wire A7 to +5 because the two pins are right next to each other. In most cases that's what you will do unless you really want to use PWM.
 
 ## CE and CSN
 
