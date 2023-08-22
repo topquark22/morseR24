@@ -440,7 +440,7 @@ void transmitMessage(String message) {
   Serial.println("-- Transmitting message");
   
   msg[0] = TOKEN_MESSAGE_INCOMPLETE;
-  // Break messages into chunks of 31 characters
+  // Break messages into chunks of 30 characters
   // First make life easy by making a zero-terminated byte array
   const int BUF_LEN = message.length() + 1;
   byte messageBytes[BUF_LEN];
