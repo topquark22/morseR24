@@ -28,15 +28,15 @@ For master mode, leave pin D8 unconnected. The text to transmit is entered in th
 
 The following in-line characters will cause the text to be interpreted in several different ways:
 
-- Morse code (the default, or preceded by *_*)
-- Unary (using the *#* character). For example, #314159*
-- Hexadecimal (using the *$* character). For example, *$600DF00D*
-- Chess coordinates (using the % character). For example, *%e2e4*
+- Morse code (the default, or preceded by **_** )
+- Unary (using the **#** character). For example, **#314159**
+- Hexadecimal (using the **$** character). For example, **$600DF00D**
+- Chess coordinates (using the **%** character). For example, **%e2e4**
 
-The speed (dot length in ms) and pause (time between outputs of the entire text) can be changed using the following commands:
+The speed (dot length in ms) and pause (time between outputs of the entire text) can be changed using the following commands, for example:
 
-- \*speed <dot duration in ms>
-- \*pause <pause duration in ms>
+- *speed 100
+- *pause 3000
 
 Issuing one of these commands will interrupt and restart the broadcast in progress.
 
