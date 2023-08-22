@@ -2,8 +2,6 @@
 
 Send Morse code to GPIO pin and optional RF24 radio
 
-This version transmits the entire message to the receiver. The receiver stores it in its EEPROM.
-
 ## Initialization
 
 This code will work with a fresh Arduino from the factory. The EEPROM location 0 must contain the value 0xFF at first use, in order for it to initialize the speed and pause to their initial default values. If something gets messed up, the best thing to do is run eeprom_reset.ino. This will clear the EEPROM to all 0xFF values. Then reupload the sketch and life is good.
