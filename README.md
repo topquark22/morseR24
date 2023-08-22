@@ -18,7 +18,7 @@ The output pins D5 and inverted output D3 support PWM, if you really need it. Th
 
 ## CE and CSN
 
-The important point for the integrated board is that you must use CE=10 and CSN=9. Most resources on the Internet suggest radio(9, 10) or some other pins. That's fine if you are using a Uno or something else, but it took me some time to figure this out. I had to follow the traces on the PCB and compare the pinout with the nRF24L01 chip on the integrated board to see that they actually have to be reversed. I couldn't find any explanation of this anywhere, so here it is.
+The important point for the integrated board is that you must use CE=10 and CSN=9. Most resources on the Internet suggest radio(9, 10) or some other pins. That's fine if you are using an external radio, but it took me some time to figure this out. I had to follow the traces on the PCB and compare the pinout with the nRF24L01 chip on the integrated board to see that they actually have to be reversed. I couldn't find any explanation of this anywhere, so here it is.
 
 ## Error conditions
 
