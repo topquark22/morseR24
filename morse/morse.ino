@@ -1,5 +1,7 @@
-/*
- * Send Morse code to GPIO pin and optional RF24 radio
+/**
+ * Send Morse code to GPIO pin.
+ * 
+ * Send text to slave via optional nRF24L01 radio.
  * 
  * @version 7.0
  * @author topquark22
@@ -17,17 +19,17 @@ const int PIN_CSN = 9;
 
 const int SPI_SPEED = 10000000;
 
-const int PIN_DISABLE_ = 4; // wire to GND to disable radio
+const int PIN_DISABLE_ = 4; // wire to GND if not using radio
 
-const int PIN_XRMODE = 8; // wire to GND for recv mode; else xmit mode
+const int PIN_XRMODE = 8; // wire to GND for recv (slave) mode; else xmit (master) mode
 
 const int PIN_TEST_ = 7; // jumper to GND for test mode
 
-const int PIN_BUTTON_ = 6; // code key switch for manual input
+const int PIN_BUTTON_ = 6; // code key switch for manual input in test mode
 
-const int PIN_OUT = 5; // output LED
+const int PIN_OUT = 5;  // output
 const int PIN_OUT_ = 3; // inverted output
-const int PIN_RED = 2; // LED, hemorrhoid condition
+const int PIN_RED = 2;  // LED, hemorrhoid condition
 
 // radio output power = 2*A0 + A1
 const int PIN_PWR2 = A0;
@@ -530,13 +532,16 @@ void displayMessage(String message) {
   interpretTextAs = MORSE;
 }
 
+bool buttonPressed() {
+  return !digitalRead(PIN_BUTTON_);
+}
+
 void testRoutine() {
   Serial.println("Test mode");
-  bool useButton = !digitalRead(PIN_BUTTON_);
-  if (useButton) {
+  if (buttonPressed()) {
     int prevValue = -1;
     while (1) {
-      int value = !digitalRead(PIN_BUTTON_);
+      int value = buttonPressed();
       if (value != prevValue) {
         prevValue = value;
         setOutput(value);
@@ -694,7 +699,7 @@ void setup() {
     if (testMode) {
       Serial.println("Test mode");
       while(1) {
-        bool value = !digitalRead(PIN_BUTTON_);
+        bool value = buttonPressed();
         setOutput(value);
         delay(10);
       }
@@ -757,7 +762,8 @@ void transmitPause() {
 
 
 void loop() {
-  if (!digitalRead(PIN_BUTTON_)) {
+  // can enter test mode by holding down button switch
+  if (buttonPressed()) {
     testRoutine();
   }
   if (transmitMode) {
