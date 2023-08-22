@@ -42,7 +42,7 @@ If you hold down the button during the reset, then the button will act as a code
 
 2.  In normal operation (D7 not wired to ground), you can enter test mode by holding down the button until the next loop starts. In this case, the button will act as a code key for manual input. To get out of test mode, you have to reset the Arduino.
 
-## Hardware example
+## Hardware examples
 
 Here is just one way to wire up the Arduino. In this circuit, the output drives the gate of a 2N7000 MOSFET which can then be used to control an external circuit.
 
