@@ -48,6 +48,6 @@ Here is one way to wire up the Arduino. In this circuit, the output drives the g
 
 ![MOSFET board](img/mosfet-board.jpg)
 
-The next circuit uses a 555 to generate a tone that is sent to an audio jack. It uses a regular Nano3 and external radio (not shown). In this configuration it might be useful to remove and disable the radio, because it's mainly just a Morse tone generator.
+The next circuit uses a 555 to generate a tone that is sent to an audio jack. The Morse signal is sent to pin 4 (active low reset) of the 555 to turn the tone on and off. This configuration uses a regular Nano3 and external radio (not shown). In this configuration it might be useful to remove and disable the radio, because it's mainly just a Morse tone generator.
 
 ![Tone generator](img/audio-board.jpg)
