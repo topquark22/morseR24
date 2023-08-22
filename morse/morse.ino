@@ -43,7 +43,8 @@ const int PIN_CH40 = A4; // if not wired low, add 40 t0 CHANNEL_BASE
 const uint64_t DEVICE_ID_BASE = 0x600DFF2430LL;
 const int PIN_ID1 = A5; // if wired low, add 0x1 to ID_BASE
 
-// analog input for PWM (wire to +5V normally)
+// analog input for PWM
+// Usually you would wire this to +5V (it's right next to the +5V pin)
 const int PIN_PWM = A7;
 
 // defaults
