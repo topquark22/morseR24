@@ -26,9 +26,9 @@ It will blink once for 1/10 second upon initiation to indicate that the radio is
 
 Fast blink: Radio is not connected properly. You can use this code without a radio, if you just want to control something from the GPIO pin. But in that case you need to wire pin D4 to ground to disable the radio.
 
-Solid red: This can mean one of two things:
+Solid red can mean one of two things:
 
--  If it happens immediately, that means you are configured as a receiver and the radio is disabled. This is obviously an unsuported configuration because you can't do anything.
+-  If it happens immediately, that means you are configured as a receiver and the radio is disabled. This is obviously a limited configuration because it can only replay what's already in its EEPROM, not receive new messages.
     
 -  If it happens during transmission of a message, the PIN_RED will light up on the slave to indicate a bad checksum of the data packet. This can be cleared by retransmitting the data from the master.
 
