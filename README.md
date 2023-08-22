@@ -46,7 +46,7 @@ If you hold down the button during the reset, then the button will act as a code
 
 ## Hardware examples
 
-Here is one way to wire up the Arduino. In this circuit, the output drives the gate of a 2N7000 MOSFET which can then be used to control an external circuit.
+Here is one way to wire up the Arduino. This is using an integrated board. In this circuit, the output drives the gate of a 2N7000 MOSFET which can then be used to control an external circuit.
 
 ![MOSFET board](img/mosfet-board.jpg)
 
