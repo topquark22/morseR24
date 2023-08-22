@@ -85,18 +85,6 @@ byte msg[PAYLOAD_LEN]; // Used to store/receive message via radio
 
 RF24 radio(PIN_CE, PIN_CSN, SPI_SPEED);
 
-void writeRadio(String message) {
-  Serial.println("Writing to radio, message: " + message);
-  int i;
-  for (int i = 0; i < message.length(); i++) {
-    msg[i] = message[i];
-  }
-  for (int j = i; j < PAYLOAD_LEN; j++) {
-    msg[j] = 0;
-  }
-  radio.write(msg, PAYLOAD_LEN);
-}
-
 int getPWM() {
   double pwmRaw = analogRead(PIN_PWM); // 0 to 2^10 - 1
   return pwmRaw / 4;
