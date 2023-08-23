@@ -14,7 +14,7 @@ This code will work with a fresh Arduino from the factory. The EEPROM location 0
 
 The output pins D5 and inverted output D3 support PWM. This is controlled by the voltage on pin A7, which is usually wired to +5V. If you leave A7 unconnected, you will get erratic results. On the Nano V3, it is easy to wire A7 to +5 because the two pins are right next to each other. In most cases that's what you will do unless you really want to use PWM.
 
-## CE and CSN
+## CE and CSN pins
 
 The important point for the integrated board is that you must use CE=10 and CSN=9. Most resources on the Internet suggest `radio(9, 10)` or some other pins. That's fine if you are using an external radio for some other project, but on the integrated boards you must use `radio(10, 9)`.
 
