@@ -74,6 +74,8 @@ Here is one way to wire up the Arduino. This is using an integrated board. In th
 
 ![MOSFET board](img/mosfet-board.jpg)
 
-The next circuit uses a 555 to generate a tone that is sent to an audio jack. The Morse signal is sent to pin 4 (active low reset) of the 555 to turn the tone on and off. This configuration uses a regular Nano3 and external radio (not shown). In this configuration it might be useful to remove and disable the radio, because it's mainly just a Morse tone generator.
+The next circuit uses a 555 to generate a tone that is sent to an audio jack. The Morse signal is sent to pin 4 (active low reset) of the 555 to turn the tone on and off. This configuration uses a regular Nano3 and external radio (not shown).
+
+If you just wanted a standalone Morse tone generator, you could use master mode and remove and disable the radio.
 
 ![Tone generator](img/audio-board.jpg)
