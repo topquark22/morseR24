@@ -454,8 +454,6 @@ String decodeBlock() {
   for (int i = 1; i < PAYLOAD_LEN - 1 && msg[i] > 0; i++) {
     block = block + (char)msg[i];
   }
-  //Serial.print("DEBUG Got next block: "); Serial.println(block);
-  //Serial.print("DEBUG Got block length "); Serial.println(block.length());
   return block;
 }
 
@@ -498,7 +496,6 @@ void transmitMessage(String message) {
   // write empty packet to signal end of message
   clearMsg();
   radio.write(msg, PAYLOAD_LEN);
-  //Serial.println("DEBUG: Transmitted terminal packet");
 }
 
 void displayMessage(String message) {
