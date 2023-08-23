@@ -2,13 +2,13 @@
 
 An Arduino sketch that converts text to Morse code, outputs to GPIO pin, and can transmit to slave devices using nRF24L01 radio.
 
+## Hardware requirements
+
+This project requires the Arduino Nano v3 and/or a Nano board with an integrated radio. Other boards may work, but they must have A7 analog input. So a Uno won't work.
+
 ## Initialization
 
 This code will work with a fresh Arduino from the factory. The EEPROM location 0 must contain the value 0xFF at first use, in order for it to initialize the timings to their initial default values. If something gets messed up, the best thing to do is run eeprom_reset.ino. This will clear the EEPROM to all 0xFF values. Then reupload the sketch and life is good.
-
-## Hardware
-
-This project requires the Arduino Nano v3 and/or a Nano board with an integrated radio. Other boards may work, but they must have A7 analog input. So a Uno won't work.
 
 ## PWM wiring
 
