@@ -662,35 +662,24 @@ void setup() {
 
   if (transmitMode) {
     
-    Serial.print("Dot duration: ");
-    Serial.print(t_dot);
-    Serial.println(" ms");
-    Serial.print("Pause duration: ");
-    Serial.print(t_pause);
-    Serial.println(" ms");
-    Serial.println("Accepting input from serial console");
-    Serial.println("Commands:");
-    Serial.println("*speed <dot ms>");
-    Serial.println("*pause <pause ms>");
+    Serial.print("Dot duration: "); Serial.print(t_dot); Serial.println(" ms");
+    Serial.print("Pause duration: "); Serial.print(t_pause); Serial.println(" ms");
     Serial.println();
-    Serial.println("In-stream modifiers:");
-    Serial.println("_: Morse mode (default)");
-    Serial.println("$: Hex mode");
-    Serial.println("#: Unary mode");
-    Serial.println("%: Chess mode");
+    Serial.println("Accepting input from serial console");
+    Serial.println();
+    Serial.println("Commands:");
+    Serial.println("  *speed <dot ms>");
+    Serial.println("  *pause <pause ms>");
+    Serial.println();
+    Serial.println("In-stream modifiers for text interpretation:");
+    Serial.println("  _: Morse (default)");
+    Serial.println("  $: Hexadecimal");
+    Serial.println("  #: Unary");
+    Serial.println("  %: Chess");
     Serial.println();
 
   } else { // recv mode
-
-    if (testMode) {
-      Serial.println("Test mode");
-      while(1) {
-        bool value = buttonPressed();
-        setOutput(value);
-        delay(10);
-      }
-    }
-
+    
     if (!radioEnabled) {
       Serial.println("Unsupported configuration");
       digitalWrite(PIN_RED, HIGH);
