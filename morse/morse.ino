@@ -695,6 +695,7 @@ void setup() {
     if (!radioEnabled) {
       Serial.println("Unsupported configuration");
       digitalWrite(PIN_RED, HIGH);
+      delay(1000);
       exit(1);
     }
   }
