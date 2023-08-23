@@ -11,15 +11,15 @@
 #include <RF24.h>
 #import <EEPROM.h>
 
-
 const int SPI_SPEED = 10000000;
 
+// Delay required so multiple blocks of the message don't clobber each other at the receiving end.
+// TODO find a better solution (some kind of ACK protocol?)
 const int DELAY_INTERBLOCK = 3000;
 
 // These wirings of CE, CSN are used for integrated Nano3/nRF24l01 boards
 const int PIN_CE = 10;
 const int PIN_CSN = 9;
-
 
 const int PIN_DISABLE_ = 4; // wire to GND if not using radio
 
@@ -44,7 +44,7 @@ const int PIN_CH20 = A3; // if not wired low, add 20 to CHANNEL_BASE
 const int PIN_CH40 = A4; // if not wired low, add 40 t0 CHANNEL_BASE
 
 // Device ID setting. Must match transmitter and receiver
-const uint64_t DEVICE_ID_BASE = 0x600DFF2430LL;
+const uint64_t DEVICE_ID_BASE = 0x600DFF2440LL;
 const int PIN_ID1 = A5; // if wired low, add 0x1 to ID_BASE
 
 // analog input for PWM
