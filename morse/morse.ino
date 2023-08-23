@@ -11,7 +11,7 @@
 #include <RF24.h>
 #import <EEPROM.h>
 
-// Note these wirings of CE, CSN are used for integrated Nano3/nRF24l01 boards
+// These wirings of CE, CSN are used for integrated Nano3/nRF24l01 boards
 const int PIN_CE = 10;
 const int PIN_CSN = 9;
 
@@ -694,7 +694,7 @@ void setup() {
     if (!radioEnabled) {
       Serial.println("Unsupported configuration");
       digitalWrite(PIN_RED, HIGH);
-      delay(1000);
+      delay(100);
       exit(1);
     }
   }
