@@ -65,8 +65,8 @@ const int ADDR_PAUSE = 0x3F4;
 const int TOKEN_TEST = 1;
 const int TOKEN_SPEED = 2;
 const int TOKEN_PAUSE = 3;
-const int TOKEN_MESSAGE_COMPLETE = 4;
-const int TOKEN_MESSAGE_INCOMPLETE = 5;
+const int TOKEN_MESSAGE_PACKET_FINAL = 4;
+const int TOKEN_MESSAGE_PACKET = 5;
 
 int t_dot;
 int t_dash;
@@ -426,7 +426,7 @@ void transmitMessage(String message) {
   }
   Serial.println("-- Transmitting message");
   
-  msg[0] = TOKEN_MESSAGE_INCOMPLETE;
+  msg[0] = TOKEN_MESSAGE_PACKET;
   // Break messages into chunks of 30 characters
   // First make life easy by making a zero-terminated byte array
   const int BUF_LEN = message.length() + 1;
@@ -445,7 +445,7 @@ void transmitMessage(String message) {
     
     // zero-pad last block (not strictly necessary)
     if (0 == messageBytes[j]) {
-      msg[0] = TOKEN_MESSAGE_COMPLETE;
+      msg[0] = TOKEN_MESSAGE_PACKET_FINAL;
       for (int k = j % BLOCK_SIZE + 2; k < PAYLOAD_LEN - 1; k++) {
         msg[k] = 0;
       }
@@ -848,7 +848,7 @@ String decodeMsg() {
 
 String decodeAllPackets() {
   String message = decodeMsg(); // first packet already in buffer
-  while (TOKEN_MESSAGE_INCOMPLETE == msg[0]) {
+  while (TOKEN_MESSAGE_PACKET == msg[0]) {
     // expecting another packet; might need to wait for it to arrive
     while (!radio.available()) {
       delay(1);
@@ -868,11 +868,11 @@ void loop_RECV() {
     if (radio.available()) {
       digitalWrite(PIN_RED, LOW);
       radio.read(msg, PAYLOAD_LEN); // Read data from the nRF24L01
-      if (TOKEN_MESSAGE_COMPLETE == msg[0]) {
+      if (TOKEN_MESSAGE_PACKET_FINAL == msg[0]) {
         String message = decodeMsg();
         writeMessageToEEPROM(message);
         displayDisabled = false;
-      } else if (TOKEN_MESSAGE_INCOMPLETE == msg[0]) {
+      } else if (TOKEN_MESSAGE_PACKET == msg[0]) {
         String message = decodeAllPackets();
         writeMessageToEEPROM(message);
         displayDisabled = false;
