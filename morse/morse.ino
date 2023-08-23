@@ -11,8 +11,7 @@
 #include <RF24.h>
 #import <EEPROM.h>
 
-// Note these choices of CE, CSN are mandatory for integrated Nano3/nRF24l01 boards
-// and so should always be used, NOT 9 and 10 as you see in most places!!
+// Note these wirings of CE, CSN are used for integrated Nano3/nRF24l01 boards
 const int PIN_CE = 10;
 const int PIN_CSN = 9;
 
