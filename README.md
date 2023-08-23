@@ -4,7 +4,7 @@ An Arduino sketch that converts text to Morse code, outputs to GPIO pin, and can
 
 ## Hardware requirements
 
-This project uses the Arduino Nano V3 or a compatible board with integrated nRF24L01 radio. Other boards may work, but they must have A7 analog input. So, for instance, a Uno won't work.
+This project uses the Arduino Nano V3, or a compatible board with integrated nRF24L01 radio. Other boards may work, but they must have A7 analog input. So, for instance, a Uno won't work.
 
 ## Software requirements
 
