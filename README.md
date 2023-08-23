@@ -1,6 +1,6 @@
 # morseR24
 
-Send Morse code to GPIO pin and optional RF24 radio
+An Arduino sketch that converts text to Morse code, outputs to GPIO pin, and can transmit to slave devices using nRF24L01 radio.
 
 ## Initialization
 
