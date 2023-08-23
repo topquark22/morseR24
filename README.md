@@ -31,7 +31,9 @@ The following in-line characters will cause the text to be interpreted in severa
 - Hexadecimal (using the **$** character). For example, **$600DF00D**
 - Chess coordinates (using the **%** character). For example, **%e2e4**
 
-The speed (dot length in ms) and pause (time between broadcasts of the material) can be changed using the following commands, for example:
+You can change these in-line modifiers mid-text.
+
+The speed (dot length in ms) and pause (time between broadcasts of the message) can be changed using the following commands, for example:
 
 - ***speed 100**
 - ***pause 3000**
