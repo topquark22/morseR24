@@ -6,6 +6,10 @@ An Arduino sketch that converts text to Morse code, outputs to GPIO pin, and can
 
 This project requires the Arduino Nano V3 or a compatible board with integrated nRF24L01 radio. Other boards may work, but they must have A7 analog input. So, for instance, a Uno won't work.
 
+## Software requirements
+
+You must install the RF24 library from TMRh20,Avamander version 1.4.7 or above.
+
 ## Initialization
 
 This code will work with a fresh Arduino from the factory. The EEPROM location 0 must contain the value 0xFF at first use, in order for it to initialize the timings to their default values. If something gets messed up, the best thing to do is run eeprom_reset.ino. This will clear the EEPROM to all 0xFF values. Then reupload the sketch and life is good.
@@ -16,7 +20,7 @@ The output pins D5 and inverted output D3 support PWM. This is controlled by the
 
 ## CE and CSN pins
 
-The integrated boards are wired for CE=10 and CSN=9. Most resources on the Internet suggest `radio(9, 10)` or say that you can specify any pins. That's fine if you are using an external radio for some other project, but this project supports integrated boards and so you must use pin 10 for CE and pin 9 for CSN.
+The integrated boards are wired for CE=10 and CSN=9. Most resources on the Internet suggest `RF24 radio(9, 10)` or say that you can specify any pins. That's fine if you are using an external radio for some other project, but this project supports integrated boards and so you must use pin 10 for CE and pin 9 for CSN.
 
 ## Modes of operation
 
