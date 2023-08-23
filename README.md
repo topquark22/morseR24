@@ -16,7 +16,7 @@ The output pins D5 and inverted output D3 support PWM. This is controlled by the
 
 ## CE and CSN
 
-The important point for the integrated board is that you must use CE=10 and CSN=9. Most resources on the Internet suggest `radio(9, 10)` or some other pins. That's fine if you are using an external radio, but on the integrated boards you must use `radio(10, 9)`.
+The important point for the integrated board is that you must use CE=10 and CSN=9. Most resources on the Internet suggest `radio(9, 10)` or some other pins. That's fine if you are using an external radio for some other project, but on the integrated boards you must use `radio(10, 9)`.
 
 ## Modes of operation
 
