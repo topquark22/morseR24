@@ -1,21 +1,25 @@
 /**
- * Send Morse code to GPIO pin.
- * 
- * Send text to slave via optional nRF24L01 radio.
- * 
- * @author topquark22
- */
+ Send Morse code to GPIO pin.
+
+ Send text to slave via optional nRF24L01 radio.
+
+ @author topquark22
+*/
 
 #include <RF24_config.h>
 #include <nRF24L01.h>
 #include <RF24.h>
 #import <EEPROM.h>
 
+
+const int SPI_SPEED = 10000000;
+
+const int DELAY_INTERBLOCK = 3000;
+
 // These wirings of CE, CSN are used for integrated Nano3/nRF24l01 boards
 const int PIN_CE = 10;
 const int PIN_CSN = 9;
 
-const int SPI_SPEED = 10000000;
 
 const int PIN_DISABLE_ = 4; // wire to GND if not using radio
 
@@ -108,8 +112,8 @@ int parseInt(String s) {
 }
 
 /**
- * Text interpretation (can using special character mid-message)
- */
+   Text interpretation (can using special character mid-message)
+*/
 enum TEXT_INTERPRETATION {
   MORSE, // '_' in stream
   HEXADECIMAL,  // '$' in stream
@@ -200,132 +204,132 @@ void dash() {
 void displayMorse(char c) {
   c = toUpperCase(c);
   switch (c) {
-  case ' ' :
-    delay(t_space);
-    break;
-  case 'A' :
-    dot(); dash();
-    break;
-  case 'B' :
-    dash(); dot(); dot(); dot();
-    break;
-  case 'C' :
-    dash(); dot(); dash(); dot();
-    break;
- case 'D' :
-   dash(); dot(); dot();
-   break;
-  case 'E' :
-    dot();
-    break;
-  case 'F' :
-    dot(); dot(); dash(); dot();
-    break;
-  case 'G' :
-    dash(); dash(); dot();
-    break;
-  case 'H' :
-    dot(); dot(); dot(); dot();
-    break;
-  case 'I' :
-    dot(); dot();
-    break;
-  case 'J' :
-    dot(); dash(); dash(); dash();
-    break;
-  case 'K' :
-    dash(); dot(); dash();
-    break;
-  case 'L' :
-    dot(); dash(); dot(); dot();
-    break;
-  case 'M' :
-    dash(); dash();
-    break;
-  case 'N' :
-    dash(); dot();
-    break;
-  case 'O' :
-    dash(); dash(); dash();
-    break;
-  case 'P' :
-    dot(); dash(); dash(); dot();
-    break;
-  case 'Q' :
-    dash(); dash(); dot(); dash();
-    break;
-  case 'R' :
-    dot(); dash(); dot();
-    break;
-  case 'S' :
-    dot(); dot(); dot();
-    break;
-  case 'T' :
-    dash();
-    break;
-  case 'U' :
-    dot(); dot(); dash();
-    break;
-  case 'V' :
-    dot(); dot(); dot(); dash();
-    break;
-  case 'W' :
-    dot(); dash(); dash();
-    break;
-  case 'X' :
-    dash(); dot(); dot(); dash();
-    break;
-  case 'Y' :
-    dash(); dot(); dash(); dash();
-    break;
-  case 'Z' :
-    dash(); dash(); dot(); dot();
-    break;
-  case '0' :
-    dash(); dash(); dash(); dash(); dash();
-    break;
-  case '1' :
-    dot(); dash(); dash(); dash(); dash();
-    break;
-  case '2' :
-    dot(); dot(); dash(); dash(); dash();
-    break;
-  case '3' :
-    dot(); dot(); dot(); dash(); dash();
-    break;
-  case '4' :
-    dot(); dot(); dot(); dot(); dash();
-    break;
-  case '5' :
-    dot(); dot(); dot(); dot(); dot();
-    break;
-  case '6' :
-    dash(); dot(); dot(); dot(); dot();
-    break;
-  case '7' :
-    dash(); dash(); dot(); dot(); dot();
-    break;
-  case '8' :
-    dash(); dash(); dash(); dot(); dot();
-    break;
-  case '9' :
-    dash(); dash(); dash(); dash(); dot();
-    break;
-      case '.' :
-    dot(); dash(); dot(); dash(); dot(); dash();
-    break;
-  case ',' :
-    dash(); dash(); dot(); dot(); dash(); dash();
-    break;
-  case '?' :
-    dot(); dot(); dash(); dash(); dot(); dot();
-    break;
-  case '/' :
-    dash(); dot(); dot(); dash(); dot();
-    break;
-  case '@' :
-    dot(); dash(); dash(); dot(); dash(); dot();
-    break;
+    case ' ' :
+      delay(t_space);
+      break;
+    case 'A' :
+      dot(); dash();
+      break;
+    case 'B' :
+      dash(); dot(); dot(); dot();
+      break;
+    case 'C' :
+      dash(); dot(); dash(); dot();
+      break;
+    case 'D' :
+      dash(); dot(); dot();
+      break;
+    case 'E' :
+      dot();
+      break;
+    case 'F' :
+      dot(); dot(); dash(); dot();
+      break;
+    case 'G' :
+      dash(); dash(); dot();
+      break;
+    case 'H' :
+      dot(); dot(); dot(); dot();
+      break;
+    case 'I' :
+      dot(); dot();
+      break;
+    case 'J' :
+      dot(); dash(); dash(); dash();
+      break;
+    case 'K' :
+      dash(); dot(); dash();
+      break;
+    case 'L' :
+      dot(); dash(); dot(); dot();
+      break;
+    case 'M' :
+      dash(); dash();
+      break;
+    case 'N' :
+      dash(); dot();
+      break;
+    case 'O' :
+      dash(); dash(); dash();
+      break;
+    case 'P' :
+      dot(); dash(); dash(); dot();
+      break;
+    case 'Q' :
+      dash(); dash(); dot(); dash();
+      break;
+    case 'R' :
+      dot(); dash(); dot();
+      break;
+    case 'S' :
+      dot(); dot(); dot();
+      break;
+    case 'T' :
+      dash();
+      break;
+    case 'U' :
+      dot(); dot(); dash();
+      break;
+    case 'V' :
+      dot(); dot(); dot(); dash();
+      break;
+    case 'W' :
+      dot(); dash(); dash();
+      break;
+    case 'X' :
+      dash(); dot(); dot(); dash();
+      break;
+    case 'Y' :
+      dash(); dot(); dash(); dash();
+      break;
+    case 'Z' :
+      dash(); dash(); dot(); dot();
+      break;
+    case '0' :
+      dash(); dash(); dash(); dash(); dash();
+      break;
+    case '1' :
+      dot(); dash(); dash(); dash(); dash();
+      break;
+    case '2' :
+      dot(); dot(); dash(); dash(); dash();
+      break;
+    case '3' :
+      dot(); dot(); dot(); dash(); dash();
+      break;
+    case '4' :
+      dot(); dot(); dot(); dot(); dash();
+      break;
+    case '5' :
+      dot(); dot(); dot(); dot(); dot();
+      break;
+    case '6' :
+      dash(); dot(); dot(); dot(); dot();
+      break;
+    case '7' :
+      dash(); dash(); dot(); dot(); dot();
+      break;
+    case '8' :
+      dash(); dash(); dash(); dot(); dot();
+      break;
+    case '9' :
+      dash(); dash(); dash(); dash(); dot();
+      break;
+    case '.' :
+      dot(); dash(); dot(); dash(); dot(); dash();
+      break;
+    case ',' :
+      dash(); dash(); dot(); dot(); dash(); dash();
+      break;
+    case '?' :
+      dot(); dot(); dash(); dash(); dot(); dot();
+      break;
+    case '/' :
+      dash(); dot(); dot(); dash(); dot();
+      break;
+    case '@' :
+      dot(); dash(); dash(); dot(); dash(); dot();
+      break;
   }
   delay(2 * t_dot); // inter-character break is 3 including 1 from last dot/dash
 }
@@ -362,11 +366,11 @@ void displayNybble(char c) {
 }
 
 /**
- * Transmit a number in unary
- *   - Zero represented by a single dash
- *   - Number n represented by n dots
- *   - Recommend keeping 0 <= n <= 9
- */
+   Transmit a number in unary
+     - Zero represented by a single dash
+     - Number n represented by n dots
+     - Recommend keeping 0 <= n <= 9
+*/
 void displayUnary(char c) {
   if (' ' == c) {
     delay(t_space);
@@ -388,8 +392,8 @@ void displayUnary(char c) {
 }
 
 /**
- * display chess coordinates 'A'-'H', '1'-'8' as unary 1-8
- */
+   display chess coordinates 'A'-'H', '1'-'8' as unary 1-8
+*/
 void displayChess(char c) {
   if (' ' == c) {
     delay(2 * t_space);
@@ -477,9 +481,9 @@ void transmitMessage(String message) {
     return;
   }
   Serial.println("-- Transmitting message");
-  
+
   msg[0] = TOKEN_MESSAGE;
-  
+
   clearMsg();
   for (int j = 0; j < message.length(); j++) {
     msg[(j % BLOCK_SIZE) + 1] = message[j];
@@ -487,11 +491,11 @@ void transmitMessage(String message) {
       setChecksum();
       radio.write(msg, PAYLOAD_LEN);
       clearMsg();
-      delay(3000); // give time for transmission and processing
+      delay(DELAY_INTERBLOCK); // give time for transmission and processing
     }
   }
 
-// write empty packet to signal end of message
+  // write empty packet to signal end of message
   clearMsg();
   radio.write(msg, PAYLOAD_LEN);
   //Serial.println("DEBUG: Transmitted terminal packet");
@@ -584,7 +588,7 @@ void testRoutine() {
 void setup() {
 
   Serial.begin(BAUD_RATE);
-  
+
   // pushbutton
   pinMode(PIN_BUTTON_, INPUT_PULLUP);
 
@@ -599,7 +603,7 @@ void setup() {
 
   digitalWrite(PIN_OUT, LOW);
   digitalWrite(PIN_OUT_, HIGH);
-  
+
   // device ID jumpers
   pinMode(PIN_ID1, INPUT_PULLUP);
   uint64_t deviceID = DEVICE_ID_BASE + 0x1 * !digitalRead(PIN_ID1);
@@ -611,7 +615,7 @@ void setup() {
   } else {
     Serial.println("Configured as receiver");
   }
-  
+
   pinMode(PIN_PWM, INPUT);
   int pwm = getPWM();
   if (pwm < 255) {
@@ -625,12 +629,12 @@ void setup() {
   }
   readSpeedFromEEPROM();
   readPauseFromEEPROM();
-    
+
   if (radioEnabled) {
 
     Serial.print("Radio starting as device ");
     Serial.println((int)deviceID & 0x0f);
-    
+
     pinMode(PIN_PWR2, INPUT_PULLUP);
     pinMode(PIN_PWR1, INPUT_PULLUP);
     // power 0=MIN, 1=LOW, 2=HIGH, 3=MAX
@@ -643,13 +647,13 @@ void setup() {
     pinMode(PIN_CH40, INPUT_PULLUP);
 
     int channel = CHANNEL_BASE
-                + 10 * digitalRead(PIN_CH10)
-                + 20 * digitalRead(PIN_CH20)
-                + 40 * digitalRead(PIN_CH40);
+                  + 10 * digitalRead(PIN_CH10)
+                  + 20 * digitalRead(PIN_CH20)
+                  + 40 * digitalRead(PIN_CH40);
     Serial.print("Channel set to "); Serial.println(channel);
 
     radio.begin();
-    
+
     if (!radio.isChipConnected()) {
       Serial.println("Radio not connected");
       while (1) {
@@ -664,7 +668,7 @@ void setup() {
     digitalWrite(PIN_RED, HIGH);
     delay(100);
     digitalWrite(PIN_RED, LOW);
-      
+
     radio.setDataRate(RF24_1MBPS);
     radio.setPALevel(power);
     radio.setChannel(channel);
@@ -678,10 +682,10 @@ void setup() {
       transmitPause();
 
     } else { // recv mode
- 
+
       radio.openReadingPipe(1, deviceID); // Get NRF24L01 ready to receive
       radio.startListening(); // Listen to see if information received
-      
+
     }
   } else {
     Serial.println("radio disabled");
@@ -694,7 +698,7 @@ void setup() {
   }
 
   if (transmitMode) {
-    
+
     Serial.print("Dot duration: "); Serial.print(t_dot); Serial.println(" ms");
     Serial.print("Pause duration: "); Serial.print(t_pause); Serial.println(" ms");
     Serial.println();
@@ -712,7 +716,7 @@ void setup() {
     Serial.println();
 
   } else { // recv mode
-    
+
     if (!radioEnabled) {
       Serial.println("Unsupported configuration");
       digitalWrite(PIN_RED, HIGH);
@@ -723,8 +727,8 @@ void setup() {
 }
 
 /*
- * Sets the duration of 1 dot in ms
- */
+   Sets the duration of 1 dot in ms
+*/
 void setSpeed(int t_dot_ms) {
   if (t_dot_ms < 0) {
     Serial.println("Invalid speed");
@@ -750,15 +754,12 @@ void setPause(int t_pause_ms) {
 }
 
 void transmitInteger(int tokenType, int value) {
+  clearMsg();
   msg[0] = tokenType;
   msg[1] = (value >> 24) & 0xFF;
   msg[2] = (value >> 16) & 0xFF;
   msg[3] = (value >> 8) & 0xFF;
   msg[4] = value & 0xFF;
-  // zero fill rest of packet (not strictly necessary)
-  for (int i = 5; i < PAYLOAD_LEN; i++) {
-    msg[i] = 0;
-  }
   radio.write(msg, PAYLOAD_LEN);
 }
 
@@ -816,7 +817,7 @@ void loop_XMIT() {
   } else { // Serial.available()
 
     String line = readLine();
-    if (line.substring(0,1).equals("*")) {
+    if (line.substring(0, 1).equals("*")) {
       if (line.substring(0, 7).equals("*speed ")) {
         String speedStr = line.substring(7, line.length());
         int speed = parseInt(speedStr);
@@ -824,7 +825,7 @@ void loop_XMIT() {
         transmitSpeed();
         return;
       }
-    
+
       if (line.substring(0, 7).equals("*pause ")) {
         String pauseStr = line.substring(7, line.length());
         int pause = parseInt(pauseStr);
@@ -837,14 +838,14 @@ void loop_XMIT() {
         return;
       }
     }
-  
+
     Serial.println("-- Append to message (max 64 chars per line. Blank line commits message)");
-  
+
     String message = line;
     Serial.println();
     Serial.print(message);
     Serial.println("<");
-      
+
     line = readLine();
     while (line.length() > 0) {
       message = message + line;
@@ -867,7 +868,7 @@ void loop_XMIT() {
 bool displayDisabled = false;
 
 void loop_RECV() {
-  
+
   if (radioEnabled) {
     if (radio.available()) {
       digitalWrite(PIN_RED, LOW);
@@ -887,7 +888,7 @@ void loop_RECV() {
         Serial.println("Invalid packet received");
         digitalWrite(PIN_RED, HIGH);
         delay(100);
-        digitalWrite(PIN_RED, LOW);    
+        digitalWrite(PIN_RED, LOW);
       }
     }
   }
