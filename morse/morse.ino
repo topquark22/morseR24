@@ -65,8 +65,7 @@ const int ADDR_PAUSE = 0x3F4;
 const int TOKEN_TEST = 1;
 const int TOKEN_SPEED = 2;
 const int TOKEN_PAUSE = 3;
-const int TOKEN_MESSAGE_PACKET_FINAL = 4;
-const int TOKEN_MESSAGE_PACKET = 5;
+const int TOKEN_MESSAGE = 4;
 
 int t_dot;
 int t_dash;
@@ -123,8 +122,6 @@ const char SW_MORSE = '_';
 const char SW_HEXADECIMAL  = '$';
 const char SW_UNARY = '#';
 const char SW_CHESS = '%';
-
-
 
 // Width of serial console
 const int CONSOLE_WIDTH = 100;
@@ -420,48 +417,84 @@ void displayChess(char c) {
   delay(dly);
 }
 
+const int BLOCK_SIZE = PAYLOAD_LEN - 2;
+
+void clearMsg() {
+  for (int k = 1; k < PAYLOAD_LEN; k++) {
+    msg[k] = 0;
+  }
+}
+
+void setChecksum() {
+  byte checksum = 0;
+  for (int k = 1; k < PAYLOAD_LEN - 1; k++) {
+    checksum ^= msg[k];
+  }
+  msg[PAYLOAD_LEN - 1] = checksum;
+}
+
+
+void checkChecksum() {
+  byte checksum = 0;
+  for (int i = 1; i < PAYLOAD_LEN - 1; i++) {
+    checksum ^= msg[i];
+  }
+  if (msg[PAYLOAD_LEN - 1] != checksum) {
+    digitalWrite(PIN_RED, HIGH);
+  }
+}
+
+String decodeBlock() {
+  checkChecksum();
+  String block = "";
+  for (int i = 1; i < PAYLOAD_LEN - 1 && msg[i] > 0; i++) {
+    block = block + (char)msg[i];
+  }
+  //Serial.print("DEBUG Got next block: "); Serial.println(block);
+  //Serial.print("DEBUG Got block length "); Serial.println(block.length());
+  return block;
+}
+
+bool isEndBlock() {
+  return 0 == msg[1];
+}
+
+String receiveMessage() {
+  // first block already in buffer
+  String message = "";
+  while (!isEndBlock()) {
+    message = message + decodeBlock();
+    while (!radio.available()) {
+      delay(1);
+    }
+    radio.read(msg, PAYLOAD_LEN);
+  }
+  return message;
+}
+
 void transmitMessage(String message) {
   if (!radioEnabled) {
     return;
   }
   Serial.println("-- Transmitting message");
   
-  msg[0] = TOKEN_MESSAGE_PACKET;
-  // Break messages into chunks of 30 characters
-  // First make life easy by making a zero-terminated byte array
-  const int BUF_LEN = message.length() + 1;
-  byte messageBytes[BUF_LEN];
-  int i;
-  for (i = 0; i < message.length(); i++) {
-    messageBytes[i] = message[i];
-  }
-  messageBytes[i] = 0;
-
-  const int BLOCK_SIZE = PAYLOAD_LEN - 2;
-
-  int j = 0;
-  while (j < BUF_LEN) {
-    msg[j % BLOCK_SIZE + 1] = messageBytes[j];
-    
-    // zero-pad last block (not strictly necessary)
-    if (0 == messageBytes[j]) {
-      msg[0] = TOKEN_MESSAGE_PACKET_FINAL;
-      for (int k = j % BLOCK_SIZE + 2; k < PAYLOAD_LEN - 1; k++) {
-        msg[k] = 0;
-      }
-    }
-    
-    byte checksum = 0;
-    for (int k = 0; k < PAYLOAD_LEN - 1; k++) {
-      checksum ^= msg[k];
-    }
-    
-    if (0 == messageBytes[j] ||  (j + 1) % BLOCK_SIZE == 0) {
-      msg[PAYLOAD_LEN - 1] = checksum;
+  msg[0] = TOKEN_MESSAGE;
+  
+  clearMsg();
+  for (int j = 0; j < message.length(); j++) {
+    msg[(j % BLOCK_SIZE) + 1] = message[j];
+    if (j % BLOCK_SIZE == BLOCK_SIZE - 1 || message.length() - 1 == j) {
+      setChecksum();
       radio.write(msg, PAYLOAD_LEN);
+      clearMsg();
+      delay(3000); // give time for transmission and processing
     }
-    j++;
   }
+
+// write empty packet to signal end of message
+  clearMsg();
+  radio.write(msg, PAYLOAD_LEN);
+  //Serial.println("DEBUG: Transmitted terminal packet");
 }
 
 void displayMessage(String message) {
@@ -831,35 +864,6 @@ void loop_XMIT() {
   displayMessage(message);
 }
 
-String decodeMsg() {
-  String message = "";
-  for (int i = 1; i < PAYLOAD_LEN - 1 && msg[i] > 0; i++) {
-    message = message + (char)msg[i];
-  }
-  byte checksum = 0;
-  for (int i = 0; i < PAYLOAD_LEN - 1; i++) {
-    checksum ^= msg[i];
-  }
-  if (msg[PAYLOAD_LEN - 1] != checksum) {
-    digitalWrite(PIN_RED, HIGH);
-  }
-  return message;
-}
-
-String decodeAllPackets() {
-  String message = decodeMsg(); // first packet already in buffer
-  while (TOKEN_MESSAGE_PACKET == msg[0]) {
-    // expecting another packet; might need to wait for it to arrive
-    while (!radio.available()) {
-      delay(1);
-    }
-    radio.read(msg, PAYLOAD_LEN);
-    String next = decodeMsg();
-    message = message + next;
-  }
-  return message;
-}
-
 bool displayDisabled = false;
 
 void loop_RECV() {
@@ -868,12 +872,8 @@ void loop_RECV() {
     if (radio.available()) {
       digitalWrite(PIN_RED, LOW);
       radio.read(msg, PAYLOAD_LEN); // Read data from the nRF24L01
-      if (TOKEN_MESSAGE_PACKET_FINAL == msg[0]) {
-        String message = decodeMsg();
-        writeMessageToEEPROM(message);
-        displayDisabled = false;
-      } else if (TOKEN_MESSAGE_PACKET == msg[0]) {
-        String message = decodeAllPackets();
+      if (TOKEN_MESSAGE == msg[0]) {
+        String message = receiveMessage();
         writeMessageToEEPROM(message);
         displayDisabled = false;
       } else if (TOKEN_TEST == msg[0]) { // special case manual transmission
