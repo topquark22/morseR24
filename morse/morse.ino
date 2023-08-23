@@ -15,7 +15,7 @@
 const int PIN_CE = 10;
 const int PIN_CSN = 9;
 
-const int SPI_SPEED = 10000000;
+const int SPI_SPEED = 12000000;
 
 const int PIN_DISABLE_ = 4; // wire to GND if not using radio
 
