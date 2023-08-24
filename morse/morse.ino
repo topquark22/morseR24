@@ -14,8 +14,7 @@
 const int SPI_SPEED = 10000000;
 
 // Delay required so multiple blocks of the message don't clobber each other at the receiving end.
-// TODO find a better solution (some kind of ACK protocol?)
-const int DELAY_INTERBLOCK = 3000;
+const int DELAY_INTERBLOCK = 10;
 
 // These wirings of CE, CSN are used for integrated Nano3/nRF24l01 boards
 const int PIN_CE = 10;
@@ -538,6 +537,7 @@ void displayMessage(String message) {
     Serial.println();
   }
   interpretTextAs = MORSE;
+  delay(t_pause);
 }
 
 bool buttonPressed() {
@@ -797,7 +797,6 @@ void loop_XMIT() {
       transmitMessage(message);
       messageChanged = false;
     }
-    delay(t_pause);
 
   } else { // Serial.available()
 
@@ -860,6 +859,7 @@ void loop_RECV() {
     if (TOKEN_MESSAGE == msg[0]) {
       String message = receiveMessage();
       writeMessageToEEPROM(message);
+      messageChanged = true;
       displayEnabled = true;
     } else if (TOKEN_TEST == msg[0]) { // special case manual transmission
       setOutput(msg[4]);
