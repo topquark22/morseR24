@@ -68,20 +68,20 @@ Solid red can mean one of two things:
 
 There are two ways to enter test mode:
 
-1.  Wire pin D7 to ground. When the Arduino is reset, the output will blink continuously every 1 second. This is useful if you are in a different room, for instance.
+1.  Wire pin D7 to ground. When the Arduino is reset, the output will blink continuously every 1 second. If you hold down the button during the reset, then the button will act as a code key for manual input.
 
-If you hold down the button during the reset, then the button will act as a code key for manual input.
-
-2.  In normal operation (D7 not wired to ground), you can enter test mode by holding down the button until the next loop starts. In this case, the button will act as a code key for manual input. To get out of test mode, you have to reset the Arduino.
+2.  In normal operation (D7 not wired to ground), you can enter test mode by holding down the button until the next loop starts. In this case, the button will act as a code key for manual input. To get out of test mode, reset the Arduino.
 
 ## Circuit examples
 
-Here is one way to wire up the Arduino. This is using an integrated board. In this circuit, the output drives the gate of a 2N7000 MOSFET (open drain configuration) which can then be used to control an external circuit.
+1. External device control
+
+This example uses an integrated Nano V3 + nRF24L01 board. Here, the output drives the gate of a 2N7000 MOSFET in open drain configuration, that can then be used to control an external circuit.
 
 ![MOSFET board](img/mosfet-board.jpg)
 
-The next circuit uses a 555 to generate a tone that is sent to an audio jack. The Morse signal is sent to pin 4 (active low reset) of the 555 to turn the tone on and off. This configuration uses a regular Nano3 and external radio (not shown).
+2. Tone generator
 
-If you just wanted a standalone Morse tone generator, you could use master mode and remove and disable the radio.
+An LM555 timer in astable mode generates a tone that is sent to an audio jack. The GPIO signal is sent to pin 4 (active low reset) of the 555 to turn the tone on and off. This configuration uses a regular Nano3 and external radio (not shown). It can be used in master mode (with or without radio) or slave mode.
 
 ![Tone generator](img/audio-board.jpg)
