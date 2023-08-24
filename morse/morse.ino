@@ -421,7 +421,7 @@ void displayChess(char c) {
   delay(dly);
 }
 
-const int BLOCK_SIZE = PAYLOAD_LEN - 2;
+const int BLOCK_SIZE = PAYLOAD_LEN - 1;
 
 void clearMsg() {
   for (int k = 1; k < PAYLOAD_LEN; k++) {
@@ -429,45 +429,33 @@ void clearMsg() {
   }
 }
 
-void setChecksum() {
-  byte checksum = 0;
-  for (int k = 1; k < PAYLOAD_LEN - 1; k++) {
-    checksum ^= msg[k];
-  }
-  msg[PAYLOAD_LEN - 1] = checksum;
-}
-
-
-void checkChecksum() {
-  byte checksum = 0;
-  for (int i = 1; i < PAYLOAD_LEN - 1; i++) {
-    checksum ^= msg[i];
-  }
-  if (msg[PAYLOAD_LEN - 1] != checksum) {
-    digitalWrite(PIN_RED, HIGH);
-  }
-}
-
 String decodeBlock() {
-  checkChecksum();
   String block = "";
-  for (int i = 1; i < PAYLOAD_LEN - 1 && msg[i] > 0; i++) {
+  for (int i = 1; i < PAYLOAD_LEN && msg[i] > 0; i++) {
     block = block + (char)msg[i];
   }
   return block;
 }
 
-bool isEndBlock() {
-  return 0 == msg[1];
+bool isEmptyBlock() {
+  for (int i = 1; i < PAYLOAD_LEN; i++) {
+    if (msg[i] != 0) {
+      return false;
+    }
+  }
+  return true;
 }
 
 String receiveMessage() {
+
+  Serial.println("-- Receiving message");
+  
   // first block already in buffer
   String message = "";
-  while (!isEndBlock()) {
+  while (!isEmptyBlock()) {
     message = message + decodeBlock();
     while (!radio.available()) {
-      delay(1);
+      // wait for next packet
     }
     radio.read(msg, PAYLOAD_LEN);
   }
@@ -486,7 +474,6 @@ void transmitMessage(String message) {
   for (int j = 0; j < message.length(); j++) {
     msg[(j % BLOCK_SIZE) + 1] = message[j];
     if (j % BLOCK_SIZE == BLOCK_SIZE - 1 || message.length() - 1 == j) {
-      setChecksum();
       radio.write(msg, PAYLOAD_LEN);
       clearMsg();
       delay(DELAY_INTERBLOCK); // give time for transmission and processing
@@ -496,6 +483,7 @@ void transmitMessage(String message) {
   // write empty packet to signal end of message
   clearMsg();
   radio.write(msg, PAYLOAD_LEN);
+  delay(DELAY_INTERBLOCK); 
 }
 
 void displayMessage(String message) {
@@ -862,34 +850,32 @@ void loop_XMIT() {
   displayMessage(message);
 }
 
-bool displayDisabled = false;
+bool displayEnabled = true;
 
 void loop_RECV() {
 
-  if (radioEnabled) {
-    if (radio.available()) {
-      digitalWrite(PIN_RED, LOW);
-      radio.read(msg, PAYLOAD_LEN); // Read data from the nRF24L01
-      if (TOKEN_MESSAGE == msg[0]) {
-        String message = receiveMessage();
-        writeMessageToEEPROM(message);
-        displayDisabled = false;
-      } else if (TOKEN_TEST == msg[0]) { // special case manual transmission
-        setOutput(msg[4]);
-        displayDisabled = true;
-      } else if (TOKEN_SPEED == msg[0]) { // speed was transmitted
-        setSpeed((msg[1] << 24) + (msg[2] << 16) + (msg[3] << 8) + msg[4]);
-      } else if (TOKEN_PAUSE == msg[0]) { // pause was transmitted
-        setPause((msg[1] << 24) + (msg[2] << 16) + (msg[3] << 8) + msg[4]);
-      } else { // invalid token in msg[0]
-        Serial.println("Invalid packet received");
-        digitalWrite(PIN_RED, HIGH);
-        delay(100);
-        digitalWrite(PIN_RED, LOW);
-      }
+  if (radio.available()) {
+    digitalWrite(PIN_RED, LOW);
+    radio.read(msg, PAYLOAD_LEN); // Read data from the nRF24L01
+    if (TOKEN_MESSAGE == msg[0]) {
+      String message = receiveMessage();
+      writeMessageToEEPROM(message);
+      displayEnabled = true;
+    } else if (TOKEN_TEST == msg[0]) { // special case manual transmission
+      setOutput(msg[4]);
+      displayEnabled = false;
+    } else if (TOKEN_SPEED == msg[0]) { // speed was transmitted
+      setSpeed((msg[1] << 24) + (msg[2] << 16) + (msg[3] << 8) + msg[4]);
+    } else if (TOKEN_PAUSE == msg[0]) { // pause was transmitted
+      setPause((msg[1] << 24) + (msg[2] << 16) + (msg[3] << 8) + msg[4]);
+    } else { // invalid token in msg[0]
+      Serial.println("Invalid packet received");
+      digitalWrite(PIN_RED, HIGH);
+      delay(100);
+      exit(1);
     }
   }
-  if (!displayDisabled) {
+  if (displayEnabled) {
     String message = readMessageFromEEPROM();
     displayMessage(message);
     delay(t_pause);
