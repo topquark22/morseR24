@@ -72,15 +72,15 @@ There are two ways to enter test mode:
 
 2.  In normal operation (D7 not wired to ground), you can enter test mode by holding down the button until the next loop starts. In this case, the button will act as a code key for manual input. To get out of test mode, reset the Arduino.
 
-## Circuit examples
+## Example circuits
 
-1. External device control
+### External device control
 
 This example uses an integrated Nano V3 + nRF24L01 board. Here, the output drives the gate of a 2N7000 MOSFET in open drain configuration, that can then be used to control an external circuit.
 
 ![MOSFET board](img/mosfet-board.jpg)
 
-2. Tone generator
+### Tone generator
 
 An LM555 timer in astable mode generates a tone that is sent to an audio jack. The GPIO signal is sent to pin 4 (active low reset) of the 555 to turn the tone on and off. This configuration uses a regular Nano3 and external radio (not shown). It can be used in master mode (with or without radio) or slave mode.
 
