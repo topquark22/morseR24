@@ -756,6 +756,9 @@ void transmitPause() {
   transmitInteger(TOKEN_PAUSE, t_pause);
 }
 
+int decodeInteger() {
+  return (msg[1] << 24) + (msg[2] << 16) + (msg[3] << 8) + msg[4];
+}
 
 void loop() {
   // can enter test mode by holding down button switch
@@ -865,9 +868,9 @@ void loop_RECV() {
       setOutput(msg[4]);
       displayEnabled = false;
     } else if (TOKEN_SPEED == msg[0]) { // speed was transmitted
-      setSpeed((msg[1] << 24) + (msg[2] << 16) + (msg[3] << 8) + msg[4]);
+      setSpeed(decodeInteger());
     } else if (TOKEN_PAUSE == msg[0]) { // pause was transmitted
-      setPause((msg[1] << 24) + (msg[2] << 16) + (msg[3] << 8) + msg[4]);
+      setPause(decodeInteger());
     } else { // invalid token in msg[0]
       Serial.println("Invalid packet received");
       digitalWrite(PIN_RED, HIGH);
