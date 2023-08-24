@@ -84,6 +84,6 @@ Similarly, the inverted output D3 could be used to drive a P-channel MOSFET such
 
 ### Tone generator
 
-Here, an LM555 timer in astable mode generates a tone that is sent to a mono audio jack. The pin D5 output signal is sent to pin 4 (active low reset) of the 555 to turn the tone on and off. This configuration uses a regular Nano3 and external radio (not shown). It can be used in master mode (with or without radio) or slave mode.
+Here, an LM555 timer in astable mode generates a tone that is sent to a mono audio jack. The pin D5 output signal is sent to pin 4 (active low reset) of the 555 to turn the tone on and off. This configuration uses a regular Nano V3 and external radio (not shown) connected to the SPI bus. This circuit can be used in master mode (with or without radio) or slave mode.
 
 ![Tone generator](img/audio-board.jpg)
