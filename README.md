@@ -62,7 +62,7 @@ Solid red can mean one of two things:
 
 -  If red LED lights immediately, that means you are configured as a receiver and the radio is disabled. This configuration is unsupported.
     
--  If it happens during transmission of a message, the PIN_RED will light up on the slave to indicate a bad checksum of the data packet. This can be cleared by retransmitting the data from the master.
+-  If it happens during transmission of a message, the PIN_RED will light up on the slave to indicate that an invalid packet was received. The problem should be investigated and the slave reset.
 
 ## Test mode
 
