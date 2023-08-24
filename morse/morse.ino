@@ -864,7 +864,6 @@ void loop_RECV() {
     } else if (TOKEN_TEST == msg[0]) { // special case manual transmission
       setOutput(msg[4]);
       displayEnabled = false;
-      delay(10);
     } else if (TOKEN_SPEED == msg[0]) { // speed was transmitted
       setSpeed((msg[1] << 24) + (msg[2] << 16) + (msg[3] << 8) + msg[4]);
     } else if (TOKEN_PAUSE == msg[0]) { // pause was transmitted
@@ -880,5 +879,7 @@ void loop_RECV() {
     String message = readMessageFromEEPROM();
     displayMessage(message);
     delay(t_pause);
+  } else {
+    delay(10);
   }
 }
