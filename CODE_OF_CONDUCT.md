@@ -12,12 +12,6 @@ and orientation.
 We pledge to act and interact in ways that contribute to an open, welcoming,
 diverse, inclusive, and healthy community.
 
-# Usage restrictions
-
-This software contains the ability to transmit chess coordinates to a remot
-device. We strongly condemn cheating in chess. Do not use this software as
-part of a chess-cheating device.
-
 # Our Standards
 
 Examples of behavior that contributes to a positive environment for our
@@ -132,3 +126,10 @@ enforcement ladder](https://github.com/mozilla/diversity).
 For answers to common questions about this code of conduct, see the FAQ at
 https://www.contributor-covenant.org/faq. Translations are available at
 https://www.contributor-covenant.org/translations.
+
+# Usage restrictions
+
+This software contains the ability to transmit chess coordinates to a remot
+device. We strongly condemn cheating in chess. Do not use this software as
+part of a chess-cheating device.
+
