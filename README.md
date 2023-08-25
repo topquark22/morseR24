@@ -74,6 +74,14 @@ There are two ways to enter test mode:
 
 2.  In normal operation (D7 not wired to ground), you can enter test mode by holding down the button until the next loop starts. In this case, the button will act as a code key for manual input. To get out of test mode, reset the Arduino.
 
+## Channel setting
+
+The nRF24L01 supports wireless channels 0-125. The morse24 supports 8 channels, from 48 to 118 in increments of 10. The channel is specified using jumpers on pins A2-A4. If none of these are wired to ground, the channel defaults to 118. See the code for more details.
+
+## Device ID setting
+
+The morse24 supports two device IDs, selected by a jumper on pin A5. See the code for more details.
+
 ## Example circuits
 
 ### External device control
