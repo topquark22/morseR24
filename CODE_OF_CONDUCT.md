@@ -129,7 +129,7 @@ https://www.contributor-covenant.org/translations.
 
 # Usage restrictions
 
-This software contains the ability to transmit chess coordinates to a remot
-device. We strongly condemn cheating in chess. Do not use this software as
-part of a chess-cheating device.
+This software contains the ability to transmit chess coordinates to a remote
+device. We strongly condemn cheating in chess. We take no liability if this
+software were to be used as part of a chess-cheating device.
 
