@@ -126,8 +126,3 @@ enforcement ladder](https://github.com/mozilla/diversity).
 For answers to common questions about this code of conduct, see the FAQ at
 https://www.contributor-covenant.org/faq. Translations are available at
 https://www.contributor-covenant.org/translations.
-
-This software contains the ability to transmit chess coordinates to a remote
-device. We strongly condemn cheating in chess. We take no liability if this
-software were to be used as part of a chess-cheating device.
-
