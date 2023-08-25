@@ -12,10 +12,11 @@ and orientation.
 We pledge to act and interact in ways that contribute to an open, welcoming,
 diverse, inclusive, and healthy community.
 
-## Product usage
+# Usage restrictions
 
-This software contains the ability to transmit chess coordinates to a remote device. We strongly condemn cheating
-in chess. Do not use this software as part of a chess-cheating device.
+This software contains the ability to transmit chess coordinates to a remot
+device. We strongly condemn cheating in chess. Do not use this software as
+part of a chess-cheating device.
 
 # Our Standards
 
