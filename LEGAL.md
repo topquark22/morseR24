@@ -1,4 +1,4 @@
-# Usage restrictions
+# Legal disclaimer
 
 This software contains the ability to transmit chess moves to a remote device.
 We strongly condemn cheating in chess. We take no liability should this software be used
