@@ -14,7 +14,7 @@ You must install the RF24 library from TMRh20,Avamander version 1.4.7 or greater
 
 ## Initialization
 
-This code will work with a fresh Arduino from the factory. The EEPROM location 0 must contain the value 0xFF at first use, in order for it to initialize the timings to their default values. If something gets messed up, the best thing to do is run eeprom_reset.ino. This will clear the EEPROM to all 0xFF values. Then reupload the sketch and life is good.
+This sketch will work with a fresh Arduino from the factory. The EEPROM location 0 must contain the value 0xFF at first use, in order for it to initialize the timings to their default values. If something gets messed up, the best thing to do is run eeprom_reset.ino. This will clear the EEPROM to all 0xFF values. Then reupload the sketch and life is good.
 
 ## PWM wiring
 
