@@ -2,7 +2,7 @@
 
 An Arduino sketch that converts text to Morse code, outputs to GPIO pin, and can transmit to slave devices using nRF24L01 radio.
 
-It supports up to 16 different wireless channels, and two different device IDs.
+It supports up to 8 different wireless channels, and two different device IDs.
 
 ## Hardware requirements
 
