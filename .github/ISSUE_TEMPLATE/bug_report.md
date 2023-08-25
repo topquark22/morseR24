@@ -7,6 +7,9 @@ assignees: ''
 
 ---
 
+**Release/Tag**
+Which release or tag contains the bug.
+
 **Describe the bug**
 A clear and concise description of what the bug is.
 
@@ -18,3 +21,6 @@ A clear and concise description of what you expected to happen.
 
 **Screenshots**
 If applicable, add screenshots, photo or video to help explain your problem.
+
+**Workaround**
+How to mitigate the bug, if possible.
