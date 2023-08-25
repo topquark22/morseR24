@@ -28,7 +28,9 @@ The integrated boards are wired for CE=10 and CSN=9. Most resources on the Inter
 
 ### Master (transmitter) mode
 
-For master mode, leave pin D8 unconnected. The message to transmit is entered in the serial monitor console. It accepts multiple lines (as the serial input buffer can only accept 64 characters at a time,) and concatenates them together. Enter a blank line to commit the message.
+For master mode, leave pin D8 unconnected.
+
+The message to transmit is entered in the serial monitor console. It accepts multiple lines (as the serial input buffer can only accept 64 characters at a time,) and concatenates them together. Enter a blank line to commit the message.
 
 The following in-line characters will cause the text to be interpreted in several different ways:
 
