@@ -64,9 +64,9 @@ Fast blink: Radio is not connected properly. You can use this sketch in master m
 
 Solid red can mean one of two things:
 
--  If red LED lights immediately, that means you are configured as a receiver and the radio is disabled. This configuration is not supported.
+-  If the red LED lights immediately, that means you are configured as a receiver and the radio is disabled. This configuration is not supported.
     
--  If it happens during transmission of a message, the red LED will light up on the slave to indicate that an invalid packet was received. This should not happen, so file a bug report. The problem should be investigated and the slave reset.
+-  If the red LED lights during transmission of a message, an invalid packet was received. This should not happen if there is good communication between the transmitter and the receiver. The problem should be investigated and the slave reset.
 
 ## Test mode
 
