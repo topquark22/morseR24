@@ -64,6 +64,9 @@ const int BUFLEN = 64;
 const int ADDR_SPEED = 0x3F0;
 const int ADDR_PAUSE = 0x3F4;
 
+// special value indicating that an int in EEPROM has not been set
+const int NOT_SET = -1;
+
 // packet type tokens (first byte of payload)
 const int TOKEN_TEST = 1;
 const int TOKEN_SPEED = 2;
@@ -607,7 +610,7 @@ void setup() {
     Serial.print("Warning: PWM = "); Serial.println(pwm);
   }
 
-  if (0xFF == EEPROM.read(0)) { // new Arduino
+  if (NOT_SET == readIntFromEEPROM(ADDR_SPEED)) { // new Arduino
     EEPROM.write(0, 0);
     setSpeed(t_DOT);
     setPause(t_PAUSE);
