@@ -43,8 +43,8 @@ You can change these in-line modifiers mid-text.
 
 The timings can be changed using the following commands, for example:
 
-- **@speed 100** changes the dot length to 100 ms
-- **@pause 3000** changes the inter-message pause to 3000 ms
+- ***speed 100** changes the dot length to 100 ms
+- ***pause 3000** changes the inter-message pause to 3000 ms
 
 The command will be transmitted to the slave. Issuing one of these commands will interrupt and restart any broadcast in progress.
 
