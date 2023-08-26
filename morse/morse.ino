@@ -667,9 +667,6 @@ void setup() {
       radio.openWritingPipe(deviceID); // Get NRF24L01 ready to transmit
       radio.stopListening();
 
-      transmitSpeed();
-      transmitPause();
-
     } else { // recv mode
 
       radio.openReadingPipe(1, deviceID); // Get NRF24L01 ready to receive
