@@ -56,7 +56,7 @@ The serial monitor will display the characters as they are transmitted, as well 
 
 ## Error conditions
 
-The red LED (pin D2) indicates the following:
+Connect a red LED to pin D2. It indicates the following:
 
 It will blink once for 1/10 second upon initiation to indicate that the radio is operational.
 
