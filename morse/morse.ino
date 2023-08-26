@@ -458,6 +458,7 @@ String receiveMessage() {
     message = message + decodeBlock();
     while (!radio.available()) {
       // wait for next packet
+      delay(1);
     }
     radio.read(msg, PAYLOAD_LEN);
   }
