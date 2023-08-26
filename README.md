@@ -84,6 +84,10 @@ The nRF24L01 supports wireless channels 0-125. The morse24 supports 8 channels, 
 
 The morse24 supports two device IDs, selected by a jumper on pin A5. See the code for more details.
 
+## Radio power
+
+The radio power is set by jumpers on pins A0, A1. The default is MAX. See the code for more details.
+
 ## Example circuits
 
 ### External device control
