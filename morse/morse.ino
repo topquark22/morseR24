@@ -865,7 +865,6 @@ void loop_RECV() {
     if (TOKEN_MESSAGE == msg[0]) {
       String message = receiveMessage();
       writeMessageToEEPROM(message);
-      messageChanged = true;
       displayEnabled = true;
     } else if (TOKEN_TEST == msg[0]) { // special case manual transmission
       setOutput(msg[4]);
