@@ -37,7 +37,7 @@ The following in-line characters will cause the text to be interpreted in severa
 - Morse code (the default, or preceded by **_** )
 - Unary (using the **#** character). For example, **#314159**
 - Hexadecimal (using the **$** character). For example, **$600DF00D**
-- Chess coordinates (using the **%** character). For example, **%e2e4**
+- Chess coordinates (using the **%** character). For example, **%e2e4 e7e5**
 
 You can change these in-line modifiers mid-text.
 
