@@ -793,7 +793,7 @@ String readLine() {
 
 const int INPUT_LEN = 64;
 
-bool messageChanged = true;
+bool messageChanged = false;
 
 void loop_XMIT() {
 
