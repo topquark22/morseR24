@@ -16,13 +16,13 @@ You must install the RF24 library from TMRh20,Avamander version 1.4.7 or greater
 
 This sketch will work with a fresh Arduino from the factory. In order for it to initialize the timings to their default values, the speed timing must not be set initially. If something gets messed up, the best thing to do is run eeprom_reset.ino. This will clear the EEPROM to all 0xFF values. Then reupload the sketch and life is good.
 
+## CE and CSN pins
+
+If using an external radio with a Nano V3 or compatible, wire  CE to pin 10 and CSN to pin 9. This project supports integrated boards and that's what they use.
+
 ## PWM wiring
 
 The signal output pins (D5, and D3 inverted) support PWM. This is controlled by the voltage on pin A7, which is usually wired to +5V. If you leave A7 unconnected, you will get erratic results. On the Nano V3, it is easy to wire A7 to +5 because the two pins are right next to each other. In most cases that's what you will do unless you really want to use PWM.
-
-## CE and CSN pins
-
-If using an external radio, wire  CE to pin 10 and CSN to pin 9. This project supports integrated boards and that's what they use.
 
 ## Modes of operation
 
