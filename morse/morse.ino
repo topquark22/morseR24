@@ -810,7 +810,7 @@ void loop_XMIT() {
   } else { // Serial.available()
 
     String line = readLine();
-    if (line.substring(0, 1).equals("*")) {
+    if (line.substring(0, 1).equals("@")) {
       if (line.substring(0, 7).equals("@speed ")) {
         String speedStr = line.substring(7, line.length());
         int speed = parseInt(speedStr);
