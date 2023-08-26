@@ -2,7 +2,7 @@
 
 An Arduino sketch that converts text to Morse code or other formats, outputs to GPIO pin, and can transmit to slave devices using an nRF24L01 radio.
 
-It supports up to 8 different wireless channels, and two different device IDs.
+It supports up to 8 different wireless channels, and 2 selectable device IDs.
 
 ## Hardware requirements
 
@@ -22,7 +22,7 @@ The signal output pins (D5, and D3 inverted) support PWM. This is controlled by 
 
 ## CE and CSN pins
 
-The integrated boards are wired for CE=10 and CSN=9. Most resources on the Internet suggest `RF24 radio(9, 10)` or say that you can specify any pins. That's fine if you are using an external radio for some other project, but this project supports integrated boards and so you must use pin 10 for CE and pin 9 for CSN.
+The integrated boards are wired for CE=10 and CSN=9. Most resources on the Internet suggest that you can specify any pins. That's fine if you are using an external radio for some other project, but this project supports integrated boards and so you must use pin 10 for CE and pin 9 for CSN.
 
 ## Modes of operation
 
