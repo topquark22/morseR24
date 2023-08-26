@@ -694,8 +694,8 @@ void setup() {
     Serial.println("Accepting input from serial console");
     Serial.println();
     Serial.println("Commands:");
-    Serial.println("  *speed <dot ms>");
-    Serial.println("  *pause <pause ms>");
+    Serial.println("  @speed <dot ms>");
+    Serial.println("  @pause <pause ms>");
     Serial.println();
     Serial.println("In-stream modifiers for text interpretation:");
     Serial.println("  _: Morse (default)");
@@ -811,7 +811,7 @@ void loop_XMIT() {
 
     String line = readLine();
     if (line.substring(0, 1).equals("*")) {
-      if (line.substring(0, 7).equals("*speed ")) {
+      if (line.substring(0, 7).equals("@speed ")) {
         String speedStr = line.substring(7, line.length());
         int speed = parseInt(speedStr);
         setSpeed(speed);
@@ -819,7 +819,7 @@ void loop_XMIT() {
         return;
       }
 
-      if (line.substring(0, 7).equals("*pause ")) {
+      if (line.substring(0, 7).equals("@pause ")) {
         String pauseStr = line.substring(7, line.length());
         int pause = parseInt(pauseStr);
         setPause(pause);
@@ -827,7 +827,7 @@ void loop_XMIT() {
         return;
       }
       else {
-        Serial.println("-- Invalid * command");
+        Serial.println("-- Invalid @ command");
         return;
       }
     }
