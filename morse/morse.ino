@@ -753,10 +753,12 @@ void transmitInteger(int tokenType, int value) {
 }
 
 void transmitSpeed() {
+  Serial.println("-- Transmitting speed");
   transmitInteger(TOKEN_SPEED, t_dot);
 }
 
 void transmitPause() {
+  Serial.println("-- Transmitting pause");
   transmitInteger(TOKEN_PAUSE, t_pause);
 }
 
