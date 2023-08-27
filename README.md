@@ -6,7 +6,7 @@ It supports up to 8 different wireless channels, and 2 selectable device IDs.
 
 ## Hardware requirements
 
-This project uses the Arduino Nano V3, or a compatible board with integrated nRF24L01 radio. Some other Arduuinos may work, but they must have analog input pin A7. So, for instance, a Uno won't work.
+This project was developed using the Arduino Nano V3, and a compatible board with integrated nRF24L01 radio. Some other Arduuinos may work, but they must have analog input pin A7. So, for instance, a Uno won't work.
 
 ## Software requirements
 
