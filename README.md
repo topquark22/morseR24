@@ -14,7 +14,7 @@ You must install the RF24 library from TMRh20,Avamander version 1.4.7 or greater
 
 ## Initialization
 
-This sketch will work initially with Arduino factory EEPROM settings. If the stored message or timing settings are incorrect, then run **eeprom_reset.ino** to reset the EEPROM. Then reupload the sketch and life is good.
+This sketch will work initially with Arduino factory EEPROM settings. If the stored message or timing settings are incorrect, run **eeprom_reset.ino** to reset the EEPROM. Then reupload the sketch and life is good.
 
 ## CE and CSN pins
 
