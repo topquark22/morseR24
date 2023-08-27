@@ -4,6 +4,36 @@ An Arduino sketch that converts text to Morse code or other formats, outputs to 
 
 It supports up to 8 different wireless channels, and 2 selectable device IDs.
 
+## Modes of operation
+
+### Master (transmitter) mode
+
+For master mode, leave pin D8 unconnected.
+
+The message to transmit is entered in the serial monitor console. It accepts multiple lines (as the serial input buffer can only accept 64 characters at a time) and concatenates them together. Enter a blank line to commit the message.
+
+The following in-line characters will cause the text to be interpreted in several different ways:
+
+- Morse code (the default, or preceded by **_** )
+- Unary (using the **#** character). For example, **#314159**
+- Hexadecimal (using the **$** character). For example, **$600DF00D**
+- Chess coordinates (using the **%** character). For example, **%e2e4 e7e5**
+
+You can change these in-line modifiers mid-text.
+
+The timings can be changed using the following commands, for example:
+
+- ***speed 100** changes the dot length to 100 ms
+- ***pause 3000** changes the inter-message pause to 3000 ms
+
+The command will be transmitted to the slave. Issuing one of these commands will interrupt and restart any broadcast in progress.
+
+### Slave (receiver) mode
+
+For slave mode, wire pin D8 to ground.
+
+The serial monitor will display the characters as they are transmitted, as well as any speed and pause timing changes.
+
 ## Hardware requirements
 
 This project uses the Arduino Nano V3, or a compatible board with integrated nRF24L01 radio. Other boards may work, but they must have analog input A7. So, for instance, a Uno won't work.
@@ -35,36 +65,6 @@ Optionally connect a red LED to pin D2 via a current-limiting resistor. This is 
 ### Pushbutton switch
 
 Optionally connect pin D6 to ground via a normally-open switch.
-
-## Modes of operation
-
-### Master (transmitter) mode
-
-For master mode, leave pin D8 unconnected.
-
-The message to transmit is entered in the serial monitor console. It accepts multiple lines (as the serial input buffer can only accept 64 characters at a time) and concatenates them together. Enter a blank line to commit the message.
-
-The following in-line characters will cause the text to be interpreted in several different ways:
-
-- Morse code (the default, or preceded by **_** )
-- Unary (using the **#** character). For example, **#314159**
-- Hexadecimal (using the **$** character). For example, **$600DF00D**
-- Chess coordinates (using the **%** character). For example, **%e2e4 e7e5**
-
-You can change these in-line modifiers mid-text.
-
-The timings can be changed using the following commands, for example:
-
-- ***speed 100** changes the dot length to 100 ms
-- ***pause 3000** changes the inter-message pause to 3000 ms
-
-The command will be transmitted to the slave. Issuing one of these commands will interrupt and restart any broadcast in progress.
-
-### Slave (receiver) mode
-
-For slave mode, wire pin D8 to ground.
-
-The serial monitor will display the characters as they are transmitted, as well as any speed and pause timing changes.
 
 ## Error conditions
 
