@@ -30,7 +30,7 @@ The output pins support PWM. This is controlled by the voltage on pin A7, which 
 
 ### Indicator LED
 
-Optionally connect a red LED from pin D2 via a current-limiting resistor to ground. This is used to indicate error and operating signals (see below).
+Optionally connect a red LED from pin D2 via a current-limiting resistor to ground. This is used to indicate error and operating conditions (see below).
 
 ### Pushbutton switch
 
