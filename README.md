@@ -40,7 +40,7 @@ Optionally connect pin D6 to ground via a normally-open switch.
 
 The red LED indicates the following:
 
-It will blink once for 1/10 second upon initiation to indicate that the radio is operational.
+It will blink once for 1/10 second upon initiation if the radio is operational.
 
 Fast blink: Radio is not connected properly. You can use this sketch in master mode without a radio, if you just want to control something from the GPIO pin. But in that case you need to wire pin D4 to ground to disable the radio.
 
