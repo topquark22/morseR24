@@ -14,7 +14,7 @@ You must install the RF24 library from TMRh20,Avamander version 1.4.7 or greater
 
 ## Initialization
 
-Upload **morse.ino**. This sketch will work initially with Arduino factory EEPROM settings. If the stored message or timing settings are incorrect, upload **eeprom_reset.ino** to reset the EEPROM. Then reupload **morse.ino** and life is good.
+Upload **morse.ino**. This sketch will work initially with Arduino factory EEPROM settings. If the stored message or timing settings are incorrect, upload **eeprom_reset.ino** to reset the EEPROM. Then reupload **morse.ino**.
 
 ## CE and CSN pins
 
