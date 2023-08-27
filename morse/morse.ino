@@ -448,26 +448,28 @@ bool isEmptyBlock() {
   return true;
 }
 
-String receiveMessage() {
+void displayBlock() {
+  if (isEmptyBlock()) {
+    Serial.println("-- Block is empty");
+  } else {
+    Serial.println("-- Block contains: ");
+    Serial.println(decodeBlock());
+  }
+}
 
+String receiveMessage() {
   Serial.println("-- Receiving message");
-  
+  displayBlock();
   // first block already in buffer
   String message = "";
   while (!isEmptyBlock()) {
     message = message + decodeBlock();
     while (!radio.available()) {
-      Serial.println("DEBUG: Waiting for next packet");
-      delay(10);
+      //Serial.println("DEBUG: Waiting for next packet");
+      delay(1);
     }
     radio.read(msg, PAYLOAD_LEN);
-    // start DEBUG
-    if (isEmptyBlock()) {
-      Serial.println("DEBUG: Received terminator");
-    } else {
-      Serial.println("DEBUG: Received packet ");
-      Serial.println(decodeBlock());
-    } // end DEBUG code
+    displayBlock();
   }
   return message;
 }
@@ -484,13 +486,7 @@ void transmitMessage(String message) {
   for (int j = 0; j < message.length(); j++) {
     msg[(j % BLOCK_SIZE) + 1] = message[j];
     if (j % BLOCK_SIZE == BLOCK_SIZE - 1 || message.length() - 1 == j) {
-      // start DEBUG
-      if (isEmptyBlock()) {
-        Serial.println("DEBUG: Transmitting terminator");
-      } else {
-        Serial.print("DEBUG: Transmitting block: ");
-        Serial.println(decodeBlock());
-      } // end DEBUG
+      displayBlock();
       radio.write(msg, PAYLOAD_LEN);
       clearMsg();
       delay(DELAY_INTERBLOCK); // give time for transmission and processing
