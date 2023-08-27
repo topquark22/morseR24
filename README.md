@@ -98,7 +98,7 @@ The command will be transmitted to the slave. Issuing one of these commands will
 
 For slave mode, wire pin D8 to ground.
 
-The serial monitor will display the characters as they are transmitted, as well as any speed and pause timing changes.
+The serial monitor will display the characters as they are output, as well as any speed and pause timing changes.
 
 ## Example circuits
 
