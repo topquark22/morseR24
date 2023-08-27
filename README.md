@@ -18,7 +18,7 @@ This sketch will work with a fresh Arduino from the factory. In order for it to 
 
 ## CE and CSN pins
 
-If using an external radio with a Nano V3 or compatible, wire  CE to pin 10 and CSN to pin 9. This project supports integrated boards and that's what they use.
+If using an external radio, wire CE to pin 10 and CSN to pin 9. This project supports integrated boards and that's what they use.
 
 ## Circuit considerations
 
