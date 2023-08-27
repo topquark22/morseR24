@@ -66,7 +66,7 @@ Solid red can mean one of two things:
 
 -  If the red LED lights immediately, then it is configured as a receiver and the radio is disabled. This configuration is not supported.
     
--  If the red LED lights during transmission of a message, an invalid packet was received. This should not happen if there is good communication between the transmitter and the receiver. The problem should be investigated and the slave reset.
+-  If the red LED lights during transmission of a message, an invalid packet was received. Ensure that the transmitter and the receiver are running compatible versions and that there is good radio communication. The problem should be investigated and the slave reset.
 
 ## Test mode
 
