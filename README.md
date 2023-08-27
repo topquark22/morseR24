@@ -4,36 +4,6 @@ An Arduino sketch that converts text to Morse code or other formats, outputs to 
 
 It supports up to 8 different wireless channels, and 2 selectable device IDs.
 
-## Modes of operation
-
-### Master (transmitter) mode
-
-For master mode, leave pin D8 unconnected.
-
-The message to transmit is entered in the serial monitor console. It accepts multiple lines (as the serial input buffer can only accept 64 characters at a time) and concatenates them together. Enter a blank line to commit the message.
-
-The following in-line characters will cause the text to be interpreted in several different ways:
-
-- Morse code (the default, or preceded by **_** )
-- Unary (using the **#** character). For example, **#314159**
-- Hexadecimal (using the **$** character). For example, **$600DF00D**
-- Chess coordinates (using the **%** character). For example, **%e2e4 e7e5**
-
-You can change these in-line modifiers mid-text.
-
-The timings can be changed using the following commands, for example:
-
-- ***speed 100** changes the dot length to 100 ms
-- ***pause 3000** changes the inter-message pause to 3000 ms
-
-The command will be transmitted to the slave. Issuing one of these commands will interrupt and restart any broadcast in progress.
-
-### Slave (receiver) mode
-
-For slave mode, wire pin D8 to ground.
-
-The serial monitor will display the characters as they are transmitted, as well as any speed and pause timing changes.
-
 ## Hardware requirements
 
 This project uses the Arduino Nano V3, or a compatible board with integrated nRF24L01 radio. Other boards may work, but they must have analog input A7. So, for instance, a Uno won't work.
@@ -80,7 +50,9 @@ Solid red can mean one of two things:
     
 -  If the red LED lights during transmission of a message, an invalid packet was received. Ensure that the transmitter and the receiver are running compatible versions and that there is good radio communication. The problem should be investigated and the slave reset.
 
-## Test mode
+## Configuration
+
+### Test mode
 
 There are two ways to enter test mode:
 
@@ -88,17 +60,47 @@ There are two ways to enter test mode:
 
 2.  In normal operation (D7 not wired to ground), you can enter test mode by holding down the button until the next loop starts. In this case, the button will act as a code key for manual input. To get out of test mode, reset the Arduino.
 
-## Channel setting
+### Channel setting
 
 The nRF24L01 supports wireless channels 0-125. The morse24 supports 8 channels, from 48 to 118 in increments of 10. The channel is specified using jumpers on pins A2-A4. If none of these are wired to ground, the channel defaults to 118. See the code for more details.
 
-## Device ID setting
+### Device ID setting
 
 The morse24 supports two device IDs, selected by a jumper on pin A5. See the code for more details.
 
-## Power setting
+### Power setting
 
 The radio power is set by jumpers on pins A0, A1. The default is MAX. See the code for more details.
+
+## Modes of operation
+
+### Master (transmitter) mode
+
+For master mode, leave pin D8 unconnected.
+
+The message to transmit is entered in the serial monitor console. It accepts multiple lines (as the serial input buffer can only accept 64 characters at a time) and concatenates them together. Enter a blank line to commit the message.
+
+The following in-line characters will cause the text to be interpreted in several different ways:
+
+- Morse code (the default, or preceded by **_** )
+- Unary (using the **#** character). For example, **#314159**
+- Hexadecimal (using the **$** character). For example, **$600DF00D**
+- Chess coordinates (using the **%** character). For example, **%e2e4 e7e5**
+
+You can change these in-line modifiers mid-text.
+
+The timings can be changed using the following commands, for example:
+
+- ***speed 100** changes the dot length to 100 ms
+- ***pause 3000** changes the inter-message pause to 3000 ms
+
+The command will be transmitted to the slave. Issuing one of these commands will interrupt and restart any broadcast in progress.
+
+### Slave (receiver) mode
+
+For slave mode, wire pin D8 to ground.
+
+The serial monitor will display the characters as they are transmitted, as well as any speed and pause timing changes.
 
 ## Example circuits
 
