@@ -1,6 +1,6 @@
 # morseR24
 
-An Arduino sketch that converts text to Morse code or other formats, outputs to GPIO pin, and can transmit to slave devices using an nRF24L01 radio.
+An Arduino sketch that converts text to Morse code and other formats, outputs to GPIO pin, and can transmit to slave devices using an nRF24L01 radio.
 
 It supports up to 8 wireless channels, and 2 selectable device IDs.
 
