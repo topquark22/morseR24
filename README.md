@@ -6,7 +6,7 @@ It supports up to 8 wireless channels, and 2 selectable device IDs.
 
 ## Hardware requirements
 
-This project was developed using the Arduino Nano V3, and a compatible board with integrated nRF24L01 radio. Some other Arduinos may work, but they must have analog input pin A7. So, for instance, a Uno won't work.
+This project was developed using the Arduino Nano V3, and a compatible board with integrated nRF24L01 radio. Some other Arduinos may work, but they must have analog input pin A7. So, for instance, the Uno won't work.
 
 ## Software requirements
 
@@ -60,7 +60,7 @@ There are two ways to enter test mode:
 
 ### Channel setting
 
-The nRF24L01 supports wireless channels 0-125. The morse24 supports 8 channels, from 48 to 118 in increments of 10. The channel is specified using jumpers on pins A2-A4. If none of these are wired to ground, the channel defaults to 118. See the code for more details.
+The nRF24L01 supports wireless channels 0-125. **morse.ino** supports 8 channels, from 48 to 118 in increments of 10. The channel is specified using jumpers on pins A2-A4. If none of these are wired to ground, the channel defaults to 118. See the code for more details.
 
 ### Device ID setting
 
