@@ -34,7 +34,7 @@ Optionally connect a red LED from pin D2 via a current-limiting resistor to grou
 
 ### Code key switch
 
-Optionally connect pin D6 to ground via a normally-open pushbutton.
+Optionally connect pin D6 to ground via a normally-open pushbutton switch.
 
 ## Indicator signals
 
