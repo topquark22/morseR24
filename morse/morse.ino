@@ -14,7 +14,7 @@
 const int SPI_SPEED = 10000000;
 
 // Delay required so multiple blocks of the message don't clobber each other at the receiving end.
-const int DELAY_INTERBLOCK = 10;
+const int DELAY_INTERBLOCK = 1000;
 
 // These wirings of CE, CSN are used for integrated Nano3/nRF24l01 boards
 const int PIN_CE = 10;
@@ -457,10 +457,17 @@ String receiveMessage() {
   while (!isEmptyBlock()) {
     message = message + decodeBlock();
     while (!radio.available()) {
-      // wait for next packet
-      delay(1);
+      Serial.println("DEBUG: Waiting for next packet");
+      delay(10);
     }
     radio.read(msg, PAYLOAD_LEN);
+    // start DEBUG
+    if (isEmptyBlock()) {
+      Serial.println("DEBUG: Received terminator");
+    } else {
+      Serial.println("DEBUG: Received packet ");
+      Serial.println(decodeBlock());
+    } // end DEBUG code
   }
   return message;
 }
@@ -477,6 +484,13 @@ void transmitMessage(String message) {
   for (int j = 0; j < message.length(); j++) {
     msg[(j % BLOCK_SIZE) + 1] = message[j];
     if (j % BLOCK_SIZE == BLOCK_SIZE - 1 || message.length() - 1 == j) {
+      // start DEBUG
+      if (isEmptyBlock()) {
+        Serial.println("DEBUG: Transmitting terminator");
+      } else {
+        Serial.print("DEBUG: Transmitting block: ");
+        Serial.println(decodeBlock());
+      } // end DEBUG
       radio.write(msg, PAYLOAD_LEN);
       clearMsg();
       delay(DELAY_INTERBLOCK); // give time for transmission and processing
