@@ -135,6 +135,8 @@ const int CONSOLE_WIDTH = 100;
 const int EEPROM_LEN = 0x3F0; // leave room for speed, pause
 
 void writeMessageToEEPROM(String message) {
+  Serial.print("DEBUG: Writing to EEPROM: ");
+  Serial.println(message);
   int i;
   for (i = 0; i < message.length() && i < EEPROM_LEN - 1; i++) {
     EEPROM.update(i, message[i]);
@@ -465,8 +467,8 @@ String receiveMessage() {
   while (!isEmptyBlock()) {
     message = message + decodeBlock();
     while (!radio.available()) {
-      //Serial.println("DEBUG: Waiting for next packet");
-      delay(1);
+      Serial.println("DEBUG: Waiting for next packet");
+      delay(100);
     }
     radio.read(msg, PAYLOAD_LEN);
     displayBlock();
