@@ -40,7 +40,7 @@ Optionally connect pin D6 to ground via a normally-open pushbutton switch.
 
 The red LED will blink once for 1/10 second if the radio is operational.
 
-Fast blink: Radio is enabled but not connected properly. If you just want to control something with GPIO, you can operate in master mode without a radio. But in that case you must wire pin D4 to ground to disable the radio.
+Fast blink: Radio is enabled but not connected properly.
 
 Solid red can mean one of two things:
 
@@ -93,6 +93,10 @@ The timings can be changed using the following commands, for example:
 - ***pause 3000** changes the inter-message pause to 3000 ms
 
 The command will be transmitted to the slave. Issuing one of these commands will interrupt and restart any broadcast in progress.
+
+#### Standalone operation
+
+If you just want to control something with GPIO, you can operate in master mode without a radio. But in that case you must wire pin D4 to ground to disable the radio.
 
 ### Slave (receiver) mode
 
