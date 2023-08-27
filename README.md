@@ -20,9 +20,19 @@ This sketch will work with a fresh Arduino from the factory. In order for it to 
 
 If using an external radio with a Nano V3 or compatible, wire  CE to pin 10 and CSN to pin 9. This project supports integrated boards and that's what they use.
 
-## PWM wiring
+## Wiring considerations
+
+### PWM
 
 The signal output pins (D5, and D3 inverted) support PWM. This is controlled by the voltage on pin A7, which is usually wired to +5V. If you leave A7 unconnected, you will get erratic results. On the Nano V3, it is easy to wire A7 to +5 because the two pins are right next to each other. In most cases that's what you will do unless you really want to use PWM.
+
+### Indicator LED
+
+Optionally connect a red LED to pin D2 via a current-limiting resistor. This is used to indicate error and operatiing conditions (see below).
+
+### Pushbutton switch
+
+Optionally connect pin D6 to ground via a normally-open switch.
 
 ## Modes of operation
 
@@ -56,7 +66,7 @@ The serial monitor will display the characters as they are transmitted, as well 
 
 ## Error conditions
 
-Connect a red LED to pin D2. It indicates the following:
+The red LED indicates the following:
 
 It will blink once for 1/10 second upon initiation to indicate that the radio is operational.
 
