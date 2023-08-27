@@ -36,7 +36,7 @@ Optionally connect a red LED to pin D2 via a current-limiting resistor to ground
 
 Optionally connect pin D6 to ground via a normally-open switch.
 
-## Indicator conditions
+## Indicator signals
 
 The red LED will blink once for 1/10 second if the radio is operational.
 
