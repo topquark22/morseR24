@@ -18,7 +18,7 @@ Upload **morse.ino**. The sketch will work initially with Arduino factory settin
 
 ## CE and CSN pins
 
-If using an external radio, wire CE to pin 10 and CSN to pin 9. This project supports integrated boards and that's what they use.
+If using an external radio, wire CE to pin 10 and CSN to pin 9. This sketch supports integrated boards and that's what they use.
 
 ## Circuit considerations
 
