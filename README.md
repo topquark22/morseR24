@@ -42,7 +42,7 @@ The red LED indicates the following:
 
 It will blink once for 1/10 second upon initiation if the radio is operational.
 
-Fast blink: Radio is not connected properly. You can use this sketch in master mode without a radio, if you just want to control something from the GPIO pin. But in that case you need to wire pin D4 to ground to disable the radio.
+Fast blink: Radio is enabled but not connected properly. If you just want to control something with GPIO, you can operate in master mode without a radio. But in that case you must wire pin D4 to ground to disable the radio.
 
 Solid red can mean one of two things:
 
