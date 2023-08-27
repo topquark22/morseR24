@@ -64,7 +64,7 @@ The nRF24L01 supports wireless channels 0-125. **morse.ino** supports 8 channels
 
 ### Device ID setting
 
-The morse24 supports two device IDs, selected by a jumper on pin A5. See the code for more details.
+The sketch supports two device IDs, selected by a jumper on pin A5. See the code for more details.
 
 ### Power setting
 
