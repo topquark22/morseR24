@@ -14,7 +14,7 @@ You must install the RF24 library from TMRh20,Avamander version 1.4.7 or greater
 
 ## Initialization
 
-This sketch will work with a fresh Arduino from the factory. In order for it to initialize the timings to their default values, the speed timing must not be set initially. If something gets messed up, the best thing to do is run eeprom_reset.ino. This will clear the EEPROM to all 0xFF values. Then reupload the sketch and life is good.
+This sketch will work initially with Arduino factory EEPROM settings. If the stored message or timing settings are incorrect, then run **eeprom_reset.ino** to reset the EEPROM. Then reupload the sketch and life is good.
 
 ## CE and CSN pins
 
