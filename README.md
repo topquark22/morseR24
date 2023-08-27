@@ -22,7 +22,7 @@ If using an external radio with a Nano V3 or compatible, wire  CE to pin 10 and 
 
 ## Circuit considerations
 
-### PWM
+### PWM wiring
 
 The signal output pins (D5, and D3 inverted) support PWM. This is controlled by the voltage on pin A7, which is usually wired to +5V. If you leave A7 unconnected, you will get erratic results. On the Nano V3, it is easy to wire A7 to +5 because the two pins are right next to each other. In most cases that's what you will do unless you really want to use PWM.
 
