@@ -526,7 +526,6 @@ void transmitMessage(String message) {
   clearBlock();
   radio.write(msg, PAYLOAD_SIZE);
   displayBlock(); // DEBUG
-  delay(DELAY_INTERBLOCK); 
 }
 
 void displayMessage(String message) {
