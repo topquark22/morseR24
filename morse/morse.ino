@@ -14,6 +14,8 @@ bool transmitMode = digitalRead(PIN_XRMODE);
 
 bool testMode = !digitalRead(PIN_TEST_);
 
+bool radioEnabled = digitalRead(PIN_DISABLE_);
+
 void setup() {
 
   Serial.begin(BAUD_RATE);
@@ -43,6 +45,7 @@ void setup() {
   pinMode(PIN_XRMODE, INPUT_PULLUP);
 
   pinMode(PIN_PWM, INPUT);
+
   int pwm = getPWM();
   if (pwm < 255) {
     Serial.print("Warning: PWM = "); Serial.println(pwm);
@@ -72,6 +75,10 @@ void setup() {
   testMode = !digitalRead(PIN_TEST_);
   if (testMode) {
     testRoutine();
+  }
+
+  if (transmitMode) {
+    showInstructions();
   }
 }
 

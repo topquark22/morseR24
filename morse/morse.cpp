@@ -13,7 +13,7 @@ int t_dash;
 int t_space;
 int t_pause;
 
-bool radioEnabled = digitalRead(PIN_DISABLE_);
+extern bool radioEnabled;
 
 extern bool transmitMode;
 
@@ -76,23 +76,6 @@ void setupRadio() {
     Serial.println("Configured as transmitter");
     radio.openWritingPipe(deviceID); // Get NRF24L01 ready to transmit
     radio.stopListening();
-        Serial.print("Dot duration: "); Serial.print(t_dot); Serial.println(" ms");
-    Serial.print("Pause duration: "); Serial.print(t_pause); Serial.println(" ms");
-    Serial.println();
-    Serial.println("Accepting input from serial console");
-    Serial.println();
-    Serial.println("Star commands:");
-    Serial.println("  *s<dot>");
-    Serial.println("    changes the dot duration (speed) to <dot> ms");
-    Serial.println("  *p<pause>");
-    Serial.println("    changes the inter-message pause to <pause> ms");
-    Serial.println();
-    Serial.println("In-stream modifiers for text interpretation:");
-    Serial.println("  _: Morse (default)");
-    Serial.println("  $: Hexadecimal");
-    Serial.println("  #: Unary");
-    Serial.println("  %: Chess");
-    Serial.println();
 
   } else { // recv mode
 

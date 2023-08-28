@@ -18,9 +18,8 @@ extern int t_pause;
 
 extern RF24 radio;
 
-extern bool radioEnabled;
+void showInstructions();
 
-extern bool testMode;
 /*
  * Parse a star command, either *s<num> or *p<num>
  */

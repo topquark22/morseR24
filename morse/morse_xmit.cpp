@@ -23,6 +23,26 @@ const int LINE_SIZE = 64;
 byte line[LINE_SIZE];
 int line_len;
 
+void showInstructions() {
+    Serial.print("Dot duration: "); Serial.print(t_dot); Serial.println(" ms");
+    Serial.print("Pause duration: "); Serial.print(t_pause); Serial.println(" ms");
+    Serial.println();
+    Serial.println("Accepting input from serial console");
+    Serial.println();
+    Serial.println("Star commands:");
+    Serial.println("  *s<dot>");
+    Serial.println("    changes the dot duration (speed) to <dot> ms");
+    Serial.println("  *p<pause>");
+    Serial.println("    changes the inter-message pause to <pause> ms");
+    Serial.println();
+    Serial.println("In-stream modifiers for text interpretation:");
+    Serial.println("  _: Morse (default)");
+    Serial.println("  $: Hexadecimal");
+    Serial.println("  #: Unary");
+    Serial.println("  %: Chess");
+    Serial.println();
+}
+
 /*
  * Parse a star command, either *s<num> or *p<num>
  */
@@ -38,7 +58,6 @@ int parseIntFromLine() {
   }
   return res;
 }
-
 void clearPayload() {
   payload[0] = TOKEN_MESSAGE;
   for (int k = 1; k < PAYLOAD_SIZE; k++) {
