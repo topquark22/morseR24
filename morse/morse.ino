@@ -482,21 +482,19 @@ String receiveMessage() {
   // first block already in buffer
   displayBlock(); // DEBUG
   String message = "";
-  if (isEmptyBlock()) {
-    return message;
-  }
   while (!isEmptyBlock()) {
     String block = decodeBlock();
+    // Note Arduino has limited memory and so there will be
+    // a maximum number of times we can do this. Will open a
+    // bug report
     message = message + block;
-    Serial.print("DEBUG: concatenated using +, block: ");;
+    Serial.print("DEBUG: concatenated using +, block: ");
     Serial.println(block);
     Serial.print("DEBUG: message is now: ");
     Serial.println(message);
     // the last block was not empty. Expect another
-    /*while (!radio.available()) {
-      Serial.println("DEBUG: Waiting for next packet");
-      delay(1000);
-    }*/
+    while (!radio.available()) {
+    }
     radio.read(msg, PAYLOAD_SIZE);
     displayBlock(); // DEBUG
   }
