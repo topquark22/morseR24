@@ -1,0 +1,178 @@
+/**
+ * General includes
+*/
+
+#ifndef M_A
+#define M_A
+
+#include <Arduino.h>
+#include <string.h>
+#include <RF24_config.h>
+#include <nRF24L01.h>
+#include <RF24.h>
+#import <EEPROM.h>
+
+const int PIN_DISABLE_ = 4; // wire to GND if not using radio
+
+const int PIN_XRMODE = 8; // wire to GND for recv (slave) mode; else xmit (master) mode
+
+const int PIN_TEST_ = 7; // jumper to GND for test mode
+
+const int PIN_BUTTON_ = 6; // code key switch for manual input in test mode
+
+const int PIN_OUT = 5;  // output
+const int PIN_OUT_ = 3; // inverted output
+const int PIN_RED = 2;  // LED, hemorrhoid condition
+
+// radio output power = 2*A0 + A1
+const int PIN_PWR2 = A0;
+const int PIN_PWR1 = A1;
+
+// Which RF channel to communicate on, 0-125. Default 118 = 48 + 10 + 20 + 40
+const int CHANNEL_BASE = 48;
+const int PIN_CH10 = A2; // if not wired low, add 10 to CHANNEL_BASE
+const int PIN_CH20 = A3; // if not wired low, add 20 to CHANNEL_BASE
+const int PIN_CH40 = A4; // if not wired low, add 40 t0 CHANNEL_BASE
+
+// Device ID setting. Must match radio and radio
+const uint64_t DEVICE_ID_BASE = 0x600DFF2440LL;
+const int PIN_ID1 = A5; // if wired low, add 0x1 to ID_BASE
+
+// analog input for PWM
+// Usually you would wire this to +5V (it's right next to the +5V pin)
+const int PIN_PWM = A7;
+
+// These wirings of CE, CSN are used for integrated Nano3/nRF24l01 boards
+const int PIN_CE = 10;
+const int PIN_CSN = 9;
+
+// defaults
+const int t_DOT = 100;
+const int t_PAUSE = 3000;
+
+// Serial transmission rate
+const int BAUD_RATE = 9600;
+
+// EEPROM addresses
+const int ADDR_SPEED = 0x3F0;
+const int ADDR_PAUSE = 0x3F4;
+
+// special value indicating that an int in EEPROM has not been set
+const int NOT_SET = -1;
+
+// packet type tokens (first byte of payload)
+const int TOKEN_TEST = 1;
+const int TOKEN_SPEED = 2;
+const int TOKEN_PAUSE = 3;
+const int TOKEN_MESSAGE = 4;
+
+const int SPI_SPEED = 10000000;
+
+// full message buffer
+const int MESSAGE_SIZE = 100;
+
+// payload[] is used to store/receive message via radio
+// Format:
+//   payload[0] : token indicating message type (1 byte)
+//   payload[0] to payload[31]: data block
+const int PAYLOAD_SIZE = 32;
+const int BLOCK_SIZE = PAYLOAD_SIZE - 1;
+
+/**
+   Text interpretation (can using special character mid-message)
+*/
+enum TEXT_INTERPRETATION {
+  MORSE, // '_' in stream
+  HEXADECIMAL,  // '$' in stream
+  UNARY, // '#' in stream
+  CHESS  // '%' in stream
+};
+
+const char SW_MORSE = '_';
+const char SW_HEXADECIMAL  = '$';
+const char SW_UNARY = '#';
+const char SW_CHESS = '%';
+
+// Width of serial console
+const int CONSOLE_WIDTH = 100;
+
+const int EEPROM_LEN = 0x3F0; // leave room for speed, pause
+
+extern RF24 radio;
+
+void initNewArduino();
+
+void setupRadio();
+
+int decodeInteger();
+
+void writeMessageToEEPROM();
+
+void readMessageFromEEPROM();
+
+void writeIntToEEPROM(int addr, int value);
+
+int readIntFromEEPROM(int addr);
+
+void writeSpeedToEEPROM();
+
+void readSpeedFromEEPROM();
+
+void writePauseToEEPROM();
+
+void readPauseFromEEPROM();
+
+int getPWM();
+
+void setOutput(bool value);
+
+void errExit();
+
+bool buttonPressed();
+
+void blinkRedLED(int ms);
+
+void beep(int beep_ms);
+
+void dot();
+
+void dash();
+
+void displayMorse(char c);
+
+int ascToNybble(char c);
+
+void displayNybble(char c);
+
+/**
+   Transmit a number in unary
+     - Zero represented by a single dash
+     - Number n represented by n dots
+     - Recommend keeping 0 <= n <= 9
+*/
+void displayUnary(char c);
+/**
+   display chess coordinates 'A'-'H', '1'-'8' as unary 1-8
+*/
+void displayChess(char c);
+
+void displayMessage();
+
+bool buttonPressed();
+
+void testRoutine();
+
+/*
+   Sets the duration of 1 dot in ms
+*/
+void setSpeed(int t_dot_ms);
+
+void setPause(int t_pause_ms);
+
+/*
+ * Append payload bytes to message buffer
+ * @return number of bytes appended
+ */
+int decodePayload();
+
+#endif
