@@ -820,7 +820,7 @@ void readLine() {
 
 void appendLineToMessage() {
   Serial.print("DEBUG start appendLineToMessage(), line="); printLine();
-  int numBytes = min(line_len, MESSAGE_SIZE - message_len);
+  int numBytes = min(line_len + 1, MESSAGE_SIZE - message_len);
   memcpy(message + i, line, numBytes);
   message_len += line_len;
   message[message_len] = 0;
