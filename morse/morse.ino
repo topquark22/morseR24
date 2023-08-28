@@ -578,7 +578,6 @@ void displayMessage(String message) {
     Serial.println();
   }
   interpretTextAs = MORSE;
-  delay(t_pause);
 }
 
 bool buttonPressed() {
