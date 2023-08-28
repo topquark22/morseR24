@@ -38,11 +38,11 @@ Optionally connect pin D6 to ground via a normally-open pushbutton switch.
 
 ## Indicator signals
 
-The red LED will blink once for 1/10 second if the radio is operational.
+Single 1/10 second blink following reset: The radio is operational.
 
 Fast blink: Radio is enabled but not connected properly.
 
-Solid red can mean one of two things:
+Solid red can mean:
 
 -  If the red LED lights immediately, the circuit is configured as a receiver and the radio is disabled. This configuration is not supported.
     
