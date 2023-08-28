@@ -451,6 +451,12 @@ String decodeBlock() {
 }
 
 bool isEmptyBlock() {
+  if (msg[0] != TOKEN_MESSAGE) {
+    Serial.print("Expected message block; got block of token type: ");
+    Serial.println(msg[0]);
+    digitalWrite(PIN_RED, HIGH);
+    return true;
+  }
   for (int i = 1; i < PAYLOAD_LEN; i++) {
     if (msg[i] != 0) {
       return false;
