@@ -729,7 +729,7 @@ void setup() {
     Serial.println("Accepting input from serial console");
     Serial.println();
     Serial.println("Star commands:");
-    Serial.println("  *s<dot>"
+    Serial.println("  *s<dot>");
     Serial.println("    changes the dot duration (speed) to <dot> ms");
     Serial.println("  *p<pause>");
     Serial.println("    changes the inter-message pause to <pause> ms");
@@ -811,7 +811,7 @@ void readLine() {
       Serial.print("DEBUG readLine() got character "); Serial.println(c);
       line[line_len++] = c;
     } else {
-      Serial.println(DEBUG readLine() got CR or LF");
+      Serial.println("DEBUG readLine() got CR or LF");
     }
   }
   line[line_len] = 0;
@@ -821,7 +821,7 @@ void readLine() {
 void appendLineToMessage() {
   Serial.print("DEBUG start appendLineToMessage(), line="); printLine();
   int numBytes = min(line_len + 1, MESSAGE_SIZE - message_len);
-  memcpy(message + i, line, numBytes);
+  memcpy(message + message_len, line, numBytes);
   message_len += line_len;
   message[message_len] = 0;
   Serial.print("DEBUG: message_len="); Serial.println(message_len);
