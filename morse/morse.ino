@@ -810,6 +810,8 @@ void readLine() {
     if ('\n' != c && '\r' != c) {
       Serial.print("DEBUG readLine() got character "); Serial.println(c);
       line[line_len++] = c;
+    } else {
+      Serial.println(DEBUG readLine() got CR or LF");
     }
   }
   line[line_len] = 0;
@@ -818,10 +820,9 @@ void readLine() {
 
 void appendLineToMessage() {
   Serial.print("DEBUG start appendLineToMessage(), line="); printLine();
-  for (int i = 0; i < line_len && message_len < MESSAGE_SIZE - 1; i++) {
-    message[message_len + i] = line[i];
-    message_len++;
-  }
+  int numBytes = min(line_len, MESSAGE_SIZE - message_len);
+  memcpy(message + i, line, numBytes);
+  message_len += line_len;
   message[message_len] = 0;
   Serial.print("DEBUG: message_len="); Serial.println(message_len);
   Serial.print("DEBUG end appendLineToMessage(), message="); previewMessage();
