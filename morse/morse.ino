@@ -78,14 +78,21 @@ bool radioEnabled;
 
 bool testMode;
 
-// Number of messages received
-int messageCount = 0;
+// single line of message read from serial console
+const int LINE_SIZE = 64;
+byte line[LINE_SIZE];
+int line_len;
 
-const int PAYLOAD_SIZE = 32;
+// full message buffer read from serial console
+const int MESSAGE_SIZE = 100;
+byte message[MESSAGE_SIZE];
+int message_len;
+
 // payload[] is used to store/receive message via radio
 // Format:
 //   payload[0] : token indicating message type (1 byte)
 //   payload[0] to payload[31]: data block
+const int PAYLOAD_SIZE = 32;
 byte payload[PAYLOAD_SIZE];
 const int BLOCK_SIZE = PAYLOAD_SIZE - 1;
 
@@ -102,14 +109,17 @@ void setOutput(bool value) {
   analogWrite(PIN_OUT_, 255 - (value * pwmWidth));
 }
 
-int parseInt(String s) {
+/*
+ * Parse a star command, either *s<num> or *p<num>
+ */
+int parseIntFromLine() {
   int res = 0;
-  for (int i = 0; i < s.length(); i++) {
-    char c = s.charAt(i);
+  for (int i = 2; i < line_len; i++) {
+    char c = line[i];
     if (c >= '0' && c <= '9') {
       res = res * 10 + (c - '0');
     } else {
-      return -1;
+      return 0;
     }
   }
   return res;
@@ -136,24 +146,22 @@ const int CONSOLE_WIDTH = 100;
 
 const int EEPROM_LEN = 0x3F0; // leave room for speed, pause
 
-void writeMessageToEEPROM(String message) {
-  Serial.println(message);
+void writeMessageToEEPROM() {
   int i;
-  for (i = 0; i < message.length() && i < EEPROM_LEN - 1; i++) {
+  for (i = 0; i < message_len && i < EEPROM_LEN - 1; i++) {
     EEPROM.update(i, message[i]);
   }
   EEPROM.update(i, 0);
 }
 
-String readMessageFromEEPROM() {
-  String message = "";
+void readMessageFromEEPROM() {
   int i = 0;
   byte b = EEPROM.read(0);
-  while (i < EEPROM_LEN && b > 0) {
-    message += (char)b;
+  while (b != 0 && i < MESSAGE_SIZE - 1) {
+    message[i] = b;
     b = EEPROM.read(++i);
   }
-  return message;
+  message[i] = 0;
 }
 
 void writeIntToEEPROM(int addr, int value) {
@@ -438,29 +446,36 @@ void displayChess(char c) {
   delay(dly);
 }
 
-void clearBlock() {
+void clearPayload() {
   payload[0] = TOKEN_MESSAGE;
   for (int k = 1; k < PAYLOAD_SIZE; k++) {
     payload[k] = 0;
   }
 }
 
-String decodeBlock() {
+/*
+ * Append payload bytes to message buffer
+ * 
+ * @return number of bytes appended
+ */
+int decodePayload() {
   if (payload[0] != TOKEN_MESSAGE) {
-    Serial.print("Expected message block; got block of token type: ");
+    Serial.print("Expected message; got payload of type: ");
     Serial.println(payload[0]);
     errExit();
   }
-  String block = "";
-  for (int i = 1; i < PAYLOAD_SIZE && payload[i] > 0; i++) {
-    block = block + (char)payload[i];
+  int i;
+  for (i = 0; i < BLOCK_SIZE && payload[i + 1] > 0 && message_len < MESSAGE_SIZE - 1; i++) {
+    message[message_len++] = payload[i + 1];
   }
-  return block;
+  message[message_len] = 0;
+  return i;
 }
 
-bool isEmptyBlock() {
+/*
+bool isPayloadEmpty() {
   if (payload[0] != TOKEN_MESSAGE) {
-    Serial.print("Expected message block; got block of token type: ");
+    Serial.print("Expected message; got payload of type: ");
     Serial.println(payload[0]);
     errExit();
   }
@@ -471,113 +486,98 @@ bool isEmptyBlock() {
   }
   return true;
 }
+*/
 
-void displayBlock() {
-  if (payload[0] != TOKEN_MESSAGE) {
-    Serial.println("Payload is of type ");
-    Serial.println(payload[0]);
-    blinkRedLED(1000);
-    return;
-  }
-  if (isEmptyBlock()) {
-    Serial.println("Block is empty");
-  } else {
-    Serial.print("Block contains: ");
-    Serial.println(decodeBlock());
-  }
-}
-
-String receiveMessage() {
+void receiveMessage() {
   Serial.println("-- Receiving message");
   // first block already in buffer
-  String message = "";
-  while (!isEmptyBlock()) {
-    String block = decodeBlock();
-    // Note Arduino has limited memory and so there will be
-    // a maximum number of times we can do this. Will open a
-    // bug report
-    message = message + block;
-    // the last block was not empty. Expect another
+  message[0] = 0;
+  message_len = 0;
+  int bytesAppended = decodePayload();
+  while (bytesAppended > 0) {
     while (!radio.available()) {
+      // wait for next packet
     }
     radio.read(payload, PAYLOAD_SIZE);
+    bytesAppended = decodePayload();
   }
-  Serial.print("-- Number of messages received in this session: ");
-  Serial.println(++messageCount);
-  return message;
+  writeMessageToEEPROM();
 }
 
-void transmitMessage(String message) {
+void transmitMessage() {
   if (!radioEnabled) {
     return;
   }
   Serial.println("-- Transmitting message");
-
-  clearBlock();
-  for (int j = 0; j < message.length(); j++) {
-    payload[(j % BLOCK_SIZE) + 1] = message[j];
-    if (j % BLOCK_SIZE == BLOCK_SIZE - 1 || message.length() - 1 == j) {
+  previewMessage(); // DEBUG
+  clearPayload();
+  for (int j = 0; j < message_len; j++) {
+    byte c = message[j];
+    payload[(j % BLOCK_SIZE) + 1] = c;
+    if (0 == c || (j % BLOCK_SIZE) + 1 == BLOCK_SIZE) {
       radio.write(payload, PAYLOAD_SIZE);
-      clearBlock();
+      clearPayload();
     }
   }
   // write empty packet to signal end of message
-  clearBlock();
+  clearPayload();
   radio.write(payload, PAYLOAD_SIZE);
 }
 
-void displayMessage(String message) {
+void previewMessage() {
+  for (int i = 0; i < message_len; i++) {
+    Serial.print((char)message[i]);
+  }
+  Serial.println("<");
+}
+
+void printLine() {
+  for (int i = 0; i < line_len; i++) {
+    Serial.print((char)line[i]);
+  }
+  Serial.println();
+}
+
+
+void displayMessage() {
   int i;
-  char c;
-  for (i = 0, c = message.charAt(0); c != 0; c = message.charAt(++i)) {
-    if ((transmitMode && Serial.available()) || (!transmitMode && radio.available())) {
+  char c = message[0];
+  for (i = 0; c != 0 && i < message_len; c = message[++i]) {
+    if (transmitMode && Serial.available()) {
+      // user entered something on serial console during message display
       break;
     }
     if (SW_HEXADECIMAL == c) {
-      if (interpretTextAs != HEXADECIMAL)
-        Serial.print(SW_HEXADECIMAL);
       interpretTextAs = HEXADECIMAL;
       continue;
     } else if (SW_UNARY == c) {
-      if (interpretTextAs != UNARY)
-        Serial.print(SW_UNARY);
       interpretTextAs = UNARY;
       continue;
     } else if (SW_CHESS == c) {
-      if (interpretTextAs != CHESS)
-        Serial.print(SW_CHESS);
       interpretTextAs = CHESS;
       continue;
-    } else if (0 == i || '_' == c) {
-      if (interpretTextAs != MORSE)
-        Serial.print(SW_MORSE);
+    } else if (i == 0 || '_' == c) {
       interpretTextAs = MORSE;
-      if ('_' == c)
-        continue;
     }
     Serial.print(c);
     switch (interpretTextAs) {
-      case MORSE:
-        displayMorse(c);
-        break;
-      case HEXADECIMAL:
-        displayNybble(c);
-        break;
-      case UNARY:
-        displayUnary(c);
-        break;
-      case CHESS:
-        displayChess(c);
-        break;
+    case MORSE:
+      displayMorse(c);
+      break;
+    case HEXADECIMAL:
+      displayNybble(c);
+      break;
+    case UNARY:
+      displayUnary(c);
+      break;
+    case CHESS:
+      displayChess(c);
+      break;
     }
     if ((i + 1) % (CONSOLE_WIDTH - 1) == 0) {
       Serial.println();
     }
   }
-  if (i > 0) {
-    Serial.println();
-  }
-  interpretTextAs = MORSE;
 }
 
 bool buttonPressed() {
@@ -651,9 +651,14 @@ void setup() {
     EEPROM.write(0, 0);
     setSpeed(t_DOT);
     setPause(t_PAUSE);
+    message[0] = 0;
+    message_len = 0;
+    writeMessageToEEPROM();
   }
+  
   readSpeedFromEEPROM();
   readPauseFromEEPROM();
+  readMessageFromEEPROM();
 
   if (radioEnabled) {
 
@@ -718,15 +723,16 @@ void setup() {
   }
 
   if (transmitMode) {
-
     Serial.print("Dot duration: "); Serial.print(t_dot); Serial.println(" ms");
     Serial.print("Pause duration: "); Serial.print(t_pause); Serial.println(" ms");
     Serial.println();
     Serial.println("Accepting input from serial console");
     Serial.println();
-    Serial.println("Commands:");
-    Serial.println("  *speed <dot ms>");
-    Serial.println("  *pause <pause ms>");
+    Serial.println("Star commands:");
+    Serial.println("  *s<dot>"
+    Serial.println("    changes the dot duration (speed) to <dot> ms");
+    Serial.println("  *p<pause>");
+    Serial.println("    changes the inter-message pause to <pause> ms");
     Serial.println();
     Serial.println("In-stream modifiers for text interpretation:");
     Serial.println("  _: Morse (default)");
@@ -736,7 +742,6 @@ void setup() {
     Serial.println();
 
   } else { // recv mode
-
     if (!radioEnabled) {
       Serial.println("Unsupported configuration");
       errExit();
@@ -748,7 +753,7 @@ void setup() {
    Sets the duration of 1 dot in ms
 */
 void setSpeed(int t_dot_ms) {
-  if (t_dot_ms < 0) {
+  if (t_dot_ms <= 0) {
     Serial.println("Invalid speed");
     return;
   }
@@ -761,7 +766,7 @@ void setSpeed(int t_dot_ms) {
 }
 
 void setPause(int t_pause_ms) {
-  if (t_pause_ms < 0) {
+  if (t_pause_ms <= 0) {
     Serial.println("invalid pause");
     return;
   }
@@ -772,7 +777,10 @@ void setPause(int t_pause_ms) {
 }
 
 void transmitInteger(int tokenType, int value) {
-  clearBlock();
+  if (!radioEnabled) {
+    return;
+  }
+  clearPayload();
   payload[0] = tokenType;
   payload[1] = (value >> 24) & 0xFF;
   payload[2] = (value >> 16) & 0xFF;
@@ -781,123 +789,132 @@ void transmitInteger(int tokenType, int value) {
   radio.write(payload, PAYLOAD_SIZE);
 }
 
-void transmitSpeed() {
-  Serial.println("-- Transmitting speed");
-  transmitInteger(TOKEN_SPEED, t_dot);
-}
-
-void transmitPause() {
-  Serial.println("-- Transmitting pause");
-  transmitInteger(TOKEN_PAUSE, t_pause);
-}
-
 int decodeInteger() {
   return (payload[1] << 24) + (payload[2] << 16) + (payload[3] << 8) + payload[4];
 }
 
-void loop() {
-  // can enter test mode by holding down button switch
-  if (buttonPressed()) {
-    testRoutine();
-  }
-  if (transmitMode) {
-    loop_XMIT();
-  } else {
-    loop_RECV();
-  }
-}
-
-String readLine() {
-
-  String line = "";
+/*
+ * Read a line from serial console
+ * 
+ * sets line_len to number of characters read
+ */
+void readLine() {
   while (!Serial.available()) {
+    // wait for some entry
     delay(10);
   }
-  while (Serial.available()) {
+  line[0] = 0;
+  line_len = 0;
+  while (Serial.available() && line_len < LINE_SIZE - 1) {
     char c = Serial.read();
     if ('\n' != c && '\r' != c) {
-      line = line + c;
+      Serial.print("DEBUG readLine() got character "); Serial.println(c);
+      line[line_len++] = c;
+    } else {
+      Serial.println(DEBUG readLine() got CR or LF");
     }
   }
-  return line;
+  line[line_len] = 0;
+  Serial.print("DEBUG readLine set line_len="); Serial.println(line_len);
+}
+
+void appendLineToMessage() {
+  Serial.print("DEBUG start appendLineToMessage(), line="); printLine();
+  int numBytes = min(line_len + 1, MESSAGE_SIZE - message_len);
+  memcpy(message + i, line, numBytes);
+  message_len += line_len;
+  message[message_len] = 0;
+  Serial.print("DEBUG: message_len="); Serial.println(message_len);
+  Serial.print("DEBUG end appendLineToMessage(), message="); previewMessage();
+}
+
+void processStarCommand() {
+  if (line_len > 1) {
+    if ('s' == line[1]) { // speed change
+      int speed = parseIntFromLine();
+      if (speed > 0) {
+        setSpeed(speed);
+        transmitInteger(TOKEN_SPEED, t_dot);
+      } else {
+        Serial.println("-- Invalid speed");
+      }
+    } else if ('p' == line[1]) { // pause change
+      int pause = parseIntFromLine();
+      if (pause > 0) {
+        setPause(pause);
+        transmitInteger(TOKEN_PAUSE, t_dot);
+      } else {
+        Serial.println("-- Invalid pause");
+      }
+    }
+  } else {
+    Serial.println("-- Invalid * command");
+  }
 }
 
 bool messageChanged = false;
 
 void loop_XMIT() {
-
+  
   if (!Serial.available()) {
 
-    if (messageChanged) {
-      String message = readMessageFromEEPROM();
-      transmitMessage(message);
-      messageChanged = false;
+    if (!messageChanged) {
+        if (message_len > 0) {
+        displayMessage();
+        Serial.println();
+        delay(t_pause);
+      } else {
+        delay(10);
+      }
     }
 
   } else { // Serial.available()
 
-    String line = readLine();
-    if (line.substring(0, 1).equals("*")) {
-      if (line.substring(0, 7).equals("*speed ")) {
-        String speedStr = line.substring(7, line.length());
-        int speed = parseInt(speedStr);
-        setSpeed(speed);
-        transmitSpeed();
-        return;
-      }
-
-      if (line.substring(0, 7).equals("*pause ")) {
-        String pauseStr = line.substring(7, line.length());
-        int pause = parseInt(pauseStr);
-        setPause(pause);
-        transmitPause();
-        return;
-      }
-      else {
-        Serial.println("-- Invalid * command");
-        return;
-      }
+    readLine();
+    
+    if (line_len > 0 && '*' == line[0]) {
+      processStarCommand();
+      return;
     }
 
-    Serial.println("-- Append to message (max 64 chars per line. Blank line commits message)");
-
-    String message = line;
-    Serial.println();
-    Serial.print(message);
-    Serial.println("<");
-
-    line = readLine();
-    while (line.length() > 0) {
-      // Note there is a maximum String length before memory becomes fragmented.
-      // Will open a bug report
-      message = message + line;
-      Serial.print(message);
-      Serial.println("<");
-      line = readLine();
-    }
-
-    if (message.length() == 0) {
-      Serial.println("-- Message cleared");
-    }
-    transmitMessage(message);
-    writeMessageToEEPROM(message);
     messageChanged = true;
+    message[0] = 0;
+    message_len = 0;
+
+    if (0 == line_len) {
+      Serial.println("-- Message cleared");
+      transmitMessage();
+      writeMessageToEEPROM();
+      return;
+    }
+ 
+    Serial.println("-- Append to message (max 64 chars per line. Blank line commits message)");
+    Serial.println();
+
+    appendLineToMessage();
+    previewMessage();
+    
+    readLine();
+    while (line_len > 0) {
+      appendLineToMessage(); 
+      previewMessage();
+      readLine();
+    }
+    
+    messageChanged = true;
+    transmitMessage();
+    writeMessageToEEPROM();
   }
-  String message = readMessageFromEEPROM();
-  displayMessage(message);
-  delay(t_pause);
 }
 
 bool displayEnabled = true;
 
 void loop_RECV() {
-
   if (radio.available()) {
     digitalWrite(PIN_RED, LOW);
     radio.read(payload, PAYLOAD_SIZE); // Read data from the nRF24L01
     if (TOKEN_MESSAGE == payload[0]) {
-      String message = receiveMessage();
-      writeMessageToEEPROM(message);
+     receiveMessage();
       displayEnabled = true;
     } else if (TOKEN_TEST == payload[0]) { // special case manual transmission
       setOutput(payload[4]);
@@ -914,10 +931,21 @@ void loop_RECV() {
     }
   }
   if (displayEnabled) {
-    String message = readMessageFromEEPROM();
-    displayMessage(message);
+    displayMessage();
     delay(t_pause);
   } else {
     delay(10);
+  }
+}
+
+void loop() {
+  // can enter test mode by holding down button switch
+  if (buttonPressed()) {
+    testRoutine();
+  }
+  if (transmitMode) {
+    loop_XMIT();
+  } else {
+    loop_RECV();
   }
 }
