@@ -434,6 +434,11 @@ void clearMsg() {
 }
 
 String decodeBlock() {
+  if (msg[0] != TOKEN_MESSAGE) {
+    Serial.println("Expected message token");
+    digitalWrite(PIN_RED, HIGH);
+    return "";
+  }
   String block = "";
   for (int i = 1; i < PAYLOAD_LEN && msg[i] > 0; i++) {
     block = block + (char)msg[i];
@@ -450,28 +455,35 @@ bool isEmptyBlock() {
   return true;
 }
 
+// DEBUG
 void displayBlock() {
   if (isEmptyBlock()) {
-    Serial.println("-- Block is empty");
+    Serial.println("DEBUG: Block is empty");
   } else {
-    Serial.println("-- Block contains: ");
+    Serial.print("DEBUG: Block contains: ");
     Serial.println(decodeBlock());
   }
 }
 
 String receiveMessage() {
   Serial.println("-- Receiving message");
-  displayBlock();
   // first block already in buffer
+  displayBlock(); // DEBUG
   String message = "";
   while (!isEmptyBlock()) {
-    message = message + decodeBlock();
+    String block = decodeBlock();
+    message = message + block;
+    Serial.print("DEBUG: concatenated using +, block: ");;
+    Serial.println(block);
+    Serial.print("DEBUG: message is now: ");
+    Serial.println(message);
+    // the last block was not empty. Expect another
     while (!radio.available()) {
       Serial.println("DEBUG: Waiting for next packet");
       delay(100);
     }
     radio.read(msg, PAYLOAD_LEN);
-    displayBlock();
+    displayBlock(); // DEBUG
   }
   return message;
 }
@@ -483,18 +495,17 @@ void transmitMessage(String message) {
   Serial.println("-- Transmitting message");
 
   msg[0] = TOKEN_MESSAGE;
-
   clearMsg();
+
   for (int j = 0; j < message.length(); j++) {
     msg[(j % BLOCK_SIZE) + 1] = message[j];
     if (j % BLOCK_SIZE == BLOCK_SIZE - 1 || message.length() - 1 == j) {
-      displayBlock();
+      displayBlock(); // DEBUG
       radio.write(msg, PAYLOAD_LEN);
       clearMsg();
       delay(DELAY_INTERBLOCK); // give time for transmission and processing
     }
   }
-
   // write empty packet to signal end of message
   clearMsg();
   radio.write(msg, PAYLOAD_LEN);
