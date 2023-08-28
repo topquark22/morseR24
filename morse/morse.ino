@@ -191,6 +191,13 @@ void readPauseFromEEPROM() {
   t_pause = readIntFromEEPROM(ADDR_PAUSE);
 }
 
+
+void blinkRedLED(int ms) {
+  digitalWrite(PIN_RED, HIGH);
+  delay(ms);
+  digitalWrite(PIN_RED, LOW);
+}
+
 void beep(int beep_ms) {
   setOutput(1);
   delay(beep_ms);
@@ -451,7 +458,7 @@ bool isEmptyBlock() {
   if (msg[0] != TOKEN_MESSAGE) {
     Serial.print("Expected message block; got block of token type: ");
     Serial.println(msg[0]);
-    digitalWrite(PIN_RED, HIGH);
+    blinkRedLED(1000);
     return true;
   }
   for (int i = 1; i < PAYLOAD_SIZE; i++) {
@@ -466,6 +473,7 @@ void displayBlock() {
   if (msg[0] != TOKEN_MESSAGE) {
     Serial.println("Payload is of type ");
     Serial.println(msg[0]);
+    blinkRedLED(1000);
     return;
   }
   if (isEmptyBlock()) {
@@ -680,9 +688,7 @@ void setup() {
     }
 
     // visual indication that radio has started
-    digitalWrite(PIN_RED, HIGH);
-    delay(100);
-    digitalWrite(PIN_RED, LOW);
+    blinkRedLED(100);
 
     radio.setDataRate(RF24_1MBPS);
     radio.setPALevel(power);
