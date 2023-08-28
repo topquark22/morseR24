@@ -84,6 +84,9 @@ bool radioEnabled;
 
 bool testMode;
 
+// Number of messages received
+int messageCount = 0;
+
 const int PAYLOAD_LEN = 32;
 byte msg[PAYLOAD_LEN]; // Used to store/receive message via radio
 
@@ -428,6 +431,7 @@ void displayChess(char c) {
 const int BLOCK_SIZE = PAYLOAD_LEN - 1;
 
 void clearMsg() {
+  msg[0] = TOKEN_MESSAGE;
   for (int k = 1; k < PAYLOAD_LEN; k++) {
     msg[k] = 0;
   }
@@ -466,6 +470,7 @@ void displayBlock() {
 }
 
 String receiveMessage() {
+  Serial.println("DEBUG: start receiveMessage()");
   Serial.println("-- Receiving message");
   // first block already in buffer
   displayBlock(); // DEBUG
@@ -480,11 +485,14 @@ String receiveMessage() {
     // the last block was not empty. Expect another
     while (!radio.available()) {
       Serial.println("DEBUG: Waiting for next packet");
-      delay(100);
+      delay(1000);
     }
     radio.read(msg, PAYLOAD_LEN);
     displayBlock(); // DEBUG
   }
+  Serial.print("-- Number of messages received in this session: ");
+  Serial.println(++messageCount);
+  Serial.println("DEBUG: end receiveMessage()");
   return message;
 }
 
@@ -494,7 +502,6 @@ void transmitMessage(String message) {
   }
   Serial.println("-- Transmitting message");
 
-  msg[0] = TOKEN_MESSAGE;
   clearMsg();
 
   for (int j = 0; j < message.length(); j++) {
