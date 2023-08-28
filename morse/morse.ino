@@ -82,11 +82,11 @@ bool testMode;
 int messageCount = 0;
 
 const int PAYLOAD_SIZE = 32;
-// msg[] is used to store/receive message via radio
+// payload[] is used to store/receive message via radio
 // Format:
-//   msg[0] : token indicating message type (1 byte)
-//   msg[0] to msg[31]: data block
-byte msg[PAYLOAD_SIZE];
+//   payload[0] : token indicating message type (1 byte)
+//   payload[0] to payload[31]: data block
+byte payload[PAYLOAD_SIZE];
 const int BLOCK_SIZE = PAYLOAD_SIZE - 1;
 
 RF24 radio(PIN_CE, PIN_CSN, SPI_SPEED);
@@ -439,33 +439,33 @@ void displayChess(char c) {
 }
 
 void clearBlock() {
-  msg[0] = TOKEN_MESSAGE;
+  payload[0] = TOKEN_MESSAGE;
   for (int k = 1; k < PAYLOAD_SIZE; k++) {
-    msg[k] = 0;
+    payload[k] = 0;
   }
 }
 
 String decodeBlock() {
-  if (msg[0] != TOKEN_MESSAGE) {
+  if (payload[0] != TOKEN_MESSAGE) {
     Serial.print("Expected message block; got block of token type: ");
-    Serial.println(msg[0]);
+    Serial.println(payload[0]);
     errExit();
   }
   String block = "";
-  for (int i = 1; i < PAYLOAD_SIZE && msg[i] > 0; i++) {
-    block = block + (char)msg[i];
+  for (int i = 1; i < PAYLOAD_SIZE && payload[i] > 0; i++) {
+    block = block + (char)payload[i];
   }
   return block;
 }
 
 bool isEmptyBlock() {
-  if (msg[0] != TOKEN_MESSAGE) {
+  if (payload[0] != TOKEN_MESSAGE) {
     Serial.print("Expected message block; got block of token type: ");
-    Serial.println(msg[0]);
+    Serial.println(payload[0]);
     errExit();
   }
   for (int i = 1; i < PAYLOAD_SIZE; i++) {
-    if (msg[i] != 0) {
+    if (payload[i] != 0) {
       return false;
     }
   }
@@ -473,9 +473,9 @@ bool isEmptyBlock() {
 }
 
 void displayBlock() {
-  if (msg[0] != TOKEN_MESSAGE) {
+  if (payload[0] != TOKEN_MESSAGE) {
     Serial.println("Payload is of type ");
-    Serial.println(msg[0]);
+    Serial.println(payload[0]);
     blinkRedLED(1000);
     return;
   }
@@ -500,7 +500,7 @@ String receiveMessage() {
     // the last block was not empty. Expect another
     while (!radio.available()) {
     }
-    radio.read(msg, PAYLOAD_SIZE);
+    radio.read(payload, PAYLOAD_SIZE);
   }
   Serial.print("-- Number of messages received in this session: ");
   Serial.println(++messageCount);
@@ -515,15 +515,15 @@ void transmitMessage(String message) {
 
   clearBlock();
   for (int j = 0; j < message.length(); j++) {
-    msg[(j % BLOCK_SIZE) + 1] = message[j];
+    payload[(j % BLOCK_SIZE) + 1] = message[j];
     if (j % BLOCK_SIZE == BLOCK_SIZE - 1 || message.length() - 1 == j) {
-      radio.write(msg, PAYLOAD_SIZE);
+      radio.write(payload, PAYLOAD_SIZE);
       clearBlock();
     }
   }
   // write empty packet to signal end of message
   clearBlock();
-  radio.write(msg, PAYLOAD_SIZE);
+  radio.write(payload, PAYLOAD_SIZE);
 }
 
 void displayMessage(String message) {
@@ -773,12 +773,12 @@ void setPause(int t_pause_ms) {
 
 void transmitInteger(int tokenType, int value) {
   clearBlock();
-  msg[0] = tokenType;
-  msg[1] = (value >> 24) & 0xFF;
-  msg[2] = (value >> 16) & 0xFF;
-  msg[3] = (value >> 8) & 0xFF;
-  msg[4] = value & 0xFF;
-  radio.write(msg, PAYLOAD_SIZE);
+  payload[0] = tokenType;
+  payload[1] = (value >> 24) & 0xFF;
+  payload[2] = (value >> 16) & 0xFF;
+  payload[3] = (value >> 8) & 0xFF;
+  payload[4] = value & 0xFF;
+  radio.write(payload, PAYLOAD_SIZE);
 }
 
 void transmitSpeed() {
@@ -792,7 +792,7 @@ void transmitPause() {
 }
 
 int decodeInteger() {
-  return (msg[1] << 24) + (msg[2] << 16) + (msg[3] << 8) + msg[4];
+  return (payload[1] << 24) + (payload[2] << 16) + (payload[3] << 8) + payload[4];
 }
 
 void loop() {
@@ -894,19 +894,19 @@ void loop_RECV() {
 
   if (radio.available()) {
     digitalWrite(PIN_RED, LOW);
-    radio.read(msg, PAYLOAD_SIZE); // Read data from the nRF24L01
-    if (TOKEN_MESSAGE == msg[0]) {
+    radio.read(payload, PAYLOAD_SIZE); // Read data from the nRF24L01
+    if (TOKEN_MESSAGE == payload[0]) {
       String message = receiveMessage();
       writeMessageToEEPROM(message);
       displayEnabled = true;
-    } else if (TOKEN_TEST == msg[0]) { // special case manual transmission
-      setOutput(msg[4]);
+    } else if (TOKEN_TEST == payload[0]) { // special case manual transmission
+      setOutput(payload[4]);
       displayEnabled = false;
-    } else if (TOKEN_SPEED == msg[0]) { // speed was transmitted
+    } else if (TOKEN_SPEED == payload[0]) { // speed was transmitted
       setSpeed(decodeInteger());
-    } else if (TOKEN_PAUSE == msg[0]) { // pause was transmitted
+    } else if (TOKEN_PAUSE == payload[0]) { // pause was transmitted
       setPause(decodeInteger());
-    } else { // invalid token in msg[0]
+    } else { // invalid token in payload[0]
       Serial.println("Invalid packet received");
       digitalWrite(PIN_RED, HIGH);
       delay(100);
