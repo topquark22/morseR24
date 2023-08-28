@@ -14,7 +14,8 @@
 const int SPI_SPEED = 10000000;
 
 // Delay required so multiple blocks of the message don't clobber each other at the receiving end.
-const int DELAY_INTERBLOCK = 1000;
+//const int DELAY_INTERBLOCK = 1000;
+const int DELAY_INTERBLOCK = 0;
 
 // These wirings of CE, CSN are used for integrated Nano3/nRF24l01 boards
 const int PIN_CE = 10;
@@ -87,8 +88,13 @@ bool testMode;
 // Number of messages received
 int messageCount = 0;
 
-const int PAYLOAD_LEN = 32;
-byte msg[PAYLOAD_LEN]; // Used to store/receive message via radio
+const int PAYLOAD_SIZE = 32;
+// msg[] is used to store/receive message via radio
+// Format:
+//   msg[0] : token indicating message type (1 byte)
+//   msg[0] to msg[31]: data block
+byte msg[PAYLOAD_SIZE];
+const int BLOCK_SIZE = PAYLOAD_SIZE - 1;
 
 RF24 radio(PIN_CE, PIN_CSN, SPI_SPEED);
 
@@ -428,23 +434,22 @@ void displayChess(char c) {
   delay(dly);
 }
 
-const int BLOCK_SIZE = PAYLOAD_LEN - 1;
-
 void clearMsg() {
   msg[0] = TOKEN_MESSAGE;
-  for (int k = 1; k < PAYLOAD_LEN; k++) {
+  for (int k = 1; k < PAYLOAD_SIZE; k++) {
     msg[k] = 0;
   }
 }
 
 String decodeBlock() {
   if (msg[0] != TOKEN_MESSAGE) {
-    Serial.println("Expected message token");
+    Serial.print("Expected message block; got block of token type: ");
+    Serial.println(msg[0]);
     digitalWrite(PIN_RED, HIGH);
     return "";
   }
   String block = "";
-  for (int i = 1; i < PAYLOAD_LEN && msg[i] > 0; i++) {
+  for (int i = 1; i < PAYLOAD_SIZE && msg[i] > 0; i++) {
     block = block + (char)msg[i];
   }
   return block;
@@ -457,7 +462,7 @@ bool isEmptyBlock() {
     digitalWrite(PIN_RED, HIGH);
     return true;
   }
-  for (int i = 1; i < PAYLOAD_LEN; i++) {
+  for (int i = 1; i < PAYLOAD_SIZE; i++) {
     if (msg[i] != 0) {
       return false;
     }
@@ -481,6 +486,9 @@ String receiveMessage() {
   // first block already in buffer
   displayBlock(); // DEBUG
   String message = "";
+  if (isEmptyBlock()) {
+    return message;
+  }
   while (!isEmptyBlock()) {
     String block = decodeBlock();
     message = message + block;
@@ -489,11 +497,11 @@ String receiveMessage() {
     Serial.print("DEBUG: message is now: ");
     Serial.println(message);
     // the last block was not empty. Expect another
-    while (!radio.available()) {
+    /*while (!radio.available()) {
       Serial.println("DEBUG: Waiting for next packet");
       delay(1000);
-    }
-    radio.read(msg, PAYLOAD_LEN);
+    }*/
+    radio.read(msg, PAYLOAD_SIZE);
     displayBlock(); // DEBUG
   }
   Serial.print("-- Number of messages received in this session: ");
@@ -514,14 +522,15 @@ void transmitMessage(String message) {
     msg[(j % BLOCK_SIZE) + 1] = message[j];
     if (j % BLOCK_SIZE == BLOCK_SIZE - 1 || message.length() - 1 == j) {
       displayBlock(); // DEBUG
-      radio.write(msg, PAYLOAD_LEN);
+      radio.write(msg, PAYLOAD_SIZE);
       clearMsg();
       delay(DELAY_INTERBLOCK); // give time for transmission and processing
     }
   }
   // write empty packet to signal end of message
+  Serial.println("DEBUG: Sending terminator");
   clearMsg();
-  radio.write(msg, PAYLOAD_LEN);
+  radio.write(msg, PAYLOAD_SIZE);
   displayBlock(); // DEBUG
   delay(DELAY_INTERBLOCK); 
 }
@@ -783,7 +792,7 @@ void transmitInteger(int tokenType, int value) {
   msg[2] = (value >> 16) & 0xFF;
   msg[3] = (value >> 8) & 0xFF;
   msg[4] = value & 0xFF;
-  radio.write(msg, PAYLOAD_LEN);
+  radio.write(msg, PAYLOAD_SIZE);
 }
 
 void transmitSpeed() {
@@ -898,7 +907,7 @@ void loop_RECV() {
 
   if (radio.available()) {
     digitalWrite(PIN_RED, LOW);
-    radio.read(msg, PAYLOAD_LEN); // Read data from the nRF24L01
+    radio.read(msg, PAYLOAD_SIZE); // Read data from the nRF24L01
     if (TOKEN_MESSAGE == msg[0]) {
       String message = receiveMessage();
       writeMessageToEEPROM(message);
