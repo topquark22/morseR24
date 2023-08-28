@@ -13,10 +13,6 @@
 
 const int SPI_SPEED = 10000000;
 
-// Delay required so multiple blocks of the message don't clobber each other at the receiving end.
-//const int DELAY_INTERBLOCK = 1000;
-const int DELAY_INTERBLOCK = 0;
-
 // These wirings of CE, CSN are used for integrated Nano3/nRF24l01 boards
 const int PIN_CE = 10;
 const int PIN_CSN = 9;
@@ -434,7 +430,7 @@ void displayChess(char c) {
   delay(dly);
 }
 
-void clearMsg() {
+void clearBlock() {
   msg[0] = TOKEN_MESSAGE;
   for (int k = 1; k < PAYLOAD_SIZE; k++) {
     msg[k] = 0;
@@ -516,20 +512,18 @@ void transmitMessage(String message) {
   }
   Serial.println("-- Transmitting message");
 
-  clearMsg();
-
+  clearBlock();
   for (int j = 0; j < message.length(); j++) {
     msg[(j % BLOCK_SIZE) + 1] = message[j];
     if (j % BLOCK_SIZE == BLOCK_SIZE - 1 || message.length() - 1 == j) {
       displayBlock(); // DEBUG
       radio.write(msg, PAYLOAD_SIZE);
-      clearMsg();
-      delay(DELAY_INTERBLOCK); // give time for transmission and processing
+      clearBlock();
     }
   }
   // write empty packet to signal end of message
   Serial.println("DEBUG: Sending terminator");
-  clearMsg();
+  clearBlock();
   radio.write(msg, PAYLOAD_SIZE);
   displayBlock(); // DEBUG
   delay(DELAY_INTERBLOCK); 
@@ -786,7 +780,7 @@ void setPause(int t_pause_ms) {
 }
 
 void transmitInteger(int tokenType, int value) {
-  clearMsg();
+  clearBlock();
   msg[0] = tokenType;
   msg[1] = (value >> 24) & 0xFF;
   msg[2] = (value >> 16) & 0xFF;
