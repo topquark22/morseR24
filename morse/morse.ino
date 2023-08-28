@@ -191,6 +191,11 @@ void readPauseFromEEPROM() {
   t_pause = readIntFromEEPROM(ADDR_PAUSE);
 }
 
+void errExit() {
+  digitalWrite(PIN_RED, HIGH);
+  delay(100); // allow time to flush serial buffer
+  exit(1);
+}
 
 void blinkRedLED(int ms) {
   digitalWrite(PIN_RED, HIGH);
@@ -444,8 +449,7 @@ String decodeBlock() {
   if (msg[0] != TOKEN_MESSAGE) {
     Serial.print("Expected message block; got block of token type: ");
     Serial.println(msg[0]);
-    digitalWrite(PIN_RED, HIGH);
-    return "";
+    errExit();
   }
   String block = "";
   for (int i = 1; i < PAYLOAD_SIZE && msg[i] > 0; i++) {
@@ -458,8 +462,7 @@ bool isEmptyBlock() {
   if (msg[0] != TOKEN_MESSAGE) {
     Serial.print("Expected message block; got block of token type: ");
     Serial.println(msg[0]);
-    blinkRedLED(1000);
-    return true;
+    errExit();
   }
   for (int i = 1; i < PAYLOAD_SIZE; i++) {
     if (msg[i] != 0) {
@@ -737,9 +740,7 @@ void setup() {
 
     if (!radioEnabled) {
       Serial.println("Unsupported configuration");
-      digitalWrite(PIN_RED, HIGH);
-      delay(100); // allow time to flush serial buffer
-      exit(1);
+      errExit();
     }
   }
 }
