@@ -54,9 +54,6 @@ const int t_PAUSE = 3000;
 // Serial transmission rate
 const int BAUD_RATE = 9600;
 
-// max serial buffer length
-const int BUFLEN = 64;
-
 // EEPROM addresses
 const int ADDR_SPEED = 0x3F0;
 const int ADDR_PAUSE = 0x3F4;
@@ -873,6 +870,8 @@ void loop_XMIT() {
 
     line = readLine();
     while (line.length() > 0) {
+      // Note there is a maximum String length before memory becomes fragmented.
+      // Will open a bug report
       message = message + line;
       Serial.print(message);
       Serial.println("<");
