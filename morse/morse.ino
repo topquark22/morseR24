@@ -516,6 +516,7 @@ void transmitMessage(String message) {
   // write empty packet to signal end of message
   clearMsg();
   radio.write(msg, PAYLOAD_LEN);
+  displayBlock(); // DEBUG
   delay(DELAY_INTERBLOCK); 
 }
 
