@@ -885,6 +885,7 @@ void loop_XMIT() {
   }
   String message = readMessageFromEEPROM();
   displayMessage(message);
+  delay(t_pause);
 }
 
 bool displayEnabled = true;
