@@ -87,7 +87,7 @@ The following in-line characters will cause the text to be interpreted in severa
 
 You can change these in-line modifiers mid-text.
 
-The timings can be changed using the following "star commands," for example:
+The timings can be changed using the "star commands." For example:
 
 - ***s100** changes the dot length to 100 ms
 - ***p3000** changes the inter-message pause to 3000 ms
