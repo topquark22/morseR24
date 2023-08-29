@@ -7,8 +7,6 @@
 */
 
 #include "morse.h"
-#include "morse_xmit.h"
-#include "morse_recv.h"
 
 bool transmitMode = digitalRead(PIN_XRMODE);
 

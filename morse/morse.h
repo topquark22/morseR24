@@ -12,6 +12,9 @@
 #include <RF24.h>
 #import <EEPROM.h>
 
+#include "morse_xmit.h"
+#include "morse_recv.h"
+
 const int PIN_DISABLE_ = 4; // wire to GND if not using radio
 
 const int PIN_XRMODE = 8; // wire to GND for recv (slave) mode; else xmit (master) mode
