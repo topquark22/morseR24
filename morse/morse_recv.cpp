@@ -26,22 +26,22 @@ extern bool testMode;
 extern byte message[];
 extern int message_len;
 
-extern byte payload[];
+extern byte commBuffer[];
 
 /*
- * Append payload bytes to message buffer
+ * Append commBuffer bytes to message buffer
  * 
  * @return number of bytes appended
  */
-int decodePayload() {
-  if (payload[0] != TOKEN_MESSAGE) {
-    Serial.print("Expected message; got payload of type: ");
-    Serial.println(payload[0]);
+int decodeCommBuffer() {
+  if (commBuffer[0] != TOKEN_MESSAGE) {
+    Serial.print("Expected message; got commBuffer of type: ");
+    Serial.println(commBuffer[0]);
     errExit();
   }
   int i;
-  for (i = 0; i < BLOCK_SIZE && payload[i + 1] > 0 && message_len < MESSAGE_SIZE - 1; i++) {
-    message[message_len++] = payload[i + 1];
+  for (i = 0; i < CHUNK_SIZE && commBuffer[i + 1] > 0 && message_len < MESSAGE_SIZE - 1; i++) {
+    message[message_len++] = commBuffer[i + 1];
   }
   message[message_len] = 0;
   return i;
@@ -52,13 +52,13 @@ void receiveMessage() {
   // first block already in buffer
   message[0] = 0;
   message_len = 0;
-  int bytesAppended = decodePayload();
+  int bytesAppended = decodeCommBuffer();
   while (bytesAppended > 0) {
     while (!radio.available()) {
       // wait for next packet
     }
-    radio.read(payload, PAYLOAD_SIZE);
-    bytesAppended = decodePayload();
+    radio.read(commBuffer, COMM_BUFFER_SIZE);
+    bytesAppended = decodeCommBuffer();
   }
   writeMessageToEEPROM();
 }
@@ -68,18 +68,18 @@ bool displayEnabled = true;
 void loop_RECV() {
   if (radio.available()) {
     digitalWrite(PIN_RED, LOW);
-    radio.read(payload, PAYLOAD_SIZE); // Read data from the nRF24L01
-    if (TOKEN_MESSAGE == payload[0]) {
+    radio.read(commBuffer, COMM_BUFFER_SIZE); // Read data from the nRF24L01
+    if (TOKEN_MESSAGE == commBuffer[0]) {
      receiveMessage();
       displayEnabled = true;
-    } else if (TOKEN_TEST == payload[0]) { // special case manual transmission
-      setOutput(payload[4]);
+    } else if (TOKEN_TEST == commBuffer[0]) { // special case manual transmission
+      setOutput(commBuffer[4]);
       displayEnabled = false;
-    } else if (TOKEN_SPEED == payload[0]) { // speed was transmitted
+    } else if (TOKEN_SPEED == commBuffer[0]) { // speed was transmitted
       setSpeed(decodeInteger());
-    } else if (TOKEN_PAUSE == payload[0]) { // pause was transmitted
+    } else if (TOKEN_PAUSE == commBuffer[0]) { // pause was transmitted
       setPause(decodeInteger());
-    } else { // invalid token in payload[0]
+    } else { // invalid token in commBuffer[0]
       Serial.println("Invalid packet received");
       digitalWrite(PIN_RED, HIGH);
       delay(100);

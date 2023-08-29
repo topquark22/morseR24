@@ -63,7 +63,7 @@ const int ADDR_PAUSE = 0x3F4;
 // special value indicating that an int in EEPROM has not been set
 const int NOT_SET = -1;
 
-// packet type tokens (first byte of payload)
+// packet type tokens (first byte of commBuffer)
 const int TOKEN_TEST = 1;
 const int TOKEN_SPEED = 2;
 const int TOKEN_PAUSE = 3;
@@ -72,14 +72,14 @@ const int TOKEN_MESSAGE = 4;
 const int SPI_SPEED = 10000000;
 
 // full message buffer
-const int MESSAGE_SIZE = 100;
+const int MESSAGE_SIZE = 400;
 
-// payload[] is used to store/receive message via radio
+// commBuffer[] is used to store/receive message via radio
 // Format:
-//   payload[0] : token indicating message type (1 byte)
-//   payload[0] to payload[31]: data block
-const int PAYLOAD_SIZE = 32;
-const int BLOCK_SIZE = PAYLOAD_SIZE - 1;
+//   commBuffer[0] : token indicating message type (1 byte)
+//   commBuffer[0] to commBuffer[31]: data block
+const int COMM_BUFFER_SIZE = 32;
+const int CHUNK_SIZE = COMM_BUFFER_SIZE - 1;
 
 /**
    Text interpretation (can using special character mid-message)
@@ -108,6 +108,8 @@ void initNewArduino();
 void setupRadio();
 
 int decodeInteger();
+
+void printMessage();
 
 void writeMessageToEEPROM();
 
@@ -173,9 +175,9 @@ void setSpeed(int t_dot_ms);
 void setPause(int t_pause_ms);
 
 /*
- * Append payload bytes to message buffer
+ * Append commBuffer bytes to message buffer
  * @return number of bytes appended
  */
-int decodePayload();
+int decodeCommBuffer();
 
 #endif

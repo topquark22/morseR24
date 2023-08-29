@@ -20,7 +20,7 @@ extern bool transmitMode;
 byte message[MESSAGE_SIZE];
 int message_len;
 
-byte payload[PAYLOAD_SIZE];
+byte commBuffer[COMM_BUFFER_SIZE];
 
 TEXT_INTERPRETATION interpretTextAs;
 
@@ -97,6 +97,12 @@ void writeMessageToEEPROM() {
   EEPROM.update(i, 0);
 }
 
+void printMessage() {
+  for (int i = 0; i < message_len; i++) {
+    Serial.print((char)message[i]);
+  }
+}
+
 void readMessageFromEEPROM() {
   int i = 0;
   byte b = EEPROM.read(0);
@@ -105,6 +111,7 @@ void readMessageFromEEPROM() {
     b = EEPROM.read(++i);
   }
   message[i] = 0;
+  Serial.println("DEBUG got message from EEPROM"); printMessage() ; Serial.println();
 }
 
 void writeIntToEEPROM(int addr, int value) {
@@ -408,8 +415,7 @@ void displayMessage() {
   int i;
   char c = message[0];
   for (i = 0; c != 0 && i < message_len; c = message[++i]) {
-    if (Serial.available()) {
-      // user entered something on serial console during message display
+    if (Serial.available() || (!transmitMode && radio.available())) {
       break;
     }
     if (SW_HEXADECIMAL == c) {

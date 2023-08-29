@@ -16,7 +16,7 @@ extern bool radioEnabled;
 extern byte message[];
 extern int message_len;
 
-extern byte payload[];
+extern byte commBuffer[];
 
 // single line of message read from serial console
 const int LINE_SIZE = 64;
@@ -58,17 +58,16 @@ int parseIntFromLine() {
   }
   return res;
 }
-void clearPayload() {
-  payload[0] = TOKEN_MESSAGE;
-  for (int k = 1; k < PAYLOAD_SIZE; k++) {
-    payload[k] = 0;
+
+void clearCommBuffer(int tokenType) {
+  commBuffer[0] = tokenType;
+  for (int k = 1; k < CHUNK_SIZE; k++) {
+    commBuffer[k] = 0;
   }
 }
 
 void previewMessage() {
-  for (int i = 0; i < message_len; i++) {
-    Serial.print((char)message[i]);
-  }
+  printMessage();
   Serial.println("<");
 }
 
@@ -76,13 +75,13 @@ void transmitInteger(int tokenType, int value) {
   if (!radioEnabled) {
     return;
   }
-  clearPayload();
-  payload[0] = tokenType;
-  payload[1] = (value >> 24) & 0xFF;
-  payload[2] = (value >> 16) & 0xFF;
-  payload[3] = (value >> 8) & 0xFF;
-  payload[4] = value & 0xFF;
-  radio.write(payload, PAYLOAD_SIZE);
+  Serial.print("DEBUG transmitting integer ") ; Serial.print(value, DEC);
+  clearCommBuffer(tokenType);
+  commBuffer[1] = (value >> 24) & 0xFF;
+  commBuffer[2] = (value >> 16) & 0xFF;
+  commBuffer[3] = (value >> 8) & 0xFF;
+  commBuffer[4] = value & 0xFF;
+  radio.write(commBuffer, COMM_BUFFER_SIZE);
 }
 
 void transmitMessage() {
@@ -90,19 +89,19 @@ void transmitMessage() {
     return;
   }
   Serial.println("-- Transmitting message");
-  previewMessage(); // DEBUG
-  clearPayload();
-  for (int j = 0; j < message_len; j++) {
-    byte c = message[j];
-    payload[(j % BLOCK_SIZE) + 1] = c;
-    if (0 == c || (j % BLOCK_SIZE) + 1 == BLOCK_SIZE) {
-      radio.write(payload, PAYLOAD_SIZE);
-      clearPayload();
+  clearCommBuffer(TOKEN_MESSAGE);
+  for (int j = 0; j <= message_len; j++) { // include terminating 0
+    byte b = message[j];
+    int dest = (j % CHUNK_SIZE) + 1;
+    commBuffer[dest] = b;
+    if (0 == b || dest == CHUNK_SIZE) {
+      radio.write(commBuffer, COMM_BUFFER_SIZE);
+      clearCommBuffer(TOKEN_MESSAGE);
     }
   }
-  // write empty packet to signal end of message
-  clearPayload();
-  radio.write(payload, PAYLOAD_SIZE);
+  // write empty chunk to signal end of transmission
+  clearCommBuffer(TOKEN_MESSAGE);
+  radio.write(commBuffer, COMM_BUFFER_SIZE);
 }
 
 void printLine() {
@@ -113,11 +112,11 @@ void printLine() {
 }
 
 int decodeInteger() {
-  return (payload[1] << 24) + (payload[2] << 16) + (payload[3] << 8) + payload[4];
+  return (commBuffer[1] << 24) + (commBuffer[2] << 16) + (commBuffer[3] << 8) + commBuffer[4];
 }
 
 /*
- * Read a line from serial console
+ * Read a line from serial console into line[]
  * 
  * sets line_len to number of characters read
  */
@@ -131,19 +130,22 @@ void readLine() {
   while (Serial.available() && line_len < LINE_SIZE - 1) {
     char c = Serial.read();
     if ('\n' != c && '\r' != c) {
-      Serial.print("DEBUG readLine() got character "); Serial.println(c);
       line[line_len++] = c;
-    } else {
-      Serial.println("DEBUG readLine() got CR or LF");
     }
   }
   line[line_len] = 0;
-  Serial.print("DEBUG readLine set line_len="); Serial.println(line_len);
+  // start DEBUG
+  Serial.print("DEBUG got line: ");
+  for (int i = 0; i < line_len; i++) {
+    Serial.print((char)line[i]);
+  }
+  Serial.println();
+  // end DEBUG
 }
 
 void appendLineToMessage() {
   Serial.print("DEBUG start appendLineToMessage(), line="); printLine();
-  int numBytes = min(line_len + 1, MESSAGE_SIZE - message_len);
+  int numBytes = min(line_len, MESSAGE_SIZE - message_len); // do not include terminal 0 from line[]
   memcpy(message + message_len, line, numBytes);
   message_len += line_len;
   message[message_len] = 0;
@@ -152,23 +154,22 @@ void appendLineToMessage() {
 }
 
 void processStarCommand() {
-  if (line_len > 1) {
-    if ('s' == line[1]) { // speed change
-      int speed = parseIntFromLine();
-      if (speed > 0) {
-        setSpeed(speed);
-        transmitInteger(TOKEN_SPEED, t_dot);
-      } else {
-        Serial.println("-- Invalid speed");
-      }
-    } else if ('p' == line[1]) { // pause change
-      int pause = parseIntFromLine();
-      if (pause > 0) {
-        setPause(pause);
-        transmitInteger(TOKEN_PAUSE, t_dot);
-      } else {
-        Serial.println("-- Invalid pause");
-      }
+  Serial.println("DEBUG star command");
+  if ('s' == line[1]) { // speed change
+    int speed = parseIntFromLine();
+    if (speed > 0) {
+      setSpeed(speed);
+      transmitInteger(TOKEN_SPEED, t_dot);
+    } else {
+      Serial.println("-- Invalid speed");
+    }
+  } else if ('p' == line[1]) { // pause change
+    int pause = parseIntFromLine();
+    if (pause > 0) {
+      setPause(pause);
+      transmitInteger(TOKEN_PAUSE, t_dot);
+    } else {
+      Serial.println("-- Invalid pause");
     }
   } else {
     Serial.println("-- Invalid * command");
@@ -178,24 +179,25 @@ void processStarCommand() {
 bool messageChanged = false;
 
 void loop_XMIT() {
-  
-  if (!Serial.available()) {
 
-    if (!messageChanged) {
-        if (message_len > 0) {
-        displayMessage();
-        Serial.println();
-        delay(t_pause);
-      } else {
-        delay(10);
-      }
-    }
-
-  } else { // Serial.available()
+  if (!messageChanged && message_len > 0) {
+    displayMessage();
+    Serial.println();
+    delay(t_pause);
+  } else if (!Serial.available()) {
+    messageChanged = false;
+  } else { // Serial available
 
     readLine();
     
-    if (line_len > 0 && '*' == line[0]) {
+    if (0 == line_len) {
+      Serial.println("-- Message cleared");
+      writeMessageToEEPROM();
+      transmitMessage();
+      return;
+    }
+
+    if ('*' == line[0]) {
       processStarCommand();
       return;
     }
@@ -204,16 +206,10 @@ void loop_XMIT() {
     message[0] = 0;
     message_len = 0;
 
-    if (0 == line_len) {
-      Serial.println("-- Message cleared");
-      transmitMessage();
-      writeMessageToEEPROM();
-      return;
-    }
+
  
     Serial.println("-- Append to message (max 64 chars per line. Blank line commits message)");
     Serial.println();
-
     appendLineToMessage();
     previewMessage();
     
@@ -223,10 +219,8 @@ void loop_XMIT() {
       previewMessage();
       readLine();
     }
-    
-    messageChanged = true;
-    transmitMessage();
     writeMessageToEEPROM();
+    transmitMessage();
   }
 }
 

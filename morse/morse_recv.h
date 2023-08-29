@@ -11,11 +11,11 @@
 extern RF24 radio;
 
 /*
- * Append payload bytes to message buffer
+ * Append commBuffer bytes to message buffer
  * 
  * @return number of bytes appended
  */
-int decodePayload();
+int decodeCommBuffer();
 
 void receiveMessage();
 

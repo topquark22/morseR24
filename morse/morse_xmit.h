@@ -25,7 +25,7 @@ void showInstructions();
  */
 int parseIntFromLine();
 
-void clearPayload();
+void clearCommBuffer();
 
 void previewMessage();
 
