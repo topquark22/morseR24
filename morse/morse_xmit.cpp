@@ -144,13 +144,10 @@ void readLine() {
 }
 
 void appendLineToMessage() {
-  Serial.print("DEBUG start appendLineToMessage(), line="); printLine();
   int numBytes = min(line_len, MESSAGE_SIZE - message_len); // do not include terminal 0 from line[]
   memcpy(message + message_len, line, numBytes);
   message_len += line_len;
   message[message_len] = 0;
-  Serial.print("DEBUG: message_len="); Serial.println(message_len);
-  Serial.print("DEBUG end appendLineToMessage(), message="); previewMessage();
 }
 
 void processStarCommand() {
@@ -180,11 +177,13 @@ bool messageChanged = false;
 
 void loop_XMIT() {
 
-  if (!messageChanged && message_len > 0) {
-    displayMessage();
-    Serial.println();
-    delay(t_pause);
-  } else if (!Serial.available()) {
+  if (!Serial.available()) {
+
+    if (!messageChanged && message_len > 0) {
+      displayMessage();
+      Serial.println();
+      delay(t_pause);
+    }
     messageChanged = false;
   } else { // Serial available
 
@@ -192,6 +191,7 @@ void loop_XMIT() {
     
     if (0 == line_len) {
       Serial.println("-- Message cleared");
+      message_len = 0;
       writeMessageToEEPROM();
       transmitMessage();
       return;
