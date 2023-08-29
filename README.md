@@ -76,6 +76,8 @@ The radio power is set by jumpers on pins A0, A1. The default is MAX. See the co
 
 For master mode, leave pin D8 unconnected.
 
+The maximum message length is 100 characters.
+
 The message to transmit is entered in the serial monitor console. It accepts multiple lines (as the serial input buffer can only accept 64 characters at a time) and concatenates them together. Enter a blank line to commit the message.
 
 The following in-line characters will cause the text to be interpreted in several different ways:
@@ -103,6 +105,8 @@ If you just want to control something with GPIO, you can operate in master mode 
 For slave mode, wire pin D8 to ground.
 
 The serial monitor will display the characters as they are output, as well as any speed and pause timing changes.
+
+Entering a blank line on the serial monitor console will abort and restart the current message display.
 
 ## Example circuits
 
