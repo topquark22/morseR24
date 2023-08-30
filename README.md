@@ -108,6 +108,8 @@ The serial monitor will display the characters as they are output, as well as an
 
 Entering anything on the serial monitor will stop the current message display until a new message is received.
 
+Pressing the code key button during message display will enter test mode.
+
 ## Example circuits
 
 ### External device control
