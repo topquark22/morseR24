@@ -104,7 +104,6 @@ void printMessage() {
 }
 
 void readMessageFromEEPROM() {
-  Serial.println("DEBUG readMessageFromEEPROM()");
   message_len = 0;
   byte b = EEPROM.read(0);
   while (b != 0 && message_len < MESSAGE_SIZE - 1) {
