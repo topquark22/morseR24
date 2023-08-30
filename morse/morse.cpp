@@ -104,14 +104,13 @@ void printMessage() {
 }
 
 void readMessageFromEEPROM() {
-  int i = 0;
+  message_len = 0;
   byte b = EEPROM.read(0);
-  while (b != 0 && i < MESSAGE_SIZE - 1) {
-    message[i] = b;
-    b = EEPROM.read(++i);
+  while (b != 0 && message_len < MESSAGE_SIZE - 1) {
+    message[message_len] = b;
+    b = EEPROM.read(++message_len);
   }
-  message[i] = 0;
-  message_len = i;
+  message[message_len] = 0;
 }
 
 void writeIntToEEPROM(int addr, int value) {

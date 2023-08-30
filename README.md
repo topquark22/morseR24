@@ -76,7 +76,7 @@ The radio power is set by jumpers on pins A0, A1. The default is MAX. See the co
 
 For master mode, leave pin D8 unconnected.
 
-The maximum message length is 100 characters.
+The maximum message length is 150 characters.
 
 The message to transmit is entered in the serial monitor console. It accepts multiple lines (as the serial input buffer can only accept 64 characters at a time) and concatenates them together. Enter a blank line to commit the message.
 
