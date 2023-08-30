@@ -5,8 +5,8 @@
 #ifndef MORSE_H
 #define MORSE_H
 
-#include <Arduino.h>
-#include <string.h>
+#include <Arduino.h> // needed for Serial
+#include <string.h>  // needed for memcpy
 #include <RF24_config.h>
 #include <nRF24L01.h>
 #include <RF24.h>
