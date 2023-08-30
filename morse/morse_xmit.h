@@ -6,8 +6,8 @@
  @author topquark22
 */
 
-#ifndef X_A
-#define X_A
+#ifndef MORSE_XMIT_H
+#define MORSE_XMIT_H
 
 #include "morse.h"
 

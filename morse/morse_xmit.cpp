@@ -2,7 +2,7 @@
  * functions related to transmission only
  */
 
-#include <Arduino.h> //needed for Serial.println
+
 #include <string.h> //needed for memcpy
 #include "morse.h"
 
@@ -75,7 +75,6 @@ void transmitInteger(int tokenType, int value) {
   if (!radioEnabled) {
     return;
   }
-  Serial.print("DEBUG transmitting integer ") ; Serial.print(value, DEC);
   clearCommBuffer(tokenType);
   commBuffer[1] = (value >> 24) & 0xFF;
   commBuffer[2] = (value >> 16) & 0xFF;
@@ -134,13 +133,6 @@ void readLine() {
     }
   }
   line[line_len] = 0;
-  // start DEBUG
-  Serial.print("DEBUG got line: ");
-  for (int i = 0; i < line_len; i++) {
-    Serial.print((char)line[i]);
-  }
-  Serial.println();
-  // end DEBUG
 }
 
 void appendLineToMessage() {
@@ -151,7 +143,6 @@ void appendLineToMessage() {
 }
 
 void processStarCommand() {
-  Serial.println("DEBUG star command");
   if ('s' == line[1]) { // speed change
     int speed = parseIntFromLine();
     if (speed > 0) {
@@ -177,13 +168,11 @@ bool messageChanged = false;
 
 void loop_XMIT() {
 
-  if (!Serial.available()) {
-
-    if (!messageChanged && message_len > 0) {
-      displayMessage();
-      Serial.println();
-      delay(t_pause);
-    }
+  if (!messageChanged && message_len > 0) {
+    displayMessage();
+    Serial.println();
+    delay(t_pause);
+  } else if (!Serial.available()) {
     messageChanged = false;
   } else { // Serial available
 
@@ -191,7 +180,6 @@ void loop_XMIT() {
     
     if (0 == line_len) {
       Serial.println("-- Message cleared");
-      message_len = 0;
       writeMessageToEEPROM();
       transmitMessage();
       return;

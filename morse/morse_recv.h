@@ -6,19 +6,15 @@
  @author topquark22
 */
 
+#ifndef MORSE_RECV_H
+#define MORSE_RECV_H
+
 #include "morse.h"
 
 extern RF24 radio;
 
-/*
- * Append commBuffer bytes to message buffer
- * 
- * @return number of bytes appended
- */
-int decodeCommBuffer();
-
 void receiveMessage();
 
-static void setup_RECV();
-
 void loop_RECV();
+
+#endif

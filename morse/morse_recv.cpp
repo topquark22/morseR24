@@ -6,9 +6,6 @@
  @author topquark22
 */
 
-#ifndef R_A
-#define R_A
-
 #include "morse.h"
 #include "morse_recv.h"
 
@@ -93,5 +90,3 @@ void loop_RECV() {
     delay(10);
   }
 }
-
-#endif
