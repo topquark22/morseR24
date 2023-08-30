@@ -121,8 +121,6 @@ int decodeInteger() {
  */
 void readLine() {
   while (!Serial.available()) {
-    // wait for some entry
-    delay(10);
   }
   line[0] = 0;
   line_len = 0;
