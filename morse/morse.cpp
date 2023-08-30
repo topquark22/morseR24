@@ -353,7 +353,7 @@ void displayNybble(char c) {
   for (int i = 3; i >= 0; i--) {
     n & (1 << i) ? dash() : dot();
   }
-  delay(t_dot);
+  delay(2 * t_dot);
 }
 
 /**
