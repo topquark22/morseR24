@@ -48,11 +48,13 @@ Solid red can mean:
     
 -  If the red LED lights during transmission of a message, an invalid packet was received. Ensure that the transmitter and the receiver are running the same version and that there is good radio communication. The problem should be investigated and the slave reset.
 
-## Configuration
+## Test configuration
 
-### GPIO testing only
-
-Jumper pin D7 to ground. When the Arduino is reset, the output will blink continuously every 1 second. If you hold down the button during the reset, then the button will act as a code key for manual input.
+If pin D7 is jumpered to ground during reset:
+- If the pushbutton is down, it will subsequently act as a code key for manual input
+- Otherwise the output/transmission will blink continuously every 1 second.
+ 
+## Radio configuration
 
 ### Channel setting
 
@@ -64,8 +66,8 @@ The sketch supports two device IDs, selected by a jumper on pin A5. See the code
 
 ### Power setting
 
-The radio power is set by jumpers on pins A0, A1. The default is MAX. See the code for more details.
-
+The radio power is set by jumpers on pins A0, A1. The default is MAX. See the code for more details
+                                                                                                                             
 ## Modes of operation
 
 ### Master (transmitter) mode
@@ -102,13 +104,9 @@ For slave mode, wire pin D8 to ground.
 
 The serial monitor will display the characters as they are output, as well as any speed and pause timing changes.
 
-Entering anything on the serial monitor will stop the current message display until a new message is received.
-
-### GPIO test mode
-
-This mode is always enabled when pin D7 is jumpered to ground (see *Configuration* above).
-
-During normal operation, to enter GPIO test mode, press and hold the pushbutton for 1 symbol interval. The button then acts as a code key for manual input.
+Pressing the pushbutton for one symbol duration will stop the current message display. At this point:
+- If the master is in test mode, it will send its test activations to the slave
+- If a message is received from the master, the slave will return to normal operation.
 
 ## Example circuits
 
