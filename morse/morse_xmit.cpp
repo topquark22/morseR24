@@ -166,11 +166,14 @@ bool messageChanged = false;
 
 void loop_XMIT() {
 
-  if (!messageChanged && message_len > 0) {
-    displayMessage();
-    Serial.println();
-    delay(t_pause);
-  } else if (!Serial.available()) {
+
+  if (!Serial.available()) {
+
+    if (!messageChanged && message_len > 0) {
+      displayMessage();
+      Serial.println();
+      delay(t_pause);
+    }
     messageChanged = false;
   } else { // Serial available
 
@@ -178,6 +181,7 @@ void loop_XMIT() {
     
     if (0 == line_len) {
       Serial.println("-- Message cleared");
+      message_len = 0;
       writeMessageToEEPROM();
       transmitMessage();
       return;
