@@ -91,8 +91,8 @@ You can change these in-line modifiers mid-text.
 
 The timings can be changed using the "star commands." For example:
 
-- ***s100** changes the dot length to 100 ms
-- ***p3000** changes the inter-message pause to 3000 ms
+- **\*s100** changes the dot length to 100 ms
+- **\*p3000** changes the inter-message pause to 3000 ms
 
 The command will be transmitted to the slave. Issuing one of these commands will interrupt and restart any broadcast in progress.
 
