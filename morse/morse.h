@@ -101,7 +101,7 @@ const int CONSOLE_WIDTH = 80;
 
 const int EEPROM_LEN = 0x3F0; // leave room for speed, pause
 
-extern RF24 radio;
+void clearMessage();
 
 void initNewArduino();
 
@@ -133,33 +133,7 @@ void setOutput(bool value);
 
 void errExit();
 
-bool buttonPressed();
-
-void blinkRedLED(int ms);
-
-void beep(int beep_ms);
-
-void dot();
-
-void dash();
-
-void displayMorse(char c);
-
-int ascToNybble(char c);
-
-void displayNybble(char c);
-
-/**
-   Transmit a number in unary
-     - Zero represented by a single dash
-     - Number n represented by n dots
-     - Recommend keeping 0 <= n <= 9
-*/
-void displayUnary(char c);
-/**
-   display chess coordinates 'A'-'H', '1'-'8' as unary 1-8
-*/
-void displayChess(char c);
+void enableDisplay(bool enabled);
 
 void displayMessage();
 

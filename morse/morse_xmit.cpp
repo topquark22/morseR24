@@ -169,8 +169,12 @@ bool messageChanged = false;
 
 void loop_XMIT() {
 
+  if (buttonPressed()) {
+    testRoutine();
+  }
+ 
   if (!Serial.available()) {
-
+  
     if (!messageChanged && message_len > 0) {
       displayMessage();
     }

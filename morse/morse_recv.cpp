@@ -9,16 +9,9 @@
 #include "morse.h"
 #include "morse_recv.h"
 
-extern int t_dot;
-extern int t_dash;
-extern int t_space;
-extern int t_pause;
-
 extern RF24 radio;
 
 extern bool radioEnabled;
-
-extern bool testMode;
 
 extern byte message[];
 extern int message_len;
@@ -44,13 +37,10 @@ int decodeCommBuffer() {
   return i;
 }
 
-bool displayEnabled = true;
-
 void receiveMessage() {
   Serial.println("-- Receiving message");
   // first block already in buffer
-  message[0] = 0;
-  message_len = 0;
+  clearMessage();
   int bytesAppended = decodeCommBuffer();
   while (bytesAppended > 0) {
     while (!radio.available()) {
@@ -60,7 +50,6 @@ void receiveMessage() {
     bytesAppended = decodeCommBuffer();
   }
   writeMessageToEEPROM();
-  displayEnabled = (message_len > 0);
 }
 
 void loop_RECV() {
@@ -68,11 +57,11 @@ void loop_RECV() {
     digitalWrite(PIN_RED, LOW);
     radio.read(commBuffer, COMM_BUFFER_SIZE); // Read data from the nRF24L01
     if (TOKEN_MESSAGE == commBuffer[0]) {
-     receiveMessage();
-      displayEnabled = true;
+      enableDisplay(true);
+      receiveMessage();
     } else if (TOKEN_TEST == commBuffer[0]) { // special case manual transmission
+      enableDisplay(false);
       setOutput(commBuffer[4]);
-      displayEnabled = false;
     } else if (TOKEN_SPEED == commBuffer[0]) { // speed was transmitted
       setSpeed(decodeInteger());
     } else if (TOKEN_PAUSE == commBuffer[0]) { // pause was transmitted
@@ -84,7 +73,5 @@ void loop_RECV() {
       exit(1);
     }
   }
-  if (displayEnabled && message_len > 0) {
-    displayMessage();
-  }
+  displayMessage();
 }

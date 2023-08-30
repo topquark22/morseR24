@@ -81,10 +81,6 @@ void setup() {
 }
 
 void loop() {
-  // can enter test mode by holding down button switch
-  if (buttonPressed()) {
-    testRoutine();
-  }
   if (transmitMode) {
     loop_XMIT();
   } else {

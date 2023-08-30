@@ -26,15 +26,23 @@ TEXT_INTERPRETATION interpretTextAs;
 
 RF24 radio(PIN_CE, PIN_CSN, SPI_SPEED);
 
+void clearMessage() {
+  message[0] = 0;
+  message_len = 0;
+}
 void initNewArduino() {
   if (NOT_SET == readIntFromEEPROM(ADDR_SPEED)) { // new Arduino
-    EEPROM.write(0, 0);
     setSpeed(t_DOT);
     setPause(t_PAUSE);
-    message[0] = 0;
-    message_len = 0;
+    clearMessage();
     writeMessageToEEPROM();
   }
+}
+
+void blinkRedLED(int ms) {
+  digitalWrite(PIN_RED, HIGH);
+  delay(ms);
+  digitalWrite(PIN_RED, LOW);
 }
 
 void setupRadio() {
@@ -169,12 +177,6 @@ void setOutput(bool value) {
 
 bool buttonPressed() {
   return !digitalRead(PIN_BUTTON_);
-}
-
-void blinkRedLED(int ms) {
-  digitalWrite(PIN_RED, HIGH);
-  delay(ms);
-  digitalWrite(PIN_RED, LOW);
 }
 
 void beep(int beep_ms) {
@@ -412,16 +414,16 @@ void displayChess(char c) {
   delay(dly);
 }
 
-/*
- * Discard anything the user entered
- */
-void clearSerialBuffer() {
-  while (Serial.available()) {
-    Serial.read();
-  }
+bool displayEnabled = true;
+
+void enableDisplay(bool enable) {
+  displayEnabled = enable;
 }
 
 void displayMessage() {
+  if (!displayEnabled || 0 == message_len) {
+    return;
+  }
   int i;
   char c = message[0];
   for (i = 0; c != 0 && i < message_len; c = message[++i]) {
@@ -430,10 +432,9 @@ void displayMessage() {
       if (radioEnabled && radio.available()) {
         // abort display when new message comes in
         break;
-      } else if (Serial.available()  || !digitalRead(PIN_BUTTON_)) {
+      } else if (buttonPressed()) {
         Serial.println("-- Display stopped");
-        clearSerialBuffer();
-        message_len = 0;
+        displayEnabled = false;
         break;
       }
     } else { // transmit mode
