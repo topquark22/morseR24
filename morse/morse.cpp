@@ -430,7 +430,7 @@ void displayMessage() {
       if (radioEnabled && radio.available()) {
         // abort display when new message comes in
         break;
-      } else if (Serial.available()) {
+      } else if (Serial.available()  || !digitalRead(PIN_BUTTON_)) {
         Serial.println("-- Display stopped");
         clearSerialBuffer();
         message_len = 0;
