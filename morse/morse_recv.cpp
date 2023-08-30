@@ -32,7 +32,7 @@ extern byte commBuffer[];
  */
 int decodeCommBuffer() {
   if (commBuffer[0] != TOKEN_MESSAGE) {
-    Serial.print("Expected message; got commBuffer of type: ");
+    Serial.print("Expected message packet; got packet of type: ");
     Serial.println(commBuffer[0]);
     errExit();
   }
