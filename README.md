@@ -50,13 +50,9 @@ Solid red can mean:
 
 ## Configuration
 
-### Test mode
+### GPIO testing only
 
-There are two ways to enter test mode:
-
-1.  Jumper pin D7 to ground. When the Arduino is reset, the output will blink continuously every 1 second. If you hold down the button during the reset, then the button will act as a code key for manual input.
-
-2.  In normal operation (D7 not wired to ground), you can enter test mode by holding down the button until the next loop starts. In this case, the button will act as a code key for manual input. To get out of test mode, reset the Arduino.
+Jumper pin D7 to ground. When the Arduino is reset, the output will blink continuously every 1 second. If you hold down the button during the reset, then the button will act as a code key for manual input.
 
 ### Channel setting
 
@@ -108,7 +104,11 @@ The serial monitor will display the characters as they are output, as well as an
 
 Entering anything on the serial monitor will stop the current message display until a new message is received.
 
-Pressing the code key button during message display will enter test mode.
+### GPIO test mode
+
+This mode is always enabled when pin D7 is jumpered to ground (see *Configuration* above).
+
+During normal operation, to enter GPIO test mode, press and hold the pushbutton for 1 symbol interval. The button then acts as a code key for manual input.
 
 ## Example circuits
 
