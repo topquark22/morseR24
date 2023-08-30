@@ -73,14 +73,13 @@ void setupRadio() {
   radio.setChannel(channel);
 
   if (transmitMode) {
-    Serial.println("Configured as transmitter");
+    Serial.println("Configured as master\n");
     radio.openWritingPipe(deviceID); // Get NRF24L01 ready to transmit
     radio.stopListening();
 
   } else { // recv mode
-
+    Serial.println("Configured as slave\n");
     if (!radioEnabled) {
-      Serial.println("Configured as receiver");
       Serial.println("Unsupported configuration");
       errExit();
     }
@@ -100,6 +99,9 @@ void writeMessageToEEPROM() {
 void printMessage() {
   for (int i = 0; i < message_len; i++) {
     Serial.print((char)message[i]);
+    if ((i + 1) % (CONSOLE_WIDTH - 1) == 0) {
+      Serial.println();
+    }
   }
 }
 
@@ -410,13 +412,38 @@ void displayChess(char c) {
   delay(dly);
 }
 
+/*
+ * Discard anything the user entered
+ */
+void clearSerialBuffer() {
+  while (Serial.available()) {
+    Serial.read();
+  }
+}
+
 void displayMessage() {
   int i;
   char c = message[0];
   for (i = 0; c != 0 && i < message_len; c = message[++i]) {
-    if (Serial.available() || (!transmitMode && radio.available())) {
-      break;
+    
+    if (!transmitMode) { // receive mode
+      if (radioEnabled && radio.available()) {
+        // abort display when new message comes in
+        break;
+      } else if (Serial.available()) {
+        Serial.println("-- Display stopped");
+        clearSerialBuffer();
+        message_len = 0;
+        break;
+      }
+    } else { // transmit mode
+      if (Serial.available()) {
+        // abort display to allow entry of new message
+        break;
+      }
     }
+
+    Serial.print(c);
     if (SW_HEXADECIMAL == c) {
       interpretTextAs = HEXADECIMAL;
       continue;
@@ -428,8 +455,9 @@ void displayMessage() {
       continue;
     } else if (i == 0 || '_' == c) {
       interpretTextAs = MORSE;
+      continue;
     }
-    Serial.print(c);
+
     switch (interpretTextAs) {
     case MORSE:
       displayMorse(c);
@@ -448,6 +476,8 @@ void displayMessage() {
       Serial.println();
     }
   }
+  Serial.println();
+  delay(t_pause);
 };
 
 /*

@@ -68,7 +68,7 @@ void clearCommBuffer(int tokenType) {
 
 void previewMessage() {
   printMessage();
-  Serial.println("<");
+  Serial.println("<\n");
 }
 
 void transmitInteger(int tokenType, int value) {
@@ -130,13 +130,16 @@ void readLine() {
       line[line_len++] = c;
     }
   }
+  if (line_len == LINE_SIZE - 1) {
+    Serial.println("-- entry truncated\n");
+  }
   line[line_len] = 0;
 }
 
 void appendLineToMessage() {
-  int numBytes = min(line_len, MESSAGE_SIZE - message_len); // do not include terminal 0 from line[]
+  int numBytes = min(line_len, MESSAGE_SIZE - message_len - 1); // do not include terminal 0 from line[]
   memcpy(message + message_len, line, numBytes);
-  message_len += line_len;
+  message_len += numBytes;
   message[message_len] = 0;
 }
 
@@ -171,8 +174,6 @@ void loop_XMIT() {
 
     if (!messageChanged && message_len > 0) {
       displayMessage();
-      Serial.println();
-      delay(t_pause);
     }
     messageChanged = false;
   } else { // Serial available
@@ -192,22 +193,27 @@ void loop_XMIT() {
       return;
     }
 
+    Serial.println("-- Data received on serial monitor\n");
+
     messageChanged = true;
     message[0] = 0;
     message_len = 0;
 
+    Serial.print("-- Append to message (max ");
+    Serial.print(LINE_SIZE - 1, DEC);
+    Serial.println(" chars per line.) Blank line commits message\n");
 
- 
-    Serial.println("-- Append to message (max 64 chars per line. Blank line commits message)");
-    Serial.println();
     appendLineToMessage();
     previewMessage();
     
     readLine();
-    while (line_len > 0) {
+    while (line_len > 0 && message_len < MESSAGE_SIZE - 1) {
       appendLineToMessage(); 
       previewMessage();
       readLine();
+    }
+    if (message_len == MESSAGE_SIZE - 1) {
+      Serial.println("-- Maximum message size reached");
     }
     writeMessageToEEPROM();
     transmitMessage();

@@ -44,6 +44,8 @@ int decodeCommBuffer() {
   return i;
 }
 
+bool displayEnabled = true;
+
 void receiveMessage() {
   Serial.println("-- Receiving message");
   // first block already in buffer
@@ -58,9 +60,8 @@ void receiveMessage() {
     bytesAppended = decodeCommBuffer();
   }
   writeMessageToEEPROM();
+  displayEnabled = (message_len > 0);
 }
-
-bool displayEnabled = true;
 
 void loop_RECV() {
   if (radio.available()) {
@@ -83,10 +84,7 @@ void loop_RECV() {
       exit(1);
     }
   }
-  if (displayEnabled) {
+  if (displayEnabled && message_len > 0) {
     displayMessage();
-    delay(t_pause);
-  } else {
-    delay(10);
   }
 }

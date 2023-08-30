@@ -97,7 +97,7 @@ const char SW_UNARY = '#';
 const char SW_CHESS = '%';
 
 // Width of serial console
-const int CONSOLE_WIDTH = 100;
+const int CONSOLE_WIDTH = 80;
 
 const int EEPROM_LEN = 0x3F0; // leave room for speed, pause
 

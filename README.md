@@ -78,7 +78,7 @@ For master mode, leave pin D8 unconnected.
 
 The maximum message length is 150 characters.
 
-The message to transmit is entered in the serial monitor console. It accepts multiple lines (as the serial input buffer can only accept 64 characters at a time) and concatenates them together. Enter a blank line to commit the message.
+The message to transmit is entered in the serial monitor console. It accepts multiple lines (as the serial input buffer can only accept 63 characters at a time) and concatenates them together. The partial message is displayed followed by a '<' symbol indicating that more text can be entered. Enter a blank line to commit the message.
 
 The following in-line characters will cause the text to be interpreted in several different ways:
 
@@ -106,7 +106,7 @@ For slave mode, wire pin D8 to ground.
 
 The serial monitor will display the characters as they are output, as well as any speed and pause timing changes.
 
-Entering a blank line on the serial monitor console will abort and restart the current message display.
+Entering anything on the serial monitor will stop the current message display until a new message is received.
 
 ## Example circuits
 
