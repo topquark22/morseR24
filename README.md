@@ -80,7 +80,7 @@ The message to transmit is entered in the serial monitor console. It accepts mul
 
 The following in-line characters will cause the text to be interpreted in several different ways:
 
-- Morse code (the default, or preceded by **_** )
+- Morse code (the default, or preceded by an underscore **_** )
 - Unary (using the **#** character). For example, **#314159**
 - Hexadecimal (using the **$** character). For example, **$600DF00D**
 - Chess coordinates (using the **%** character). For example, **%e2e4 e7e5**
