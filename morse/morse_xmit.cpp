@@ -169,7 +169,6 @@ bool messageChanged = false;
 
 void loop_XMIT() {
 
-
   if (!Serial.available()) {
 
     if (!messageChanged && message_len > 0) {
