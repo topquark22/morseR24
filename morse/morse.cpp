@@ -194,140 +194,164 @@ void dash() {
   beep(t_dash);
 }
 
-static bool isValidMorseChar(char c) {
+static bool isValidUnary(char c) {
   c = toUpperCase(c);
-  return ' ' == c || ('A' <= c && c <= 'Z') || ('0' <= c && c <= '9') || '.' == c || ',' == c || '?' == c || '/' == c || '@' == c;
+  return ' ' == c || ('0' <= c && c <= '9');
+}
+
+static bool isValidHex(char c) {
+  c = toUpperCase(c);
+  return isValidUnary(c) || ('A' <= c && c <= 'F');
+}
+
+static bool isValidMorse(char c) {
+  c = toUpperCase(c);
+  return isValidUnary(c) || ('A' <= c && c <= 'Z') || '.' == c || ',' == c || '?' == c || '/' == c || '@' == c;
+}
+
+static bool isValidChess(char c) {
+  c = toLowerCase(c);
+  return ' ' == c || ('a' <= c && c <= 'h') || ('1' <= c && c <= '8');
+}
+
+void indicateInvalidChar() {
+  Serial.print("*");
+  blinkRedLED(t_dot);
 }
 
 void displayMorse(char c) {
-  c = toUpperCase(c);
-  switch (c) {
-    case ' ' :
-      delay(t_space);
-      break;
-    case 'A' :
-      dot(); dash();
-      break;
-    case 'B' :
-      dash(); dot(); dot(); dot();
-      break;
-    case 'C' :
-      dash(); dot(); dash(); dot();
-      break;
-    case 'D' :
-      dash(); dot(); dot();
-      break;
-    case 'E' :
-      dot();
-      break;
-    case 'F' :
-      dot(); dot(); dash(); dot();
-      break;
-    case 'G' :
-      dash(); dash(); dot();
-      break;
-    case 'H' :
-      dot(); dot(); dot(); dot();
-      break;
-    case 'I' :
-      dot(); dot();
-      break;
-    case 'J' :
-      dot(); dash(); dash(); dash();
-      break;
-    case 'K' :
-      dash(); dot(); dash();
-      break;
-    case 'L' :
-      dot(); dash(); dot(); dot();
-      break;
-    case 'M' :
-      dash(); dash();
-      break;
-    case 'N' :
-      dash(); dot();
-      break;
-    case 'O' :
-      dash(); dash(); dash();
-      break;
-    case 'P' :
-      dot(); dash(); dash(); dot();
-      break;
-    case 'Q' :
-      dash(); dash(); dot(); dash();
-      break;
-    case 'R' :
-      dot(); dash(); dot();
-      break;
-    case 'S' :
-      dot(); dot(); dot();
-      break;
-    case 'T' :
-      dash();
-      break;
-    case 'U' :
-      dot(); dot(); dash();
-      break;
-    case 'V' :
-      dot(); dot(); dot(); dash();
-      break;
-    case 'W' :
-      dot(); dash(); dash();
-      break;
-    case 'X' :
-      dash(); dot(); dot(); dash();
-      break;
-    case 'Y' :
-      dash(); dot(); dash(); dash();
-      break;
-    case 'Z' :
-      dash(); dash(); dot(); dot();
-      break;
-    case '0' :
-      dash(); dash(); dash(); dash(); dash();
-      break;
-    case '1' :
-      dot(); dash(); dash(); dash(); dash();
-      break;
-    case '2' :
-      dot(); dot(); dash(); dash(); dash();
-      break;
-    case '3' :
-      dot(); dot(); dot(); dash(); dash();
-      break;
-    case '4' :
-      dot(); dot(); dot(); dot(); dash();
-      break;
-    case '5' :
-      dot(); dot(); dot(); dot(); dot();
-      break;
-    case '6' :
-      dash(); dot(); dot(); dot(); dot();
-      break;
-    case '7' :
-      dash(); dash(); dot(); dot(); dot();
-      break;
-    case '8' :
-      dash(); dash(); dash(); dot(); dot();
-      break;
-    case '9' :
-      dash(); dash(); dash(); dash(); dot();
-      break;
-    case '.' :
-      dot(); dash(); dot(); dash(); dot(); dash();
-      break;
-    case ',' :
-      dash(); dash(); dot(); dot(); dash(); dash();
-      break;
-    case '?' :
-      dot(); dot(); dash(); dash(); dot(); dot();
-      break;
-    case '/' :
-      dash(); dot(); dot(); dash(); dot();
-      break;
-    case '@' :
-      dot(); dash(); dash(); dot(); dash(); dot();
-      break;
+  if (!isValidMorse(c)) {
+    indicateInvalidChar();
+  } else {
+    c = toUpperCase(c);
+    switch (c) {
+      case ' ' :
+        delay(t_space);
+        break;
+      case 'A' :
+        dot(); dash();
+        break;
+      case 'B' :
+        dash(); dot(); dot(); dot();
+        break;
+      case 'C' :
+        dash(); dot(); dash(); dot();
+        break;
+      case 'D' :
+        dash(); dot(); dot();
+        break;
+      case 'E' :
+        dot();
+        break;
+      case 'F' :
+        dot(); dot(); dash(); dot();
+        break;
+      case 'G' :
+        dash(); dash(); dot();
+        break;
+      case 'H' :
+        dot(); dot(); dot(); dot();
+        break;
+      case 'I' :
+        dot(); dot();
+        break;
+      case 'J' :
+        dot(); dash(); dash(); dash();
+        break;
+      case 'K' :
+        dash(); dot(); dash();
+        break;
+      case 'L' :
+        dot(); dash(); dot(); dot();
+        break;
+      case 'M' :
+        dash(); dash();
+        break;
+      case 'N' :
+        dash(); dot();
+        break;
+      case 'O' :
+        dash(); dash(); dash();
+        break;
+      case 'P' :
+        dot(); dash(); dash(); dot();
+        break;
+      case 'Q' :
+        dash(); dash(); dot(); dash();
+        break;
+      case 'R' :
+        dot(); dash(); dot();
+        break;
+      case 'S' :
+        dot(); dot(); dot();
+        break;
+      case 'T' :
+        dash();
+        break;
+      case 'U' :
+        dot(); dot(); dash();
+        break;
+      case 'V' :
+        dot(); dot(); dot(); dash();
+        break;
+      case 'W' :
+        dot(); dash(); dash();
+        break;
+      case 'X' :
+        dash(); dot(); dot(); dash();
+        break;
+      case 'Y' :
+        dash(); dot(); dash(); dash();
+        break;
+      case 'Z' :
+        dash(); dash(); dot(); dot();
+        break;
+      case '0' :
+        dash(); dash(); dash(); dash(); dash();
+        break;
+      case '1' :
+        dot(); dash(); dash(); dash(); dash();
+        break;
+      case '2' :
+        dot(); dot(); dash(); dash(); dash();
+        break;
+      case '3' :
+        dot(); dot(); dot(); dash(); dash();
+        break;
+      case '4' :
+        dot(); dot(); dot(); dot(); dash();
+        break;
+      case '5' :
+        dot(); dot(); dot(); dot(); dot();
+        break;
+      case '6' :
+        dash(); dot(); dot(); dot(); dot();
+        break;
+      case '7' :
+        dash(); dash(); dot(); dot(); dot();
+        break;
+      case '8' :
+        dash(); dash(); dash(); dot(); dot();
+        break;
+      case '9' :
+        dash(); dash(); dash(); dash(); dot();
+        break;
+      case '.' :
+        dot(); dash(); dot(); dash(); dot(); dash();
+        break;
+      case ',' :
+        dash(); dash(); dot(); dot(); dash(); dash();
+        break;
+      case '?' :
+        dot(); dot(); dash(); dash(); dot(); dot();
+        break;
+      case '/' :
+        dash(); dot(); dot(); dash(); dot();
+        break;
+      case '@' :
+        dot(); dash(); dash(); dot(); dash(); dot();
+        break;
+    }
   }
   delay(2 * t_dot); // inter-character break is 3 including 1 from last dot/dash
 }
@@ -347,18 +371,22 @@ int ascToNybble(char c) {
 }
 
 void displayNybble(char c) {
-  if (' ' == c) {
-    delay(t_space);
-    return;
-  }
-  char C = toUpperCase(c);
-  int n = ascToNybble(c);
-  if (n < 0) {
-    Serial.print("Invalid nybble "); Serial.print(c);
-    return;
-  }
-  for (int i = 3; i >= 0; i--) {
-    n & (1 << i) ? dash() : dot();
+  if (!isValidHex(c)) {
+    indicateInvalidChar();
+  } else {
+    if (' ' == c) {
+      delay(t_space);
+      return;
+    }
+    char C = toUpperCase(c);
+    int n = ascToNybble(c);
+    if (n < 0) {
+      Serial.print("Invalid nybble "); Serial.print(c);
+      return;
+    }
+    for (int i = 3; i >= 0; i--) {
+      n & (1 << i) ? dash() : dot();
+    }
   }
   delay(t_space);
 }
@@ -370,20 +398,25 @@ void displayNybble(char c) {
      - Recommend keeping 0 <= n <= 9
 */
 void displayUnary(char c) {
-  if (' ' == c) {
-    delay(t_space);
-    return;
-  }
-  int n = ascToNybble(c);
-  if (n < 0) {
-    Serial.print("Invalid digit "); Serial.print(c);
-    return;
-  }
-  if (n == 0) {
-    dash();
+  if (!isValidUnary(c)) {
+    indicateInvalidChar();
   } else {
-    for (int i = 0; i < n; i++) {
-      dot();
+    if (' ' == c) {
+      delay(t_space);
+      return;
+    }
+    int n = ascToNybble(c);
+    if (n < 0) {
+      Serial.print("Invalid digit ");
+      Serial.print(c);
+      return;
+    }
+    if (n == 0) {
+      dash();
+    } else {
+      for (int i = 0; i < n; i++) {
+        dot();
+      }
     }
   }
   delay(2 * t_dot);
@@ -393,30 +426,35 @@ void displayUnary(char c) {
    display chess coordinates 'A'-'H', '1'-'8' as unary 1-8
 */
 void displayChess(char c) {
-  if (' ' == c) {
-    delay(2 * t_space);
-    return;
-  }
-  char C = toUpperCase(c);
-  int n;
-  int dly;
-  if ('A' <= C && C <= 'H') {
-    n = C - 'A' + 1;
-    dly = 3 * t_dot;
-  } else if ('1' <= C && C <= '8') {
-    n = C - '0';
-    dly = t_space;
-  } else if (',' == C) {
-    n = 0;
-    dly = 3 * t_space;
+  if (!isValidChess(c)) {
+    indicateInvalidChar();
+    delay(t_dot);
   } else {
-    Serial.print("Invalid digit "); Serial.print(c);
-    return;
+    if (' ' == c) {
+      delay(2 * t_space);
+      return;
+    }
+    char C = toUpperCase(c);
+    int n;
+    int dly;
+    if ('A' <= C && C <= 'H') {
+      n = C - 'A' + 1;
+      dly = 3 * t_dot;
+    } else if ('1' <= C && C <= '8') {
+      n = C - '0';
+      dly = t_space;
+    } else if (',' == C) {
+      n = 0;
+      dly = 3 * t_space;
+    } else {
+      Serial.print("Invalid digit "); Serial.print(c);
+      return;
+    }
+    for (int i = 0; i < n; i++) {
+      dot();
+    }
+    delay(dly);
   }
-  for (int i = 0; i < n; i++) {
-    dot();
-  }
-  delay(dly);
 }
 
 bool displayEnabled = true;
@@ -462,10 +500,10 @@ void displayMessage() {
     } else if ('_' == c) {
       interpretTextAs = MORSE;
       continue;
-    } else if (isValidMorseChar(c)) {
+    } else if (0 == i) {
       interpretTextAs = MORSE;
     }
-     
+ 
     switch (interpretTextAs) {
     case MORSE:
       displayMorse(c);
@@ -503,6 +541,7 @@ void setSpeed(int t_dot_ms) {
   Serial.print("-- speed set to ");
   Serial.println(t_dot);
 }
+
 void setPause(int t_pause_ms) {
   if (t_pause_ms <= 0) {
     Serial.println("invalid pause");

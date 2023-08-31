@@ -36,23 +36,27 @@ Optionally connect a red LED from pin D2 via a current-limiting resistor to grou
 
 Optionally connect pin D6 to ground via a normally-open pushbutton switch.
 
-## Indicator signals
+## Red LED signals
 
-Single 1/10 second blink following reset: The radio is operational.
+Single 1/10 second blink following reset:
+- If seen, radio is enabled and connected properly.
+- If not seen, radio is disabled.
 
-Fast blink: Radio is enabled but not connected properly.
+Continuous fast blink:
+- Radio is enabled but not connected properly.
 
-Solid red can mean:
+Short blink during message display:
+- Invalid character in the message. A "\*" will also be printed after the character in the serial monitor.
 
--  If the red LED lights immediately, the circuit is configured as a receiver and the radio is disabled. This configuration is not supported.
-    
+Solid red:
+-  If the red LED lights immediately, slave mode is enabled and the radio is disabled. This is an unsupported configuration.
 -  If the red LED lights during transmission of a message, an invalid packet was received. Ensure that the transmitter and the receiver are running the same version and that there is good radio communication. The problem should be investigated and the slave reset.
 
 ## Test configuration
 
-If pin D7 is jumpered to ground during reset:
-- If the pushbutton is down, it will subsequently act as a code key for manual input
-- Otherwise the output/transmission will blink continuously every 1 second.
+With pin D7 jumpered to ground:
+- If the push button is pressed during reset, the button will subsequently act as a code key for manual input.
+- If the push button is not pressed during reset, the output/transmission will blink continuously every 1 second.
  
 ## Radio configuration
 
