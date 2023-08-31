@@ -46,7 +46,7 @@ Continuous fast blink:
 - Radio is enabled but not connected properly.
 
 Short blink during message display:
-- Invalid character in the message. **\*** will also be printed after the character in the serial monitor.
+- Invalid character in the message. (**\*** will also be printed after the character in the serial monitor.)
 
 Solid red:
 -  If the red LED lights immediately, slave mode is enabled and the radio is disabled. This is an unsupported configuration.
