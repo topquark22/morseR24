@@ -194,6 +194,11 @@ void dash() {
   beep(t_dash);
 }
 
+static bool isValidMorseChar(char c) {
+  c = toUpperCase(c);
+  return ' ' == c || ('A' <= c && c <= 'Z') || ('0' <= c && c <= '9') || '.' == c || ',' == c || '?' == c || '/' == c || '@' == c;
+}
+
 void displayMorse(char c) {
   c = toUpperCase(c);
   switch (c) {
@@ -454,11 +459,13 @@ void displayMessage() {
     } else if (SW_CHESS == c) {
       interpretTextAs = CHESS;
       continue;
-    } else if (i == 0 || '_' == c) {
+    } else if ('_' == c) {
       interpretTextAs = MORSE;
       continue;
+    } else if (isValidMorseChar(c)) {
+      interpretTextAs = MORSE;
     }
-
+     
     switch (interpretTextAs) {
     case MORSE:
       displayMorse(c);
