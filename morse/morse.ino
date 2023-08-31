@@ -55,6 +55,7 @@ void setup() {
 
   // device ID jumpers
   pinMode(PIN_ID1, INPUT_PULLUP);
+  pinMode(PIN_ID2, INPUT_PULLUP);
 
 // power level jumpers
   pinMode(PIN_PWR2, INPUT_PULLUP);
@@ -63,7 +64,6 @@ void setup() {
   // channel jumpers
   pinMode(PIN_CH10, INPUT_PULLUP);
   pinMode(PIN_CH20, INPUT_PULLUP);
-  pinMode(PIN_CH40, INPUT_PULLUP);
 
   if (radioEnabled) {
     setupRadio();

@@ -2,7 +2,7 @@
 
 An Arduino sketch that converts text to Morse code and other formats, outputs to GPIO, and can transmit message to slave devices using an nRF24L01 radio.
 
-It supports up to 8 wireless channels, and 2 selectable device IDs.
+It supports up to 4 radio channels and 4 selectable device IDs.
 
 ## Hardware requirements
 
@@ -62,11 +62,11 @@ With pin D7 jumpered to ground:
 
 ### Channel setting
 
-The nRF24L01 supports wireless channels 0-125. **morse.ino** supports 8 channels, from 48 to 118 in increments of 10. The channel is specified using jumpers on pins A2-A4. If none of these are wired to ground, the channel defaults to 118. See the code for more details.
+The nRF24L01 supports wireless channels 0-125. **morseR24** supports 4 channels, from 88 to 118 in increments of 10. The channel is specified using jumpers on pins A2, A3. If none of these are wired to ground, the channel defaults to 118. See the code for more details.
 
 ### Device ID setting
 
-The sketch supports two device IDs, selected by a jumper on pin A5. See the code for more details.
+The sketch supports 4 device IDs, selected by jumpers on pins A4, A5. See the code for more details.
 
 ### Power setting
 

@@ -47,7 +47,9 @@ void blinkRedLED(int ms) {
 
 void setupRadio() {
 
-  uint64_t deviceID = DEVICE_ID_BASE + 0x1 * !digitalRead(PIN_ID1);
+  uint64_t deviceID = DEVICE_ID_BASE
+                + 0x1 * !digitalRead(PIN_ID1)
+                + 0x2 * !digitalRead(PIN_ID2);
   Serial.print("Radio starting as device ");
   Serial.println((int)deviceID & 0x0f);
 
@@ -57,8 +59,7 @@ void setupRadio() {
 
   int channel = CHANNEL_BASE
                 + 10 * digitalRead(PIN_CH10)
-                + 20 * digitalRead(PIN_CH20)
-                + 40 * digitalRead(PIN_CH40);
+                + 20 * digitalRead(PIN_CH20);
   Serial.print("Channel set to "); Serial.println(channel);
 
   radio.begin();

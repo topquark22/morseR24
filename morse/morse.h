@@ -31,14 +31,14 @@ const int PIN_RED = 2;  // LED, hemorrhoid condition
 const int PIN_PWR2 = A0;
 const int PIN_PWR1 = A1;
 
-// Which RF channel to communicate on, 0-125. Default 118 = 48 + 10 + 20 + 40
-const int CHANNEL_BASE = 48;
+// Which RF channel to communicate on, 0-125. Default 118 = 88 + 10 + 20
+const int CHANNEL_BASE = 88;
 const int PIN_CH10 = A2; // if not wired low, add 10 to CHANNEL_BASE
 const int PIN_CH20 = A3; // if not wired low, add 20 to CHANNEL_BASE
-const int PIN_CH40 = A4; // if not wired low, add 40 t0 CHANNEL_BASE
 
 // Device ID setting. Must match radio and radio
 const uint64_t DEVICE_ID_BASE = 0x600DFF2440LL;
+const int PIN_ID2 = A4; // if wired low, add 0x2 to ID_BASE
 const int PIN_ID1 = A5; // if wired low, add 0x1 to ID_BASE
 
 // analog input for PWM
