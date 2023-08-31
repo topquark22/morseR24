@@ -357,7 +357,7 @@ void displayMorse(char c) {
   delay(2 * t_dot); // inter-character break is 3 including 1 from last dot/dash
 }
 
-int ascToNybble(char c) {
+int ascToHex(char c) {
   char C = toUpperCase(c);
   int n;
   if ('A' <= C && C <= 'F') {
@@ -371,7 +371,7 @@ int ascToNybble(char c) {
   return n;
 }
 
-void displayNybble(char c) {
+void displayHex(char c) {
   if (!isValidHex(c)) {
     indicateInvalidChar();
   } else {
@@ -380,7 +380,7 @@ void displayNybble(char c) {
       return;
     }
     char C = toUpperCase(c);
-    int n = ascToNybble(c);
+    int n = ascToHex(c);
     if (n < 0) {
       Serial.print("Invalid nybble "); Serial.print(c);
       return;
@@ -406,7 +406,7 @@ void displayUnary(char c) {
       delay(t_space);
       return;
     }
-    int n = ascToNybble(c);
+    int n = ascToHex(c);
     if (n < 0) {
       Serial.print("Invalid digit ");
       Serial.print(c);
@@ -510,7 +510,7 @@ void displayMessage() {
       displayMorse(c);
       break;
     case HEXADECIMAL:
-      displayNybble(c);
+      displayHex(c);
       break;
     case UNARY:
       displayUnary(c);
