@@ -57,6 +57,9 @@ Solid red:
 With pin D7 jumpered to ground:
 - If the push button is pressed during reset, the button will subsequently act as a code key for manual input.
 - If the push button is not pressed during reset, the output/transmission will blink continuously every 1 second.
+
+With pin D7 not jumpered to ground:
+- Pressing and holding the pushbutton enters test mode. The button will subsequently act as a code key for manual input.
  
 ## Radio configuration
 
@@ -107,10 +110,6 @@ If you just want to control something with GPIO, you can operate in master mode 
 For slave mode, wire pin D8 to ground.
 
 The serial monitor will display the characters as they are output, as well as any speed and pause timing changes.
-
-Pressing the pushbutton for one symbol duration will stop the current message display. At this point:
-- If the master is in test mode, it will send its test activations to the slave
-- If a message is received from the master, the slave will return to normal operation.
 
 ## Example circuits
 

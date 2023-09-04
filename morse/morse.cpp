@@ -471,21 +471,21 @@ void displayMessage() {
   int i;
   char c = message[0];
   for (i = 0; c != 0 && i < message_len; c = message[++i]) {
-    
-    if (!transmitMode) { // receive mode
+
+    if (buttonPressed()) {
+        Serial.println("-- Entering test mode");
+        testRoutine(); // never returns
+    }
+
+    if (!transmitMode) {
+      // recv mode
       if (radioEnabled && radio.available()) {
         // abort display when new message comes in
         break;
-      } else if (buttonPressed()) {
-        Serial.println("-- Display stopped");
-        displayEnabled = false;
-        break;
       }
-    } else { // transmit mode
-      if (Serial.available()) {
-        // abort display to allow entry of new message
-        break;
-      }
+    } else if (Serial.available()) {
+      // abort display to allow entry of new message
+      break;
     }
 
     Serial.print(c);

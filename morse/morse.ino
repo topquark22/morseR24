@@ -8,11 +8,11 @@
 
 #include "morse.h"
 
-bool transmitMode = digitalRead(PIN_XRMODE);
+bool transmitMode;
 
-bool testMode = !digitalRead(PIN_TEST_);
+bool testMode;
 
-bool radioEnabled = digitalRead(PIN_DISABLE_);
+bool radioEnabled;
 
 void setup() {
 
@@ -25,7 +25,8 @@ void setup() {
 
   // wire to GND to disable radio
   pinMode(PIN_DISABLE_, INPUT_PULLUP);
-
+  radioEnabled = digitalRead(PIN_DISABLE_);
+  
   // Indicator LEDs
   pinMode(PIN_RED, OUTPUT); // Red (error condition)
   pinMode(PIN_OUT, OUTPUT); // Green (transmitted/received data)
@@ -41,6 +42,7 @@ void setup() {
   pinMode(PIN_ID1, INPUT_PULLUP);
 
   pinMode(PIN_XRMODE, INPUT_PULLUP);
+  transmitMode = digitalRead(PIN_XRMODE);
 
   pinMode(PIN_PWM, INPUT);
 
