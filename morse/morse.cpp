@@ -82,16 +82,9 @@ void setupRadio() {
   radio.setChannel(channel);
 
   if (transmitMode) {
-    Serial.println("Configured as master\n");
     radio.openWritingPipe(deviceID); // Get NRF24L01 ready to transmit
     radio.stopListening();
-
   } else { // recv mode
-    Serial.println("Configured as slave\n");
-    if (!radioEnabled) {
-      Serial.println("Unsupported configuration");
-      errExit();
-    }
     radio.openReadingPipe(1, deviceID); // Get NRF24L01 ready to receive
     radio.startListening(); // Listen to see if information received
   }

@@ -69,6 +69,8 @@ void setup() {
 
   if (radioEnabled) {
     setupRadio();
+  } else {
+    Serial.println("Radio disabled");
   }
 
   pinMode(PIN_TEST_, INPUT_PULLUP);
@@ -78,7 +80,14 @@ void setup() {
   }
 
   if (transmitMode) {
+    Serial.println("Configured as master\n");
     showInstructions();
+  } else {
+    Serial.println("Configured as slave\n");
+    if (!radioEnabled) {
+      Serial.println("Unsupported configuration");
+      errExit();
+    }
   }
 }
 
