@@ -48,7 +48,7 @@ void setup() {
 
   int pwm = getPWM();
   if (pwm < 255) {
-    Serial.print("Warning: PWM = "); Serial.println(pwm);
+    Serial.print(F("Warning: PWM = ")); Serial.println(pwm);
   }
 
   readSpeedFromEEPROM();
@@ -70,7 +70,7 @@ void setup() {
   if (radioEnabled) {
     setupRadio();
   } else {
-    Serial.println("Radio disabled");
+    Serial.println(F("Radio disabled"));
   }
 
   pinMode(PIN_TEST_, INPUT_PULLUP);
@@ -80,12 +80,12 @@ void setup() {
   }
 
   if (transmitMode) {
-    Serial.println("Configured as master\n");
+    Serial.println(F("Configured as master\n"));
     showInstructions();
   } else {
-    Serial.println("Configured as slave\n");
+    Serial.println(F("Configured as slave\n"));
     if (!radioEnabled) {
-      Serial.println("Unsupported configuration");
+      Serial.println(F("Unsupported configuration"));
       errExit();
     }
   }

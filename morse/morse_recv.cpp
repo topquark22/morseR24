@@ -25,7 +25,7 @@ extern byte commBuffer[];
  */
 int decodeCommBuffer() {
   if (commBuffer[0] != TOKEN_MESSAGE) {
-    Serial.print("Expected message packet; got packet of type: ");
+    Serial.print(F("Expected message packet; got packet of type: "));
     Serial.println(commBuffer[0]);
     errExit();
   }
@@ -38,7 +38,7 @@ int decodeCommBuffer() {
 }
 
 void receiveMessage() {
-  Serial.println("-- Receiving message");
+  Serial.println(F("-- Receiving message"));
   // first block already in buffer
   clearMessage();
   int bytesAppended = decodeCommBuffer();
@@ -67,7 +67,7 @@ void loop_RECV() {
     } else if (TOKEN_PAUSE == commBuffer[0]) { // pause was transmitted
       setPause(decodeInteger());
     } else { // invalid token in commBuffer[0]
-      Serial.println("Invalid packet received");
+      Serial.println(F("Invalid packet received"));
       digitalWrite(PIN_RED, HIGH);
       delay(100);
       exit(1);

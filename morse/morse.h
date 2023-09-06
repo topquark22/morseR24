@@ -5,7 +5,7 @@
 #ifndef MORSE_H
 #define MORSE_H
 
-#include <Arduino.h> // needed for Serial
+#include <Arduino.h>
 #include <string.h>  // needed for memcpy
 #include <RF24_config.h>
 #include <nRF24L01.h>
@@ -72,7 +72,7 @@ const int TOKEN_MESSAGE = 4;
 const int SPI_SPEED = 10000000;
 
 // full message buffer
-const int MESSAGE_SIZE = 151;
+const int MESSAGE_SIZE = 1001;
 
 // commBuffer[] is used to store/receive message via radio
 // Format:

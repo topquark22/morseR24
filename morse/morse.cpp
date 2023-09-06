@@ -30,6 +30,7 @@ void clearMessage() {
   message[0] = 0;
   message_len = 0;
 }
+
 void initNewArduino() {
   if (NOT_SET == readIntFromEEPROM(ADDR_SPEED)) { // new Arduino
     setSpeed(t_DOT);
@@ -50,22 +51,22 @@ void setupRadio() {
   uint64_t deviceID = DEVICE_ID_BASE
                 + 0x1 * !digitalRead(PIN_ID1)
                 + 0x2 * !digitalRead(PIN_ID2);
-  Serial.print("Radio starting as device ");
+  Serial.print(F("Radio starting as device "));
   Serial.println((int)deviceID & 0x0f);
 
   // power 0=MIN, 1=LOW, 2=HIGH, 3=MAX
   uint8_t power = 2 * digitalRead(PIN_PWR2) + digitalRead(PIN_PWR1);
-  Serial.print("Power set to "); Serial.println(power);
+  Serial.print(F("Power set to ")); Serial.println(power);
 
   int channel = CHANNEL_BASE
                 + 10 * digitalRead(PIN_CH10)
                 + 20 * digitalRead(PIN_CH20);
-  Serial.print("Channel set to "); Serial.println(channel);
+  Serial.print(F("Channel set to ")); Serial.println(channel);
 
   radio.begin();
 
   if (!radio.isChipConnected()) {
-    Serial.println("Radio not connected");
+    Serial.println(F("Radio not connected"));
     while (1) {
       digitalWrite(PIN_RED, LOW);
       delay(250);
@@ -209,7 +210,7 @@ static bool isValidChess(char c) {
 }
 
 void indicateInvalidChar() {
-  Serial.print("*");
+  Serial.print(F("*"));
   blinkRedLED(t_dot);
 }
 
@@ -358,7 +359,7 @@ int ascToHex(char c) {
   } else if ('0' <= c && c <= '9') {
     n = C - '0';
   } else {
-    Serial.print("Invalid nybble "); Serial.print(c);
+    Serial.print(F("Invalid nybble ")); Serial.print(c);
     return -1;
   }
   return n;
@@ -375,7 +376,7 @@ void displayHex(char c) {
     char C = toUpperCase(c);
     int n = ascToHex(c);
     if (n < 0) {
-      Serial.print("Invalid nybble "); Serial.print(c);
+      Serial.print(F("Invalid nybble ")); Serial.print(c);
       return;
     }
     for (int i = 3; i >= 0; i--) {
@@ -401,7 +402,7 @@ void displayUnary(char c) {
     }
     int n = ascToHex(c);
     if (n < 0) {
-      Serial.print("Invalid digit ");
+      Serial.print(F("Invalid digit "));
       Serial.print(c);
       return;
     }
@@ -441,7 +442,7 @@ void displayChess(char c) {
       n = 0;
       dly = 3 * t_space;
     } else {
-      Serial.print("Invalid digit "); Serial.print(c);
+      Serial.print(F("Invalid digit ")); Serial.print(c);
       return;
     }
     for (int i = 0; i < n; i++) {
@@ -466,7 +467,7 @@ void displayMessage() {
   for (i = 0; c != 0 && i < message_len; c = message[++i]) {
 
     if (buttonPressed()) {
-        Serial.println("-- Entering test mode");
+        Serial.println(F("-- Entering test mode"));
         testRoutine(); // never returns
     }
 
@@ -525,24 +526,24 @@ void displayMessage() {
 */
 void setSpeed(int t_dot_ms) {
   if (t_dot_ms <= 0) {
-    Serial.println("Invalid speed");
+    Serial.println(F("Invalid speed"));
     return;
   }
   t_dot = t_dot_ms;
   t_dash = 3 * t_dot;
   t_space = 6 * t_dot;
   writeSpeedToEEPROM();
-  Serial.print("-- speed set to ");
+  Serial.print(F("-- speed set to "));
   Serial.println(t_dot);
 }
 
 void setPause(int t_pause_ms) {
   if (t_pause_ms <= 0) {
-    Serial.println("invalid pause");
+    Serial.println(F("invalid pause"));
     return;
   }
   t_pause = t_pause_ms;
   writePauseToEEPROM();
-  Serial.print("-- pause set to ");
+  Serial.print(F("-- pause set to "));
   Serial.println(t_pause);
 }

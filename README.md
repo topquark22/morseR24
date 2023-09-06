@@ -75,13 +75,13 @@ The sketch supports 4 device IDs, selected by jumpers on pins A4, A5. See the co
 
 The radio power is set by jumpers on pins A0, A1. The default is MAX. See the code for more details
                                                                                                                              
-## Modes of operation
-
-### Master (transmitter) mode
+## Master (transmitter) mode
 
 For master mode, leave pin D8 unconnected.
 
-The maximum message length is 150 characters.
+### Transmit a message
+
+The maximum message length is 1000 characters.
 
 The message to transmit is entered in the serial monitor console. It accepts multiple lines (as the serial input buffer can only accept 63 characters at a time) and concatenates them together. The partial message is displayed followed by a '<' symbol indicating that more text can be entered. Enter a blank line to commit the message.
 
@@ -94,6 +94,17 @@ The following in-line characters will cause the text to be interpreted in severa
 
 You can change these in-line modifiers mid-text.
 
+### Manual control
+
+The following commands entered on the serial monitor allow manual GPIO control:
+
+- **^0** turns the output off
+- **^1** turns the output on
+
+To cancel this behaviour, transmit a message again.
+
+### Change timings
+
 The timings can be changed using the "star commands." For example:
 
 - **\*s100** changes the dot length to 100 ms
@@ -101,11 +112,11 @@ The timings can be changed using the "star commands." For example:
 
 The command will be transmitted to the slave. Issuing one of these commands will interrupt and restart any broadcast in progress.
 
-#### Standalone operation
+### Standalone operation
 
 If you just want to control something with GPIO, you can operate in master mode without a radio. But in that case you must wire pin D4 to ground to disable the radio.
 
-### Slave (receiver) mode
+## Slave (receiver) mode
 
 For slave mode, wire pin D8 to ground.
 

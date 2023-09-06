@@ -24,22 +24,26 @@ byte line[LINE_SIZE];
 int line_len;
 
 void showInstructions() {
-    Serial.print("Dot duration: "); Serial.print(t_dot); Serial.println(" ms");
-    Serial.print("Pause duration: "); Serial.print(t_pause); Serial.println(" ms");
+    Serial.print(F("Dot duration: ")); Serial.print(t_dot); Serial.println(F(" ms"));
+    Serial.print(F("Pause duration: )")); Serial.print(t_pause); Serial.println(F(" ms"));
     Serial.println();
-    Serial.println("Accepting input from serial console");
+    Serial.println(F("Accepting input from serial console"));
     Serial.println();
-    Serial.println("Star commands:");
-    Serial.println("  *s<dot>");
-    Serial.println("    changes the dot duration (speed) to <dot> ms");
-    Serial.println("  *p<pause>");
-    Serial.println("    changes the inter-message pause to <pause> ms");
+    Serial.println(F("In-stream modifiers for text interpretation:"));
+    Serial.println(F("  _: Morse (default)"));
+    Serial.println(F("  $: Hexadecimal"));
+    Serial.println(F("  #: Unary"));
+    Serial.println(F("  %: Chess"));
     Serial.println();
-    Serial.println("In-stream modifiers for text interpretation:");
-    Serial.println("  _: Morse (default)");
-    Serial.println("  $: Hexadecimal");
-    Serial.println("  #: Unary");
-    Serial.println("  %: Chess");
+    Serial.println(F("Star commands:"));
+    Serial.println(F("  *s<dot>"));
+    Serial.println(F("    changes the dot duration (speed) to <dot> ms"));
+    Serial.println(F("  *p<pause>"));
+    Serial.println(F("    changes the inter-message pause to <pause> ms"));
+    Serial.println();
+    Serial.println(F("Manual control:"));
+    Serial.println(F("^0: Turn output off"));
+    Serial.println(F("^1: Turn output on"));
     Serial.println();
 }
 
@@ -68,7 +72,7 @@ void clearCommBuffer(int tokenType) {
 
 void previewMessage() {
   printMessage();
-  Serial.println("<\n");
+  Serial.println(F("<\n"));
 }
 
 void transmitInteger(int tokenType, int value) {
@@ -87,7 +91,8 @@ void transmitMessage() {
   if (!radioEnabled) {
     return;
   }
-  Serial.println("-- Transmitting message");
+  enableDisplay(true);
+  Serial.println(F("-- Transmitting message"));
   clearCommBuffer(TOKEN_MESSAGE);
   for (int j = 0; j <= message_len; j++) { // include terminating 0
     byte b = message[j];
@@ -129,9 +134,10 @@ void readLine() {
     if ('\n' != c && '\r' != c) {
       line[line_len++] = c;
     }
+    delay(10); // work around timing bug in Serial buffer
   }
   if (line_len == LINE_SIZE - 1) {
-    Serial.println("-- entry truncated\n");
+    Serial.println(F("-- entry truncated\n"));
   }
   line[line_len] = 0;
 }
@@ -143,6 +149,19 @@ void appendLineToMessage() {
   message[message_len] = 0;
 }
 
+void processManualCommand() {
+  int value = line[1] - '0';
+  if (0 == value || 1 == value) {
+    enableDisplay(false);
+    Serial.print(F("Turning output "));
+    Serial.println(value ? "on" : "off");
+    setOutput(value);
+    transmitInteger(TOKEN_TEST, value);
+  } else {
+    Serial.println(F("-- Invalid manual command"));
+  }
+}
+
 void processStarCommand() {
   if ('s' == line[1]) { // speed change
     int speed = parseIntFromLine();
@@ -150,7 +169,7 @@ void processStarCommand() {
       setSpeed(speed);
       transmitInteger(TOKEN_SPEED, t_dot);
     } else {
-      Serial.println("-- Invalid speed");
+      Serial.println(F("-- Invalid speed"));
     }
   } else if ('p' == line[1]) { // pause change
     int pause = parseIntFromLine();
@@ -158,10 +177,10 @@ void processStarCommand() {
       setPause(pause);
       transmitInteger(TOKEN_PAUSE, t_dot);
     } else {
-      Serial.println("-- Invalid pause");
+      Serial.println(F("-- Invalid pause"));
     }
   } else {
-    Serial.println("-- Invalid * command");
+    Serial.println(F("-- Invalid star command"));
   }
 }
 
@@ -184,27 +203,32 @@ void loop_XMIT() {
     readLine();
     
     if (0 == line_len) {
-      Serial.println("-- Message cleared");
+      Serial.println(F("-- Message cleared"));
       message_len = 0;
       writeMessageToEEPROM();
       transmitMessage();
       return;
     }
 
+    if ('^' == line[0]) {
+      processManualCommand();
+      return;
+    }
+    
     if ('*' == line[0]) {
       processStarCommand();
       return;
     }
 
-    Serial.println("-- Data received on serial monitor\n");
+    Serial.println(F("-- Data received on serial monitor\n"));
 
     messageChanged = true;
     message[0] = 0;
     message_len = 0;
 
-    Serial.print("-- Append to message (max ");
+    Serial.print(F("-- Append to message (max "));
     Serial.print(LINE_SIZE - 1, DEC);
-    Serial.println(" chars per line.) Blank line commits message\n");
+    Serial.println(F(" chars per line.) Blank line commits message\n"));
 
     appendLineToMessage();
     previewMessage();
@@ -216,7 +240,7 @@ void loop_XMIT() {
       readLine();
     }
     if (message_len == MESSAGE_SIZE - 1) {
-      Serial.println("-- Maximum message size reached");
+      Serial.println(F("-- Maximum message size reached"));
     }
     writeMessageToEEPROM();
     transmitMessage();
@@ -224,7 +248,7 @@ void loop_XMIT() {
 }
 
 void testRoutine() {
-  Serial.println("Test mode");
+  Serial.println(F("Test mode"));
   if (buttonPressed()) {
     int prevValue = -1;
     while (1) {
@@ -238,11 +262,9 @@ void testRoutine() {
     }
   } else { // beep at 1 second intervals
     while (1) {
-      setOutput(1);
       transmitInteger(TOKEN_TEST, 1);
       setOutput(1);
       delay(1000);
-      setOutput(0);
       transmitInteger(TOKEN_TEST, 0);
       setOutput(0);
       delay(1000);
