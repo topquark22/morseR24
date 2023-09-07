@@ -30,20 +30,21 @@ void showInstructions() {
     Serial.println(F("Accepting input from serial console"));
     Serial.println();
     Serial.println(F("In-stream modifiers for text interpretation:"));
-    Serial.println(F("  _: Morse (default)"));
-    Serial.println(F("  $: Hexadecimal"));
-    Serial.println(F("  #: Unary"));
-    Serial.println(F("  %: Chess"));
+    Serial.println(F("  _    Morse (default)"));
+    Serial.println(F("  $    Hexadecimal"));
+    Serial.println(F("  #    Unary"));
+    Serial.println(F("  %    Chess"));
     Serial.println();
-    Serial.println(F("Star commands:"));
+    Serial.println(F("Timing commands:"));
     Serial.println(F("  *s<dot>"));
     Serial.println(F("    changes the dot duration (speed) to <dot> ms"));
     Serial.println(F("  *p<pause>"));
     Serial.println(F("    changes the inter-message pause to <pause> ms"));
     Serial.println();
     Serial.println(F("Manual control:"));
-    Serial.println(F("^0: Turn output off"));
-    Serial.println(F("^1: Turn output on"));
+    Serial.println(F("  ^0   Turns output off"));
+    Serial.println(F("  ^1   Turns output on"));
+    Serial.println(F("  ^    Resumes display/Syncs message with master"));
     Serial.println();
 }
 
@@ -150,10 +151,15 @@ void appendLineToMessage() {
 }
 
 void processManualCommand() {
-  int value = line[1] - '0';
-  if (0 == value || 1 == value) {
+  if (0 == line[1]) {
+    // "^" was entered
+    transmitMessage();
+    return;
+  }
+  if (2 == line_len && ('0' == line[1] || '1' == line[1])) {
+    byte value = line[1] - '0';
     enableDisplay(false);
-    Serial.print(F("Turning output "));
+    Serial.print(F("-- Turning output "));
     Serial.println(value ? "on" : "off");
     setOutput(value);
     transmitInteger(TOKEN_TEST, value);
