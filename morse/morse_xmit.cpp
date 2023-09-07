@@ -37,14 +37,14 @@ void showInstructions() {
     Serial.println();
     Serial.println(F("Timing commands:"));
     Serial.println(F("  *s<dot>"));
-    Serial.println(F("    changes the dot duration (speed) to <dot> ms"));
+    Serial.println(F("      changes the dot duration (speed) to <dot> ms"));
     Serial.println(F("  *p<pause>"));
-    Serial.println(F("    changes the inter-message pause to <pause> ms"));
+    Serial.println(F("      changes the inter-message pause to <pause> ms"));
     Serial.println();
     Serial.println(F("Manual control:"));
-    Serial.println(F("  ^0   Turns output off"));
-    Serial.println(F("  ^1   Turns output on"));
-    Serial.println(F("  ^    Resumes display/Syncs message with master"));
+    Serial.println(F(" ^0   Turns output off"));
+    Serial.println(F(" ^1   Turns output on"));
+    Serial.println(F(" ^    Resumes display/Syncs message with master"));
     Serial.println();
 }
 
