@@ -51,7 +51,7 @@ Short blink during message display:
 Solid red:
 -  If the red LED lights immediately, slave mode is enabled and the radio is disabled. This is an unsupported configuration.
 -  If the red LED lights during transmission of a message, an invalid packet was received. Ensure that the transmitter and the receiver are running the same version and that there is good radio communication. The problem should be investigated and the slave reset.
-k
+
 ## Test configuration
 
 With pin D7 jumpered to ground:
