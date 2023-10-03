@@ -53,7 +53,9 @@ void setup() {
     Serial.print(F("Warning: PWM = ")); Serial.println(pwm);
   }
 
-  pinMode(PIN_EASTER_, INPUT_PULLUP);
+  // PULLUP makes no difference on pins 6 and 7.
+  // So there is a small random chance of starting in easter egg mode
+  pinMode(PIN_EASTER_, INPUT);
   easterMode = (0 == analogRead(PIN_EASTER_));
   if (easterMode) {
       Serial.println(F("Easter egg mode"));
