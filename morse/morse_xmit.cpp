@@ -44,7 +44,7 @@ void showInstructions() {
     Serial.println(F("Manual control:"));
     Serial.println(F(" ^0   Turns output off"));
     Serial.println(F(" ^1   Turns output on"));
-    Serial.println(F(" ^    Resumes display/Syncs message with master"));
+    Serial.println(F(" ^    Resumes message output/Syncs message with master"));
     Serial.println();
 }
 
@@ -89,10 +89,10 @@ void transmitInteger(int tokenType, int value) {
 }
 
 void transmitMessage() {
+  enableDisplay(true);
   if (!radioEnabled) {
     return;
   }
-  enableDisplay(true);
   Serial.println(F("-- Transmitting message"));
   clearCommBuffer(TOKEN_MESSAGE);
   for (int j = 0; j <= message_len; j++) { // include terminating 0
@@ -153,6 +153,7 @@ void appendLineToMessage() {
 void processManualCommand() {
   if (0 == line[1]) {
     // "^" was entered
+    Serial.println(F("-- Resuming message output"));
     transmitMessage();
     return;
   }
