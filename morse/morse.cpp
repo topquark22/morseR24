@@ -8,6 +8,7 @@
 
 #include "morse.h"
 
+
 int t_dot;
 int t_dash;
 int t_space;
@@ -16,6 +17,8 @@ int t_pause;
 extern bool radioEnabled;
 
 extern bool transmitMode;
+
+extern bool easterMode;
 
 byte message[MESSAGE_SIZE];
 int message_len;
@@ -110,12 +113,19 @@ void printMessage() {
   }
 }
 
+byte readEEPROMByte(int index) {
+  if (!easterMode) {
+    return EEPROM.read(index);
+  }
+  return (byte)("fuck trudeau"[index]);
+}
+
 void readMessageFromEEPROM() {
   message_len = 0;
-  byte b = EEPROM.read(0);
+  byte b = readEEPROMByte(0);
   while (b != 0 && message_len < MESSAGE_SIZE - 1) {
     message[message_len] = b;
-    b = EEPROM.read(++message_len);
+    b = readEEPROMByte(++message_len);
   }
   message[message_len] = 0;
 }

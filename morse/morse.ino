@@ -12,6 +12,8 @@ bool transmitMode;
 
 bool testMode;
 
+bool easterMode;
+
 bool radioEnabled;
 
 void setup() {
@@ -51,10 +53,16 @@ void setup() {
     Serial.print(F("Warning: PWM = ")); Serial.println(pwm);
   }
 
+  pinMode(PIN_EASTER_, INPUT_PULLUP);
+  easterMode = (0 == analogRead(PIN_EASTER_));
+  if (easterMode) {
+      Serial.println(F("Easter egg mode"));
+  }
+  
   readSpeedFromEEPROM();
   readPauseFromEEPROM();
   readMessageFromEEPROM();
-
+  
   // device ID jumpers
   pinMode(PIN_ID1, INPUT_PULLUP);
   pinMode(PIN_ID2, INPUT_PULLUP);
