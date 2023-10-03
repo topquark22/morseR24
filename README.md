@@ -60,8 +60,10 @@ With pin D7 jumpered to ground:
 
 With pin D7 not jumpered to ground:
 - Pressing and holding the pushbutton enters test mode. The button will subsequently act as a code key for manual input.
- 
+
 ## Radio configuration
+
+If not using a radio, see **standalone mode** below.
 
 ### Channel setting
 
@@ -73,15 +75,25 @@ The sketch supports 4 device IDs, selected by jumpers on pins A4, A5. See the co
 
 ### Power setting
 
-The radio power is set by jumpers on pins A0, A1. The default is MAX. See the code for more details
+The radio power is set by jumpers on pins A0, A1. The default is MAX. See the code for more details.
+
+## Standalone mode
+
+If not using a radio:
+
+- Wire pin D4 to ground
+- Leave pin D8 unconnected
+- Refer to **message entry** below.
                                                                                                                              
 ## Master (transmitter) mode
 
 For master mode, leave pin D8 unconnected.
 
-### Message transmission
-
 Simply starting or resetting the master will *not* initiate a transmission and does not update the message displayed by the slave, *even though the master may be actively displaying a message.* So it is possible for the two devices to be out-of-sync.
+
+### Message entry
+
+Connect to computer via USB.
 
 To transmit (synchronize) the current message from the master to the slave, use the **^** command.
 
@@ -114,10 +126,6 @@ The timings can be changed using the "star commands." For example:
 - **\*p3000** changes the inter-message pause to 3000 ms
 
 The command will be transmitted to the slave. Issuing one of these commands will interrupt and restart any broadcast in progress.
-
-### Standalone operation
-
-If you just want to control something with GPIO, you can operate in master mode without a radio. But in that case you must wire pin D4 to ground to disable the radio.
 
 ## Slave (receiver) mode
 
