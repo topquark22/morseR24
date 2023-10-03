@@ -85,7 +85,7 @@ Simply starting or resetting the master will *not* initiate a transmission and d
 
 To transmit (synchronize) the current message from the master to the slave, use the **^** command.
 
-To transmit a new message, enter text in the serial monitor console. The maximum message length is 1000 characters. It accepts multiple lines (as the serial input buffer can only accept 63 characters at a time) and concatenates them together. The partial message is displayed followed by a '<' symbol indicating that more text can be entered. Enter a blank line to commit the message.
+To enter a new message, input text in the serial monitor console. The maximum message length is 1000 characters. It accepts multiple lines (as the serial input buffer can only accept 63 characters at a time) and concatenates them together. The partial message is displayed followed by a '<' symbol indicating that more text can be entered. Enter a blank line to commit the message.
 
 The following in-line characters will cause the text to be interpreted in several different ways:
 
