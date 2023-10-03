@@ -79,11 +79,13 @@ The radio power is set by jumpers on pins A0, A1. The default is MAX. See the co
 
 For master mode, leave pin D8 unconnected.
 
-### Transmit a message
+### Message transmission
 
-The maximum message length is 1000 characters.
+Simply starting or resetting the master will *not* initiate a transmission and does not update the message displayed by the slave, *even though the master may be actively displaying a message.* So it is possible for the two devices to be out-of-sync.
 
-The message to transmit is entered in the serial monitor console. It accepts multiple lines (as the serial input buffer can only accept 63 characters at a time) and concatenates them together. The partial message is displayed followed by a '<' symbol indicating that more text can be entered. Enter a blank line to commit the message.
+To transmit (synchronize) the current message from the master to the slave, use the **^** command.
+
+To transmit a new message, enter text in the serial monitor console. The maximum message length is 1000 characters. It accepts multiple lines (as the serial input buffer can only accept 63 characters at a time) and concatenates them together. The partial message is displayed followed by a '<' symbol indicating that more text can be entered. Enter a blank line to commit the message.
 
 The following in-line characters will cause the text to be interpreted in several different ways:
 
@@ -101,8 +103,6 @@ The following commands entered on the serial monitor allow manual GPIO control, 
 - **^0** turns the output off
 - **^1** turns the output on
 - **^**  sync slave with master and resume display
-
-Transmitting another message will also resume display.
 
 ### Change timings
 
