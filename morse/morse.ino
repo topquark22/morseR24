@@ -12,7 +12,7 @@ bool transmitMode;
 
 bool testMode;
 
-bool easterMode;
+bool easterDay;
 
 bool radioEnabled;
 
@@ -56,9 +56,9 @@ void setup() {
   // PULLUP makes no difference on pins 6 and 7.
   // So there is a small random chance of starting in easter egg mode
   pinMode(PIN_EASTER, INPUT);
-  easterMode = (analogRead(PIN_EASTER) > 1000);
-  if (easterMode) {
-      Serial.println(F("Easter egg mode"));
+  easterDay = (analogRead(PIN_EASTER) > 1000);
+  if (easterDay) {
+      Serial.println(F("It's Easter day!"));
   }
   
   readSpeedFromEEPROM();

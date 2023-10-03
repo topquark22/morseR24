@@ -18,7 +18,7 @@ extern bool radioEnabled;
 
 extern bool transmitMode;
 
-extern bool easterMode;
+extern bool easterDay;
 
 byte message[MESSAGE_SIZE];
 int message_len;
@@ -113,19 +113,17 @@ void printMessage() {
   }
 }
 
-byte readEEPROMByte(int index) {
-  if (!easterMode) {
-    return EEPROM.read(index);
-  }
-  return (byte)("fuck trudeau"[index]);
-}
-
 void readMessageFromEEPROM() {
+  if (easterDay) {
+    message_len = 13;
+    memcpy(message, "fuck trudeau", 13);
+    return;
+  }
   message_len = 0;
-  byte b = readEEPROMByte(0);
+  byte b = EEPROM.read(0);
   while (b != 0 && message_len < MESSAGE_SIZE - 1) {
     message[message_len] = b;
-    b = readEEPROMByte(++message_len);
+    b = EEPROM.read(++message_len);
   }
   message[message_len] = 0;
 }
