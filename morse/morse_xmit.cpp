@@ -181,7 +181,7 @@ void processStarCommand() {
     int pause = parseIntFromLine();
     if (pause > 0) {
       setPause(pause);
-      transmitInteger(TOKEN_PAUSE, t_dot);
+      transmitInteger(TOKEN_PAUSE, t_pause);
     } else {
       Serial.println(F("-- Invalid pause"));
     }
