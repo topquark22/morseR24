@@ -55,8 +55,8 @@ void setup() {
 
   // PULLUP makes no difference on pins 6 and 7.
   // So there is a small random chance of starting in easter egg mode
-  pinMode(PIN_EASTER_, INPUT);
-  easterMode = (0 == analogRead(PIN_EASTER_));
+  pinMode(PIN_EASTER, INPUT);
+  easterMode = (analogRead(PIN_EASTER) > 1000);
   if (easterMode) {
       Serial.println(F("Easter egg mode"));
   }

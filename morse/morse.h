@@ -49,7 +49,7 @@ const int PIN_PWM = A7;
 const int PIN_CE = 10;
 const int PIN_CSN = 9;
 
-const int PIN_EASTER_ = A6;
+const int PIN_EASTER = A6;
 
 // defaults
 const int t_DOT = 100;
