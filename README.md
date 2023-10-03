@@ -104,6 +104,8 @@ The following commands entered on the serial monitor allow manual GPIO control, 
 - **^1** turns the output on
 - **^**  sync slave with master and resume display
 
+(To resume display on the slave without retransmitting the message, you must reset the slave.)
+
 ### Change timings
 
 The timings can be changed using the "star commands." For example:
