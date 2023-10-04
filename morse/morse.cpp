@@ -62,7 +62,7 @@ void setupRadio() {
   uint8_t power = 2 * digitalRead(PIN_PWR2) + digitalRead(PIN_PWR1);
   Serial.print(F("Power set to ")); Serial.println(power);
 
-  int channel = CHANNEL_DEFAULT - 10 * digitalRead(PIN_CH10) - 20 * digitalRead(PIN_CH20);
+  int channel = CHANNEL_BASE + 10 * digitalRead(PIN_CH10) + 20 * digitalRead(PIN_CH20);
   
   Serial.print(F("Channel set to "));
   Serial.println(channel);

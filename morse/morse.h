@@ -32,9 +32,10 @@ const int PIN_PWR2 = A0;
 const int PIN_PWR1 = A1;
 
 // Which RF channel to communicate on, 0-125
-const int CHANNEL_DEFAULT = 118;
-const int PIN_CH10 = A2; // if wired low, subtract 10 from CHANNEL_DEFAULT
-const int PIN_CH20 = A3; // if wired low, subtract 20 from CHANNEL_DEFAULT
+// default 118 = 88 + 10 + 20
+const int CHANNEL_BASE = 88;
+const int PIN_CH10 = A2; // if not wired low, add 10 to CHANNEL_BASE
+const int PIN_CH20 = A3; // if not wired low, add 20 to CHANNEL_BASE
 
 // Device ID setting. Must match radio and radio
 const uint64_t DEVICE_ID_BASE = 0x600DFF2440LL;
