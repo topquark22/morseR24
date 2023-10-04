@@ -49,8 +49,7 @@ Short blink during message display:
 - Invalid character in the message. (**\*** will also be printed after the character in the serial monitor.)
 
 Solid red:
--  If the red LED lights immediately, slave mode is enabled and the radio is disabled. This is an unsupported configuration.
--  If the red LED lights during transmission of a message, an invalid packet was received. Ensure that the transmitter and the receiver are running the same version and that there is good radio communication. The problem should be investigated and the slave reset.
+-  Slave mode is enabled and the radio is disabled. This is an unsupported configuration.
 
 ## Test configuration
 
