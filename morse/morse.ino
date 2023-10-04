@@ -37,9 +37,7 @@ void setup() {
 
   // device ID jumpers
   pinMode(PIN_ID1, INPUT_PULLUP);
-
-  // device ID jumpers
-  pinMode(PIN_ID1, INPUT_PULLUP);
+  pinMode(PIN_ID2, INPUT_PULLUP);
 
   pinMode(PIN_XRMODE, INPUT_PULLUP);
   transmitMode = digitalRead(PIN_XRMODE);
