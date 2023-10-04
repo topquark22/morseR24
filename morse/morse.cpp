@@ -17,8 +17,6 @@ extern bool radioEnabled;
 
 extern bool transmitMode;
 
-extern int channelId;
-
 extern int msgBankAddr;
 
 byte message[MESSAGE_SIZE + 1];
@@ -64,9 +62,10 @@ void setupRadio() {
   uint8_t power = 2 * digitalRead(PIN_PWR2) + digitalRead(PIN_PWR1);
   Serial.print(F("Power set to ")); Serial.println(power);
 
-  int channel = CHANNEL_DEFAULT - 10 * channelId;
+  int channel = CHANNEL_DEFAULT - 10 * digitalRead(PIN_CH10) - 20 * digitalRead(PIN_CH20);
   
-  Serial.print(F("Channel set to ")); Serial.println(channel);
+  Serial.print(F("Channel set to "));
+  Serial.println(channel);
 
   radio.begin();
 

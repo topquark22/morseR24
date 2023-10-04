@@ -92,7 +92,7 @@ Simply starting or resetting the master will *not* initiate a transmission and d
 
 ### Message entry
 
-It is possible to store up to 4 messages, one per channel. The message bank in use is determined by the channel setting on pins A2, A3.
+It is possible to store up to 4 messages. The message bank in use is determined by the device ID setting on pins A4, A5.
 
 Connect to computer via USB.
 

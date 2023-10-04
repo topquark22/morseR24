@@ -14,8 +14,6 @@ bool testMode;
 
 bool radioEnabled;
 
-int channelId;
-
 // offset into EEPROM where message is stored
 int msgBankAddr;
 
@@ -58,19 +56,20 @@ void setup() {
   pinMode(PIN_CH10, INPUT_PULLUP);
   pinMode(PIN_CH20, INPUT_PULLUP);
 
-  channelId = 3 - digitalRead(PIN_CH10) - 2 * digitalRead(PIN_CH20);
-  msgBankAddr = MESSAGE_SIZE * channelId;
+    // device ID jumpers
+  pinMode(PIN_ID1, INPUT_PULLUP);
+  pinMode(PIN_ID2, INPUT_PULLUP);
+
+  int msgBankId =  2 * !digitalRead(PIN_ID2) + !digitalRead(PIN_ID1);
 
   Serial.print(F("Using message bank "));
-  Serial.println(channelId);
+  Serial.println(msgBankId);
+
+  msgBankAddr = MESSAGE_SIZE * msgBankId;
   
   readSpeedFromEEPROM();
   readPauseFromEEPROM();
   readMessageFromEEPROM();
-  
-  // device ID jumpers
-  pinMode(PIN_ID1, INPUT_PULLUP);
-  pinMode(PIN_ID2, INPUT_PULLUP);
 
 // power level jumpers
   pinMode(PIN_PWR2, INPUT_PULLUP);
