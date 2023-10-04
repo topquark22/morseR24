@@ -65,7 +65,7 @@ void setup() {
   Serial.print(F("Using message bank "));
   Serial.println(msgBankId);
 
-  msgBankAddr = MESSAGE_SIZE * msgBankId;
+  msgBankAddr = 0x100 * msgBankId;
   
   readSpeedFromEEPROM();
   readPauseFromEEPROM();
