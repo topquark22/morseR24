@@ -73,7 +73,7 @@ const int TOKEN_MESSAGE = 4;
 const int SPI_SPEED = 10000000;
 
 // full message buffer
-const int MESSAGE_SIZE = 250;
+const int MESSAGE_SIZE = 240;
 
 // commBuffer[] is used to store/receive message via radio
 // Format:
