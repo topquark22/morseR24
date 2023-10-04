@@ -14,6 +14,11 @@ bool testMode;
 
 bool radioEnabled;
 
+int channelId;
+
+// offset into EEPROM where message is stored
+int msgBankAddr;
+
 void setup() {
 
   Serial.begin(BAUD_RATE);
@@ -35,14 +40,13 @@ void setup() {
   digitalWrite(PIN_OUT, LOW);
   digitalWrite(PIN_OUT_, HIGH);
 
-  // device ID jumpers
-  pinMode(PIN_ID1, INPUT_PULLUP);
-
-  // device ID jumpers
-  pinMode(PIN_ID1, INPUT_PULLUP);
-
+  
   pinMode(PIN_XRMODE, INPUT_PULLUP);
   transmitMode = digitalRead(PIN_XRMODE);
+
+  // device ID jumpers
+  pinMode(PIN_ID1, INPUT_PULLUP);
+  pinMode(PIN_ID2, INPUT_PULLUP);
 
   pinMode(PIN_PWM, INPUT);
 
@@ -51,10 +55,20 @@ void setup() {
     Serial.print(F("Warning: PWM = ")); Serial.println(pwm);
   }
 
+  // channel jumpers
+  pinMode(PIN_CH10, INPUT_PULLUP);
+  pinMode(PIN_CH20, INPUT_PULLUP);
+
+  channelId = 3 - digitalRead(PIN_CH10) - 2 * digitalRead(PIN_CH20);
+  msgBankAddr = MESSAGE_SIZE * channelId;
+
+  Serial.print(F("Using message bank "));
+  Serial.println(channelId);
+  
   readSpeedFromEEPROM();
   readPauseFromEEPROM();
   readMessageFromEEPROM();
-
+  
   // device ID jumpers
   pinMode(PIN_ID1, INPUT_PULLUP);
   pinMode(PIN_ID2, INPUT_PULLUP);
@@ -62,11 +76,7 @@ void setup() {
 // power level jumpers
   pinMode(PIN_PWR2, INPUT_PULLUP);
   pinMode(PIN_PWR1, INPUT_PULLUP);
-
-  // channel jumpers
-  pinMode(PIN_CH10, INPUT_PULLUP);
-  pinMode(PIN_CH20, INPUT_PULLUP);
-
+  
   if (radioEnabled) {
     setupRadio();
   } else {
@@ -78,7 +88,7 @@ void setup() {
   if (testMode) {
     testRoutine();
   }
-
+  
   if (transmitMode) {
     Serial.println(F("Configured as master\n"));
     showInstructions();

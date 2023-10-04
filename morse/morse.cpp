@@ -17,7 +17,11 @@ extern bool radioEnabled;
 
 extern bool transmitMode;
 
-byte message[MESSAGE_SIZE];
+extern int channelId;
+
+extern int msgBankAddr;
+
+byte message[MESSAGE_SIZE + 1];
 int message_len;
 
 byte commBuffer[COMM_BUFFER_SIZE];
@@ -35,8 +39,10 @@ void initNewArduino() {
   if (NOT_SET == readIntFromEEPROM(ADDR_SPEED)) { // new Arduino
     setSpeed(t_DOT);
     setPause(t_PAUSE);
-    clearMessage();
-    writeMessageToEEPROM();
+    // clear all message banks
+    for (int i = 0; i < 4; i++) {
+      EEPROM.update(MESSAGE_SIZE * i, 0);
+    }
   }
 }
 
@@ -58,9 +64,8 @@ void setupRadio() {
   uint8_t power = 2 * digitalRead(PIN_PWR2) + digitalRead(PIN_PWR1);
   Serial.print(F("Power set to ")); Serial.println(power);
 
-  int channel = CHANNEL_BASE
-                + 10 * digitalRead(PIN_CH10)
-                + 20 * digitalRead(PIN_CH20);
+  int channel = CHANNEL_DEFAULT - 10 * channelId;
+  
   Serial.print(F("Channel set to ")); Serial.println(channel);
 
   radio.begin();
@@ -96,9 +101,9 @@ void setupRadio() {
 void writeMessageToEEPROM() {
   int i;
   for (i = 0; i < message_len && i < EEPROM_LEN - 1; i++) {
-    EEPROM.update(i, message[i]);
+    EEPROM.update(msgBankAddr + i, message[i]);
   }
-  EEPROM.update(i, 0);
+  EEPROM.update(msgBankAddr + i, 0);
 }
 
 void printMessage() {
@@ -112,10 +117,10 @@ void printMessage() {
 
 void readMessageFromEEPROM() {
   message_len = 0;
-  byte b = EEPROM.read(0);
-  while (b != 0 && message_len < MESSAGE_SIZE - 1) {
+  byte b = EEPROM.read(msgBankAddr);
+  while (b != 0 && message_len < MESSAGE_SIZE) {
     message[message_len] = b;
-    b = EEPROM.read(++message_len);
+    b = EEPROM.read(msgBankAddr + ++message_len);
   }
   message[message_len] = 0;
 }

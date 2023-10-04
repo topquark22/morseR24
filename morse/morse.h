@@ -31,10 +31,10 @@ const int PIN_RED = 2;  // LED, hemorrhoid condition
 const int PIN_PWR2 = A0;
 const int PIN_PWR1 = A1;
 
-// Which RF channel to communicate on, 0-125. Default 118 = 88 + 10 + 20
-const int CHANNEL_BASE = 88;
-const int PIN_CH10 = A2; // if not wired low, add 10 to CHANNEL_BASE
-const int PIN_CH20 = A3; // if not wired low, add 20 to CHANNEL_BASE
+// Which RF channel to communicate on, 0-125
+const int CHANNEL_DEFAULT = 118;
+const int PIN_CH10 = A2; // if wired low, subtract 10 from CHANNEL_DEFAULT
+const int PIN_CH20 = A3; // if wired low, subtract 20 from CHANNEL_DEFAULT
 
 // Device ID setting. Must match radio and radio
 const uint64_t DEVICE_ID_BASE = 0x600DFF2440LL;
@@ -72,7 +72,7 @@ const int TOKEN_MESSAGE = 4;
 const int SPI_SPEED = 10000000;
 
 // full message buffer
-const int MESSAGE_SIZE = 1001;
+const int MESSAGE_SIZE = 250;
 
 // commBuffer[] is used to store/receive message via radio
 // Format:
