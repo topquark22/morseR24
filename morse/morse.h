@@ -75,6 +75,9 @@ const int SPI_SPEED = 10000000;
 // full message buffer
 const int MESSAGE_SIZE = 240;
 
+// determines location of message banks in EEPROM
+const int MSG_BANK_SIZE = 0x100;
+
 // commBuffer[] is used to store/receive message via radio
 // Format:
 //   commBuffer[0] : token indicating message type (1 byte)

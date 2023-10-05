@@ -39,7 +39,7 @@ void initNewArduino() {
     setPause(t_PAUSE);
     // clear all message banks
     for (int i = 0; i < 4; i++) {
-      EEPROM.update(MESSAGE_SIZE * i, 0);
+      EEPROM.update(MSG_BANK_SIZE * i, 0);
     }
   }
 }
