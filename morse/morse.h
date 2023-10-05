@@ -57,10 +57,6 @@ const int t_PAUSE = 3000;
 // Serial transmission rate
 const int BAUD_RATE = 9600;
 
-// EEPROM addresses
-const int ADDR_SPEED = 0x3F0;
-const int ADDR_PAUSE = 0x3F4;
-
 // special value indicating that an int in EEPROM has not been set
 const int NOT_SET = -1;
 
@@ -77,6 +73,10 @@ const int MESSAGE_SIZE = 240;
 
 // determines location of message banks in EEPROM
 const int MSG_BANK_SIZE = 0x100;
+
+// EEPROM addresses (add msgBankAddr)
+const int OFFSET_ADDR_SPEED = 0xF0;
+const int OFFSET_ADDR_PAUSE = 0xF4;
 
 // commBuffer[] is used to store/receive message via radio
 // Format:
@@ -105,9 +105,11 @@ const int CONSOLE_WIDTH = 80;
 
 const int EEPROM_LEN = 0x3F0; // leave room for speed, pause
 
+void showSettings();
+
 void clearMessage();
 
-void initNewArduino();
+void prepareDevice();
 
 void setupRadio();
 

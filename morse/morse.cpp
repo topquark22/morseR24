@@ -33,14 +33,22 @@ void clearMessage() {
   message_len = 0;
 }
 
-void initNewArduino() {
-  if (NOT_SET == readIntFromEEPROM(ADDR_SPEED)) { // new Arduino
+
+void showSettings() {
+  Serial.print(F("Dot duration: "));
+  Serial.print(t_dot);
+  Serial.println(F(" ms"));
+  Serial.print(F("Pause duration: "));
+  Serial.print(t_pause);
+  Serial.println(F(" ms"));
+  Serial.println();
+}
+
+void prepareDevice() {
+  if (NOT_SET == readIntFromEEPROM(msgBankAddr + OFFSET_ADDR_SPEED)) {
     setSpeed(t_DOT);
     setPause(t_PAUSE);
-    // clear all message banks
-    for (int i = 0; i < 4; i++) {
-      EEPROM.update(MSG_BANK_SIZE * i, 0);
-    }
+    EEPROM.update(msgBankAddr, 0);
   }
 }
 
@@ -99,7 +107,7 @@ void setupRadio() {
 
 void writeMessageToEEPROM() {
   int i;
-  for (i = 0; i < message_len && i < EEPROM_LEN - 1; i++) {
+  for (i = 0; i < message_len && i < MESSAGE_SIZE - 1; i++) {
     EEPROM.update(msgBankAddr + i, message[i]);
   }
   EEPROM.update(msgBankAddr + i, 0);
@@ -142,21 +150,21 @@ int readIntFromEEPROM(int addr) {
   return value;
 }
 void writeSpeedToEEPROM() {
-  writeIntToEEPROM(ADDR_SPEED, t_dot);
+  writeIntToEEPROM(msgBankAddr + OFFSET_ADDR_SPEED, t_dot);
 }
 
 void readSpeedFromEEPROM() {
-  t_dot = readIntFromEEPROM(ADDR_SPEED);
+  t_dot = readIntFromEEPROM(msgBankAddr + OFFSET_ADDR_SPEED);
   t_dash = 3 * t_dot;
   t_space = 6 * t_dot;
 }
 
 void writePauseToEEPROM() {
-  writeIntToEEPROM(ADDR_PAUSE, t_pause);
+  writeIntToEEPROM(msgBankAddr + OFFSET_ADDR_PAUSE, t_pause);
 }
 
 void readPauseFromEEPROM() {
-  t_pause = readIntFromEEPROM(ADDR_PAUSE);
+  t_pause = readIntFromEEPROM(msgBankAddr + OFFSET_ADDR_PAUSE);
 }
 
 void errExit() {

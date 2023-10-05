@@ -21,8 +21,6 @@ void setup() {
 
   Serial.begin(BAUD_RATE);
 
-  initNewArduino();
-
   // pushbutton
   pinMode(PIN_BUTTON_, INPUT_PULLUP);
 
@@ -41,7 +39,7 @@ void setup() {
   // device ID jumpers
   pinMode(PIN_ID1, INPUT_PULLUP);
   pinMode(PIN_ID2, INPUT_PULLUP);
-
+  
   pinMode(PIN_XRMODE, INPUT_PULLUP);
   transmitMode = digitalRead(PIN_XRMODE);
   
@@ -61,11 +59,12 @@ void setup() {
   pinMode(PIN_ID2, INPUT_PULLUP);
 
   int msgBankId =  2 * !digitalRead(PIN_ID2) + !digitalRead(PIN_ID1);
-
-  Serial.print(F("Using message bank "));
-  Serial.println(msgBankId);
-
   msgBankAddr = MSG_BANK_SIZE * msgBankId;
+
+  prepareDevice();
+  
+  Serial.print(F("Device #"));
+  Serial.println(msgBankId);
   
   readSpeedFromEEPROM();
   readPauseFromEEPROM();
@@ -86,7 +85,8 @@ void setup() {
   if (testMode) {
     testRoutine();
   }
-  
+
+  showSettings();
   if (transmitMode) {
     Serial.println(F("Configured as master\n"));
     showInstructions();

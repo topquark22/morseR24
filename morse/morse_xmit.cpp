@@ -1,7 +1,5 @@
 /**
- * functions related to transmission only
  */
-
 
 #include <string.h> //needed for memcpy
 #include "morse.h"
@@ -24,28 +22,23 @@ byte line[LINE_SIZE];
 int line_len;
 
 void showInstructions() {
-    Serial.print(F("Dot duration: ")); Serial.print(t_dot); Serial.println(F(" ms"));
-    Serial.print(F("Pause duration: )")); Serial.print(t_pause); Serial.println(F(" ms"));
-    Serial.println();
-    Serial.println(F("Accepting input from serial console"));
-    Serial.println();
-    Serial.println(F("In-stream modifiers for text interpretation:"));
-    Serial.println(F("  _    Morse (default)"));
-    Serial.println(F("  $    Hexadecimal"));
-    Serial.println(F("  #    Unary"));
-    Serial.println(F("  %    Chess"));
-    Serial.println();
-    Serial.println(F("Timing commands:"));
-    Serial.println(F("  *s<dot>"));
-    Serial.println(F("      changes the dot duration (speed) to <dot> ms"));
-    Serial.println(F("  *p<pause>"));
-    Serial.println(F("      changes the inter-message pause to <pause> ms"));
-    Serial.println();
-    Serial.println(F("Manual control:"));
-    Serial.println(F(" ^0   Turns output off"));
-    Serial.println(F(" ^1   Turns output on"));
-    Serial.println(F(" ^    Resumes message output/Syncs message with master"));
-    Serial.println();
+  Serial.println(F("In-stream modifiers for text interpretation:"));
+  Serial.println(F("    _  Morse (default)"));
+  Serial.println(F("  $    Hexadecimal"));
+  Serial.println(F("  #    Unary"));
+  Serial.println(F("  %    Chess"));
+  Serial.println();
+  Serial.println(F("Timing commands:"));
+  Serial.println(F("  *s<dot>"));
+  Serial.println(F("      changes the dot duration (speed) to <dot> ms"));
+  Serial.println(F("  *p<pause>"));
+  Serial.println(F("      changes the inter-message pause to <pause> ms"));
+  Serial.println();
+  Serial.println(F("Manual control:"));
+  Serial.println(F(" ^0   Turns output off"));
+  Serial.println(F(" ^1   Turns output on"));
+  Serial.println(F(" ^    Resumes message output/Syncs message with master"));
+  Serial.println();
 }
 
 /*
