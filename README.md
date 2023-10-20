@@ -50,7 +50,7 @@ Here are the descriptions of each pin. All INPUT_PULLUP pins are active-low acco
 | A4  | INPUT_PULLUP | device ID, bit 1       |
 | A5  | INPUT_PULLUP | device ID, bit 0       |
 | A6  | unused       |                        |
-| A7  | ANALOG_INPUT | output PWM, usu. to 5V |
+| A7  | INPUT        | sets output PWM        |
 
 * refer to `morse.cpp:setupRadio()`
 
