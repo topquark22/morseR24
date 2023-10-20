@@ -24,7 +24,35 @@ If using an external radio, wire CE to pin 10 and CSN to pin 9. This sketch supp
 
 The output pin is D5 and the inverted output is D3.
 
-Many behaviours of the device are determined by jumper wirings to ground on various GPIO input pins (D4, D7. D8, A0, A1, A2, A3, A4, A5). See below for the details of each of these. Jumper settings are only detected at setup (reset) of the Arduino.
+Many behaviours of the device are determined by jumper wirings to ground on various GPIO input pins. See below for the details of each of these. Jumper settings are only detected at setup (reset) of the Arduino.
+
+Here are the descriptions of each pin. All INPUT_PULLUP pins are active-low according to the function described:
+
+| Pin | mode         | function               |
+|-----|--------------|------------------------|
+| D2  | OUTPUT       | status signal          |
+| D3  | OUTPUT       | inverted Morse signal  |
+| D4  | INPUT_PULLUP | disable radio          |
+| D5  | OUTPUT       | Morse signal           |
+| D6  | INPUT_PULLUP | code key switch        |
+| D7  | INPUT_PULLUP | test mode              |
+| D8  | INPUT_PULLUP | slave (receiver) mode  |
+| D9  | SPI          | CSN to external radio  |
+| D10 | SPI          | CE to external radio   |
+| D11 | SPI          | MOSI to external radio |
+| D12 | SPI          | MISO to external radio |
+| D13 | SPI          | SCK to external radio  |
+| 3v3 | power        | to external radio      |
+| A0  | INPUT_PULLUP | radio power, bit 1     |
+| A1  | INPUT PULLUP | radio power, bit 0     |
+| A2  | INPUT_PULLUP | radio channel bit*     |
+| A3  | INPUT_PULLUP | radio channel bit*     |
+| A4  | INPUT_PULLUP | device ID, bit 1       |
+| A5  | INPUT_PULLUP | device ID, bit 0       |
+| A6  | unused       |                        |
+| A7  | ANALOG_INPUT | output PWM, usu. to 5V |
+
+* refer to `morse.cpp:setupRadio()`
 
 ### PWM wiring (pin A7)
 
