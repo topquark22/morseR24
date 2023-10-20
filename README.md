@@ -68,6 +68,8 @@ Optionally connect pin D6 to ground via a normally-open pushbutton switch.
 
 ## Red LED signals
 
+This signal is available on D2.
+
 Single 1/10 second blink following reset:
 - If seen, radio is enabled and connected properly.
 - If not seen, radio is disabled.
