@@ -24,7 +24,9 @@ If using an external radio, wire CE to pin 10 and CSN to pin 9. This sketch supp
 
 The output pin is D5 and the inverted output is D3.
 
-### PWM wiring
+Many behaviours of the device are determined by jumper wirings to ground on various GPIO input pins (D4, D7. D8, A0, A1, A2, A3, A4, A5). See below for the details of each of these. Jumper settings are only detected at setup (reset) of the Arduino.
+
+### PWM wiring (pin A7)
 
 The output pins support PWM. This is controlled by the voltage on pin A7, which is usually wired to +5V. If you leave A7 unconnected, you will get erratic results. On the Nano V3, it is easy to wire A7 to +5V because the two pins are right next to each other. In most cases that's what you will do unless you really want to use PWM.
 
