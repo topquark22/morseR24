@@ -6,7 +6,7 @@ It supports up to 4 radio channels and 4 selectable device IDs.
 
 ## Hardware requirements
 
-This project was developed using the Arduino Nano V3, and a compatible board with integrated nRF24L01 radio. Some other Arduinos may work, but they must have analog input pin A7. So, for instance, the Uno won't work.
+This project was developed using the Arduino Nano V3, and a compatible board with integrated nRF24L01 radio. Some other Arduinos may work as well. Note PWM support has been removed in this branch, so a device lacking pin A7 for PWM support can be used.
 
 ## Software requirements
 
@@ -50,13 +50,9 @@ Here are the descriptions of each pin. All INPUT_PULLUP pins are active-low acco
 | A4  | INPUT_PULLUP | device ID, bit 1       |
 | A5  | INPUT_PULLUP | device ID, bit 0       |
 | A6  | unused       |                        |
-| A7  | INPUT        | sets output PWM        |
+| A7  | unused       | PWM support removed    |
 
 \* refer to `morse.cpp:setupRadio()`
-
-### PWM wiring (pin A7)
-
-The output pins support PWM. This is controlled by the voltage on pin A7, which is usually wired to +5V. If you leave A7 unconnected, you will get erratic results. On the Nano V3, it is easy to wire A7 to +5V because the two pins are right next to each other. In most cases that's what you will do unless you really want to use PWM.
 
 ### Indicator LED
 

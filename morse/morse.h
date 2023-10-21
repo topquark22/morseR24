@@ -42,10 +42,6 @@ const uint64_t DEVICE_ID_BASE = 0x600DFF2440LL;
 const int PIN_ID2 = A4; // if wired low, add 0x2 to ID_BASE
 const int PIN_ID1 = A5; // if wired low, add 0x1 to ID_BASE
 
-// analog input for PWM
-// Usually you would wire this to +5V (it's right next to the +5V pin)
-const int PIN_PWM = A7;
-
 // These wirings of CE, CSN are used for integrated Nano3/nRF24l01 boards
 const int PIN_CE = 10;
 const int PIN_CSN = 9;
@@ -132,8 +128,6 @@ void readSpeedFromEEPROM();
 void writePauseToEEPROM();
 
 void readPauseFromEEPROM();
-
-int getPWM();
 
 void setOutput(bool value);
 
