@@ -42,13 +42,6 @@ void setup() {
   
   pinMode(PIN_XRMODE, INPUT_PULLUP);
   transmitMode = digitalRead(PIN_XRMODE);
-  
-  pinMode(PIN_PWM, INPUT);
-
-  int pwm = getPWM();
-  if (pwm < 255) {
-    Serial.print(F("Warning: PWM = ")); Serial.println(pwm);
-  }
 
   // channel jumpers
   pinMode(PIN_CH10, INPUT_PULLUP);

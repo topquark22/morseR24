@@ -173,15 +173,9 @@ void errExit() {
   exit(1);
 }
 
-int getPWM() {
-  double pwmRaw = analogRead(PIN_PWM); // 0 to 2^10 - 1
-  return pwmRaw / 4;
-}
-
 void setOutput(bool value) {
-  int pwmWidth = getPWM();
-  analogWrite(PIN_OUT, value * pwmWidth);
-  analogWrite(PIN_OUT_, 255 - (value * pwmWidth));
+  digitalWrite(PIN_OUT, value);
+  digitalWrite(PIN_OUT_,!value);
 }
 
 bool buttonPressed() {
