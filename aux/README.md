@@ -10,7 +10,8 @@ To avoid confusion, we will write pins as A_D7 or B_D7, etc.
 
 On *B*:
 
-* Assert B_D6 and B_D2 _HIGH_initially
+* Assert  B_D2 HIGH_initially
+* Assert B_D6 LOW initially (this will put A in test mode upon reset)
 * Reset A by asserting B_D2 LOW for 10ms
 * Send data to A using B_D6, which is wired to the code key pin on A
 
