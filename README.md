@@ -45,8 +45,8 @@ Here are the descriptions of each pin. All INPUT_PULLUP pins are active-low acco
 | 3v3 | power        | to external radio      |
 | A0  | INPUT_PULLUP | radio power, bit 1     |
 | A1  | INPUT PULLUP | radio power, bit 0     |
-| A2  | INPUT_PULLUP | radio channel bit*     |
-| A3  | INPUT_PULLUP | radio channel bit*     |
+| A2  | INPUT_PULLUP | radio channel select*  |
+| A3  | INPUT_PULLUP | radio channel select*  |
 | A4  | INPUT_PULLUP | device ID, bit 1       |
 | A5  | INPUT_PULLUP | device ID, bit 0       |
 | A6  | unused       |                        |
