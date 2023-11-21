@@ -168,16 +168,16 @@ The serial monitor will display the characters as they are output, as well as an
 
 ## Example circuits
 
-### External device control
-
-This example uses an integrated Nano V3 + nRF24L01 board. Here, the output D5 drives the gate of an IRF540N MOSFET in open drain configuration, that can then be used to control an external circuit.
-
-![MOSFET board](mosfet-board-IRF540N.jpg)
-
-Similarly, the inverted output D3 could be used to drive a P-channel MOSFET such as the IRF9540.
-
 ### Tone generator
 
 Here, an LM555 timer in astable mode generates a tone that is sent to a mono audio jack. The GPIO output on pin D5 is sent to pin 4 (active low reset) of the LM555 to modulate the signal. This example uses a Nano V3 (compatible) with external radio connected to the SPI bus. This circuit can be used in master mode (with or without radio) or slave mode.
 
 ![Tone generator](audio-board.jpg)
+
+### External device control
+
+This example uses an integrated Nano V3 + nRF24L01 board. It is configured as a slave. Here, the output D5 (green) drives the gate of an IRF540N MOSFET in open drain configuration, that can then be used to control an external circuit. The 3-terminal connector provides access to the MOSFET drain (brown), unregulated power from the barrel jack (orange), and GND.
+
+![MOSFET board](mosfet-board-IRF540N.jpg)
+
+Similarly, the inverted output D3 could be used to drive a P-channel MOSFET such as the IRF9540.
