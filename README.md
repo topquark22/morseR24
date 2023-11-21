@@ -170,9 +170,9 @@ The serial monitor will display the characters as they are output, as well as an
 
 ### External device control
 
-This example uses an integrated Nano V3 + nRF24L01 board. Here, the output D5 drives the gate of a 2N7000 MOSFET in open drain configuration, that can then be used to control an external circuit.
+This example uses an integrated Nano V3 + nRF24L01 board. Here, the output D5 drives the gate of an IRF540N MOSFET in open drain configuration, that can then be used to control an external circuit.
 
-![MOSFET board](mosfet-board.jpg)
+![MOSFET board](mosfet-board-IRF540N.jpg)
 
 Similarly, the inverted output D3 could be used to drive a P-channel MOSFET such as the IRF9540.
 
