@@ -10,20 +10,23 @@ void setup() {
   pinMode(PIN_A_D6, OUTPUT);
   pinMode(PIN_A_RST, OUTPUT);
 
-  // "hold down" code key switch on A to enter test mode
+  // "hold down" code key switch on A
   digitalWrite(PIN_A_D6, LOW);
 
-  // reset A
+  // reset A into test mode
   digitalWrite(PIN_A_RST, LOW);
   delay(10);
   digitalWrite(PIN_A_RST, HIGH);
-
+  
+  // "release" code key
+  digitalWrite(PIN_A_D6, HIGH);
 }
 
 void loop() {
-  // Blink A by controlling code key switch pin
-  digitalWrite(PIN_A_D6, LOW);
+
+  // Blink A by controlling code key pin
+  digitalWrite(PIN_A_D6, LOW);  // on
   delay(500);
-  digitalWrite(PIN_A_D6, HIGH);
+  digitalWrite(PIN_A_D6, HIGH); // off
   delay(500);
 }
