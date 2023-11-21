@@ -1,0 +1,1 @@
+![auxiliary control example](aux.jpg)
