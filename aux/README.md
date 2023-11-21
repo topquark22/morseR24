@@ -2,7 +2,7 @@
 
 By utilizing test mode, a device *A* running *morseR24* can be used as an auxiliary radio from a secondary device *B* running different code. Here's how you might do that, assuming *B* is another Arduino:
 
-To avoid confusion, we will write pins as A_D7 or B_D7, etc.
+To avoid confusion, we will write pins as A_D6 or B_D6, etc.
 
 * Connect any output pin (say B_D6) of *B* to pin A_D6 on *A* (code key switch)
 * Connect any output pin (say B_D2) of *B* to A_RST on *A*
