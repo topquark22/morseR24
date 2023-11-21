@@ -170,7 +170,7 @@ The serial monitor will display the characters as they are output, as well as an
 
 ### Tone generator
 
-Here, an LM555 timer in astable mode generates a tone that is sent to a mono audio jack. The GPIO output on pin D5 is sent to pin 4 (active low reset) of the LM555 to modulate the signal. This example uses a Nano V3 (compatible) with external radio connected to the SPI bus. This circuit can be used in master mode (with or without radio) or slave mode.
+Here, an LM555 timer in astable mode generates a tone that is sent to a mono audio jack. The signal output on pin D5 is sent to pin 4 (active low reset) of the LM555 to modulate the signal. This example uses a Nano V3 (compatible) with external radio connected to the SPI bus. This circuit can be used in master mode (with or without radio) or slave mode.
 
 ![Tone generator](audio-board.jpg)
 
