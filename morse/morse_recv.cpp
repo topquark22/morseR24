@@ -69,7 +69,7 @@ void loop_RECV() {
     } else if (TOKEN_PAUSE == commBuffer[0]) { // pause was transmitted
       setPause(decodeInteger());
     } else if (TOKEN_FOLLOWER == commBuffer[0]) { // follower control command received
-      followerEnabled = decodeInteger();
+      setFollow(decodeInteger());
     } else { // invalid token in commBuffer[0]
       Serial.println(F("Invalid packet received"));
       digitalWrite(PIN_RED, HIGH);

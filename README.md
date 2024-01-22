@@ -85,7 +85,7 @@ Solid red:
 
 ## Secondary output
 
-Pin D7 is the output follower. It is disabled by default. It is enabled and disabled using the '>' commands (see **message entry** below.)
+Pin D7 is the output follower. It is disabled by default. It is enabled and disabled using the '>' commands (see **message entry** below.) This setting is persisted to the EEPROM for future resets.
 
 The secondary output does not use PWM and is not dependent on the pin A7 PWM control voltage.
 

@@ -77,6 +77,7 @@ const int MSG_BANK_SIZE = 0x100;
 // EEPROM addresses (add msgBankAddr)
 const int OFFSET_ADDR_SPEED = 0xF0;
 const int OFFSET_ADDR_PAUSE = 0xF4;
+const int OFFSET_ADDR_FOLLOW = 0xEC;
 
 // commBuffer[] is used to store/receive message via radio
 // Format:
@@ -133,6 +134,10 @@ void writePauseToEEPROM();
 
 void readPauseFromEEPROM();
 
+void writeFollowToEEPROM();
+
+void readFollowFromEEPROM();
+
 int getPWM();
 
 void setOutput(bool value);
@@ -153,6 +158,8 @@ void testRoutine();
 void setSpeed(int t_dot_ms);
 
 void setPause(int t_pause_ms);
+
+void setFollow(bool follow);
 
 /*
  * Append commBuffer bytes to message buffer

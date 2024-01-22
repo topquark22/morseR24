@@ -49,6 +49,7 @@ void prepareDevice() {
   if (NOT_SET == readIntFromEEPROM(msgBankAddr + OFFSET_ADDR_SPEED)) {
     setSpeed(t_DOT);
     setPause(t_PAUSE);
+    setFollow(FALSE);
     EEPROM.update(msgBankAddr, 0);
   }
 }
@@ -166,6 +167,14 @@ void writePauseToEEPROM() {
 
 void readPauseFromEEPROM() {
   t_pause = readIntFromEEPROM(msgBankAddr + OFFSET_ADDR_PAUSE);
+}
+
+void writeFollowToEEPROM() {
+  writeIntToEEPROM(msgBankAddr + OFFSET_ADDR_FOLLOW, followerEnabled);
+}
+
+void readFollowFromEEPROM() {
+  followerEnabled = readIntFromEEPROM(msgBankAddr + OFFSET_ADDR_FOLLOW);
 }
 
 void errExit() {
@@ -564,4 +573,15 @@ void setPause(int t_pause_ms) {
   writePauseToEEPROM();
   Serial.print(F("-- pause set to "));
   Serial.println(t_pause);
+}
+
+void setFollow(bool follow) {
+  if (follow != 0  && follow != 1) {
+    Serial.println(F("Invalid follow setting"));
+    return;
+  }
+  followerEnabled = follow;
+  writeFollowToEEPROM();
+  Serial.print(F("-- Follower "));
+  Serial.println(follow ? F("enabled") : F("disabled"));
 }

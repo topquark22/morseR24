@@ -70,6 +70,7 @@ void setup() {
   
   readSpeedFromEEPROM();
   readPauseFromEEPROM();
+  readFollowFromEEPROM();
   readMessageFromEEPROM();
 
 // power level jumpers

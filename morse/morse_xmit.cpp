@@ -175,7 +175,7 @@ void processFollowerCommand() {
     Serial.print(F("-- "));
     Serial.print(value ? "Enabling" : "Disabling");
     Serial.println(F(" output follower"));
-    followerEnabled = value;
+    setFollow(value);
     transmitInteger(TOKEN_FOLLOWER, value);
   } else {
     Serial.println(F("-- Invalid follower control command"));
