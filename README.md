@@ -87,11 +87,11 @@ Solid red:
 
 Pin D7 is the output follower. It is disabled by default. It is enabled and disabled using the '>' commands (see **message entry** below.)
 
-Note: The secondary output does not use PWM and is not dependent on the pin A7 PWM control voltage.
+The secondary output does not use PWM and is not dependent on the pin A7 PWM control voltage.
 
 ## Manual mode
 
-- Pressing and holding the pushbutton enters manual mode. The button will subsequently act as a code key for manual input.
+Pressing and holding the pushbutton enters manual mode. The button will subsequently act as a code key for manual input.
 
 ## Radio configuration
 
