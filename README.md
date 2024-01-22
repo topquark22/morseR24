@@ -35,7 +35,7 @@ Here are the descriptions of each pin. All INPUT_PULLUP pins are active-low acco
 | D4  | INPUT_PULLUP | disable radio          |
 | D5  | OUTPUT       | Morse signal           |
 | D6  | INPUT_PULLUP | code key switch        |
-| D7  | OUTPUT       | follower Morse signal  |
+| D7  | OUTPUT       | secondary Morse signal |
 | D8  | INPUT_PULLUP | slave (receiver) mode  |
 | D9  | SPI          | CSN to external radio  |
 | D10 | SPI          | CE to external radio   |
@@ -83,9 +83,11 @@ Short blink during message display:
 Solid red:
 -  Slave mode is enabled and the radio is disabled. This is an unsupported configuration.
 
-## Output follower
+## Secondary output
 
-Pin D7 is the output follower. It is enabled and disabled using the '>' commands (see **message entry** below.)
+Pin D7 is the output follower. It is disabled by default. It is enabled and disabled using the '>' commands (see **message entry** below.)
+
+Note: The secondary output does not use PWM and is not dependent on the pin A7 PWM control voltage.
 
 ## Manual mode
 
