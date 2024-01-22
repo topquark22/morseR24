@@ -77,7 +77,7 @@ const int MSG_BANK_SIZE = 0x100;
 // EEPROM addresses (add msgBankAddr)
 const int OFFSET_ADDR_SPEED = 0xF0;
 const int OFFSET_ADDR_PAUSE = 0xF4;
-const int OFFSET_ADDR_FOLLOW = 0xEC;
+const int OFFSET_ADDR_FOLLOW = 0xF8;
 
 // commBuffer[] is used to store/receive message via radio
 // Format:
