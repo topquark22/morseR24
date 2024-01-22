@@ -10,9 +10,9 @@
 
 bool transmitMode;
 
-bool testMode;
-
 bool radioEnabled;
+
+bool followerEnabled = false;
 
 // offset into EEPROM where message is stored
 int msgBankAddr;
@@ -32,9 +32,11 @@ void setup() {
   pinMode(PIN_RED, OUTPUT); // Red (error condition)
   pinMode(PIN_OUT, OUTPUT); // Green (transmitted/received data)
   pinMode(PIN_OUT_, OUTPUT); // inverted Green (transmitted/received data)
+  pinMode(PIN_OUT2, OUTPUT); // output follower (can be enabled/disabled)
 
   digitalWrite(PIN_OUT, LOW);
   digitalWrite(PIN_OUT_, HIGH);
+  digitalWrite(PIN_OUT2, LOW);
 
   // device ID jumpers
   pinMode(PIN_ID1, INPUT_PULLUP);
@@ -78,12 +80,6 @@ void setup() {
     setupRadio();
   } else {
     Serial.println(F("Radio disabled"));
-  }
-
-  pinMode(PIN_TEST_, INPUT_PULLUP);
-  testMode = !digitalRead(PIN_TEST_);
-  if (testMode) {
-    testRoutine();
   }
 
   showSettings();

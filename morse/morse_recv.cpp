@@ -13,6 +13,8 @@ extern RF24 radio;
 
 extern bool radioEnabled;
 
+extern bool followerEnabled;
+
 extern byte message[];
 extern int message_len;
 
@@ -59,13 +61,15 @@ void loop_RECV() {
     if (TOKEN_MESSAGE == commBuffer[0]) {
       enableDisplay(true);
       receiveMessage();
-    } else if (TOKEN_TEST == commBuffer[0]) { // special case manual transmission
+    } else if (TOKEN_MANUAL == commBuffer[0]) { // special case manual transmission
       enableDisplay(false);
       setOutput(commBuffer[4]);
     } else if (TOKEN_SPEED == commBuffer[0]) { // speed was transmitted
       setSpeed(decodeInteger());
     } else if (TOKEN_PAUSE == commBuffer[0]) { // pause was transmitted
       setPause(decodeInteger());
+    } else if (TOKEN_FOLLOWER == commBuffer[0]) { // follower control command received
+      followerEnabled = decodeInteger();
     } else { // invalid token in commBuffer[0]
       Serial.println(F("Invalid packet received"));
       digitalWrite(PIN_RED, HIGH);

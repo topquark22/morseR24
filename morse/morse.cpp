@@ -17,6 +17,8 @@ extern bool radioEnabled;
 
 extern bool transmitMode;
 
+extern bool followerEnabled;
+
 extern int msgBankAddr;
 
 byte message[MESSAGE_SIZE + 1];
@@ -32,7 +34,6 @@ void clearMessage() {
   message[0] = 0;
   message_len = 0;
 }
-
 
 void showSettings() {
   Serial.print(F("Dot duration: "));
@@ -182,6 +183,9 @@ void setOutput(bool value) {
   int pwmWidth = getPWM();
   analogWrite(PIN_OUT, value * pwmWidth);
   analogWrite(PIN_OUT_, 255 - (value * pwmWidth));
+  if (followerEnabled) {
+    digitalWrite(PIN_OUT2, value);
+  }
 }
 
 bool buttonPressed() {

@@ -19,12 +19,11 @@ const int PIN_DISABLE_ = 4; // wire to GND if not using radio
 
 const int PIN_XRMODE = 8; // wire to GND for recv (slave) mode; else xmit (master) mode
 
-const int PIN_TEST_ = 7; // jumper to GND for test mode
-
 const int PIN_BUTTON_ = 6; // code key switch for manual input in test mode
 
 const int PIN_OUT = 5;  // output
 const int PIN_OUT_ = 3; // inverted output
+const int PIN_OUT2 = 7; // optional output
 const int PIN_RED = 2;  // LED, hemorrhoid condition
 
 // radio output power = 2*A0 + A1
@@ -61,10 +60,11 @@ const int BAUD_RATE = 9600;
 const int NOT_SET = -1;
 
 // packet type tokens (first byte of commBuffer)
-const int TOKEN_TEST = 1;
+const int TOKEN_MANUAL = 1;
 const int TOKEN_SPEED = 2;
 const int TOKEN_PAUSE = 3;
 const int TOKEN_MESSAGE = 4;
+const int TOKEN_FOLLOWER = 5;
 
 const int SPI_SPEED = 10000000;
 

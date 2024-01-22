@@ -35,7 +35,7 @@ Here are the descriptions of each pin. All INPUT_PULLUP pins are active-low acco
 | D4  | INPUT_PULLUP | disable radio          |
 | D5  | OUTPUT       | Morse signal           |
 | D6  | INPUT_PULLUP | code key switch        |
-| D7  | INPUT_PULLUP | test mode              |
+| D7  | OUTPUT       | follower Morse signal  |
 | D8  | INPUT_PULLUP | slave (receiver) mode  |
 | D9  | SPI          | CSN to external radio  |
 | D10 | SPI          | CE to external radio   |
@@ -83,14 +83,13 @@ Short blink during message display:
 Solid red:
 -  Slave mode is enabled and the radio is disabled. This is an unsupported configuration.
 
-## Test configuration
+## Output follower
 
-With pin D7 jumpered to ground:
-- If the push button is pressed during reset, the button will subsequently act as a code key for manual input.
-- If the push button is not pressed during reset, the output/transmission will blink continuously every 1 second.
+Pin D7 is the output follower. It is enabled and disabled using the '>' commands (see **message entry** below.)
 
-With pin D7 not jumpered to ground:
-- Pressing and holding the pushbutton enters test mode. The button will subsequently act as a code key for manual input.
+## Manual mode
+
+- Pressing and holding the pushbutton enters manual mode. The button will subsequently act as a code key for manual input.
 
 ## Radio configuration
 
@@ -150,6 +149,13 @@ The following commands entered on the serial monitor allow manual GPIO control, 
 - **^**  sync slave with master and resume display
 
 (To resume display on the slave without retransmitting the message, you must reset the slave.)
+
+### Follower control
+
+The following commands allow control of the output follower on D7. This is initially disabled; but if enabled, it provides another copy of the Morse output. This is useful, for instance, if an audio device such as a buzzer is connected as well.
+
+**>0** turns output follower off
+**>1** turns output follower on
 
 ### Change timings
 

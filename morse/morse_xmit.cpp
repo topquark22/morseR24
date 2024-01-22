@@ -11,6 +11,8 @@ extern int t_pause;
 
 extern bool radioEnabled;
 
+extern bool followerEnabled;
+
 extern byte message[];
 extern int message_len;
 
@@ -35,10 +37,13 @@ void showInstructions() {
   Serial.println(F("      changes the inter-message pause to <pause> ms"));
   Serial.println();
   Serial.println(F("Manual control:"));
-  Serial.println(F(" ^0   Turns output off"));
-  Serial.println(F(" ^1   Turns output on"));
-  Serial.println(F(" ^    Resumes message output/Syncs message with master"));
+  Serial.println(F(" ^0   Turns output GPIO off"));
+  Serial.println(F(" ^1   Turns output GPIO on"));
+  Serial.println(F(" ^    Resumes message output. Syncs message with master"));
   Serial.println();
+  Serial.println(F("Output 2 (follower) control:"));
+  Serial.println(F(" >0   Turns output 2 off"));
+  Serial.println(F(" >1   turns output 2 on"));
 }
 
 /*
@@ -143,6 +148,7 @@ void appendLineToMessage() {
   message[message_len] = 0;
 }
 
+// line starts with '^'
 void processManualCommand() {
   if (0 == line[1]) {
     // "^" was entered
@@ -156,9 +162,23 @@ void processManualCommand() {
     Serial.print(F("-- Turning output "));
     Serial.println(value ? "on" : "off");
     setOutput(value);
-    transmitInteger(TOKEN_TEST, value);
+    transmitInteger(TOKEN_MANUAL, value);
   } else {
     Serial.println(F("-- Invalid manual command"));
+  }
+}
+
+// line starts with '>'
+void processFollowerCommand() {
+  if (2 == line_len && ('0' == line[1] || '1' == line[1])) {
+    byte value = line[1] - '0';
+    Serial.print(F("-- "));
+    Serial.print(value ? "Enabling" : "Disabling");
+    Serial.println(F(" output follower"));
+    followerEnabled = value;
+    transmitInteger(TOKEN_FOLLOWER, value);
+  } else {
+    Serial.println(F("-- Invalid follower control command"));
   }
 }
 
@@ -198,6 +218,7 @@ void loop_XMIT() {
       displayMessage();
     }
     messageChanged = false;
+
   } else { // Serial available
 
     readLine();
@@ -215,6 +236,11 @@ void loop_XMIT() {
       return;
     }
     
+    if ('>' == line[0]) {
+      processFollowerCommand();
+      return;
+    }
+
     if ('*' == line[0]) {
       processStarCommand();
       return;
@@ -248,26 +274,15 @@ void loop_XMIT() {
 }
 
 void testRoutine() {
-  Serial.println(F("Test mode"));
-  if (buttonPressed()) {
-    int prevValue = -1;
-    while (1) {
-      int value = buttonPressed();
-      if (value != prevValue) {
-        prevValue = value;
-        setOutput(value);
-        transmitInteger(TOKEN_TEST, value);
-      }
-      delay(10);
+  Serial.println(F("Manual mode"));
+  int prevValue = -1;
+  while (1) {
+    int value = buttonPressed();
+    if (value != prevValue) {
+      prevValue = value;
+      setOutput(value);
+      transmitInteger(TOKEN_MANUAL, value);
     }
-  } else { // beep at 1 second intervals
-    while (1) {
-      transmitInteger(TOKEN_TEST, 1);
-      setOutput(1);
-      delay(1000);
-      transmitInteger(TOKEN_TEST, 0);
-      setOutput(0);
-      delay(1000);
-    }
+    delay(10);
   }
 }
