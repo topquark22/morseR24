@@ -83,9 +83,7 @@ void loop_RECV() {
       }
       default: { // invalid token in commBuffer[0]
         Serial.println(F("Invalid packet received"));
-        setErrorIndicator(HIGH);
-        delay(100); // wait to clear serial buffer
-        exit(1);
+        errExit();
       }
     }
   }
