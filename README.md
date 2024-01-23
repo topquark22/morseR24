@@ -95,6 +95,8 @@ Pin D7 serves two functions: As a code output, and a status output. In most case
 
 Pressing and holding the pushbutton enters manual mode. The button will subsequently act as a code key for manual input.
 
+In order to exit manual mode, you must reset the transmitter.
+
 ## Radio configuration
 
 If not using a radio, see **standalone mode** below.
