@@ -49,7 +49,7 @@ void prepareDevice() {
   if (NOT_SET == readIntFromEEPROM(msgBankAddr + OFFSET_ADDR_SPEED)) {
     setSpeed(t_DOT);
     setPause(t_PAUSE);
-    setFollow(FALSE);
+    setFollow(false);
     EEPROM.update(msgBankAddr, 0);
   }
 }
@@ -179,6 +179,7 @@ void readFollowFromEEPROM() {
 
 void errExit() {
   digitalWrite(PIN_RED, HIGH);
+  digitalWrite(PIN_OUT2, HIGH);
   delay(100); // allow time to flush serial buffer
   exit(1);
 }

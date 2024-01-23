@@ -35,7 +35,7 @@ Here are the descriptions of each pin. All INPUT_PULLUP pins are active-low acco
 | D4  | INPUT_PULLUP | disable radio          |
 | D5  | OUTPUT       | Morse signal           |
 | D6  | INPUT_PULLUP | code key switch        |
-| D7  | OUTPUT       | secondary Morse signal |
+| D7  | OUTPUT       | secondary output       |
 | D8  | INPUT_PULLUP | slave (receiver) mode  |
 | D9  | SPI          | CSN to external radio  |
 | D10 | SPI          | CE to external radio   |
@@ -85,9 +85,11 @@ Solid red:
 
 ## Secondary output
 
-Pin D7 is the output follower. It is disabled by default. It is enabled and disabled using the '>' commands (see **message entry** below.) This setting is persisted to the EEPROM for future resets.
+Pin D7 serves two functions: As a code output, and a status output. In most cases you would connect it to a buzzer, which helps to monitor the unit if (say) it is located in another room.
 
-The secondary output does not use PWM and is not dependent on the pin A7 PWM control voltage.
+- As a code output, it is turned off normally. It is enabled and disabled using the '>' commands (see **message entry** below.) This setting is persisted to the EEPROM. This output does not use PWM.
+
+- As a status output, in case of an error that activates the primary status output on D2, pin D7 is also activated. This helps to alert on error conditions.
 
 ## Manual mode
 
