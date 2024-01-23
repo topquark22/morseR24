@@ -88,6 +88,7 @@ Solid red:
 With pin D7 jumpered to ground:
 - If the push button is pressed during reset, the button will subsequently act as a code key for manual input.
 - If the push button is not pressed during reset, the output/transmission will blink continuously every 1 second.
+- In order to exit this mode, you must reset the transmitter.
 
 With pin D7 not jumpered to ground:
 - Pressing and holding the pushbutton enters test mode. The button will subsequently act as a code key for manual input.
