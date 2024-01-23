@@ -115,11 +115,18 @@ Wiring chart:
 
 ### Device ID setting
 
-The sketch supports 4 device IDs, selected by jumpers on pins A4, A5. See the code for more details.
+4 device IDs are supported, selected by jumpers on pins A4, A5. This does change the nRF24L01 radio transmit ID, but it is more relevant to the device functionality. See **message entry** for more details.
 
 ### Power setting
 
-The radio power is set by jumpers on pins A0, A1. The default is MAX. See the code for more details.
+The radio power is set by jumpers on pins A0, A1.
+
+| A0  | A1  | radio power |
+|-----|-----|-------------|
+| -   | -   | MAX         |
+| -   | GND | HIGH        |
+| GND | -   | LOW         |
+| GND | GND | MIN         |
 
 ## Standalone mode
 
