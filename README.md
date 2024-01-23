@@ -106,7 +106,7 @@ If not using a radio, see **standalone mode** below.
 The nRF24L01 supports wireless channels 0-125. **morseR24** supports 4 channels, from 88 to 118 in increments of 10. The channel is specified using jumpers on pins A2, A3. If none of these are wired to ground, the channel defaults to 118.
 
 Wiring chart:
-| A3  | A2  | radio channel |
+| A2  | A3  | radio channel |
 |-----|-----|---------------|
 | -   | -   | 118           |
 | -   | GND | 108           |
