@@ -184,8 +184,7 @@ void readFollowFromEEPROM() {
 }
 
 void errExit() {
-  digitalWrite(PIN_RED, HIGH);
-  digitalWrite(PIN_OUT2, HIGH);
+  setErrorIndicator(HIGH);
   delay(100); // allow time to flush serial buffer
   exit(1);
 }
