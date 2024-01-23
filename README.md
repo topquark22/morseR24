@@ -35,7 +35,7 @@ Here are the descriptions of each pin. All INPUT_PULLUP pins are active-low acco
 | D4  | INPUT_PULLUP | disable radio          |
 | D5  | OUTPUT       | Morse signal           |
 | D6  | INPUT_PULLUP | code key switch        |
-| D7  | INPUT_PULLUP | test mode              |
+| D7  | OUTPUT       | secondary output       |
 | D8  | INPUT_PULLUP | slave (receiver) mode  |
 | D9  | SPI          | CSN to external radio  |
 | D10 | SPI          | CE to external radio   |
@@ -83,15 +83,19 @@ Short blink during message display:
 Solid red:
 -  Slave mode is enabled and the radio is disabled. This is an unsupported configuration.
 
-## Test configuration
+## Secondary output
 
-With pin D7 jumpered to ground:
-- If the push button is pressed during reset, the button will subsequently act as a code key for manual input.
-- If the push button is not pressed during reset, the output/transmission will blink continuously every 1 second.
-- In order to exit this mode, you must reset the transmitter.
+Pin D7 serves two functions: As a code output, and a status output. In most cases you would connect it to a buzzer, which helps to monitor the unit if (say) it is located in another room.
 
-With pin D7 not jumpered to ground:
-- Pressing and holding the pushbutton enters test mode. The button will subsequently act as a code key for manual input.
+- As a code output, it is turned off normally. It is enabled and disabled using the '>' commands (see **message entry** below.) This setting is persisted to the EEPROM. This output does not use PWM.
+
+- As a status output, in case of an error that activates the primary status output on D2, pin D7 is also activated. This helps to alert on error conditions.
+
+## Manual mode
+
+Pressing and holding the pushbutton enters manual mode. The button will subsequently act as a code key for manual input.
+
+In order to exit manual mode, you must reset the transmitter. Then use the '^' command to restart the display on the receiver.
 
 ## Radio configuration
 
@@ -151,6 +155,13 @@ The following commands entered on the serial monitor allow manual GPIO control, 
 - **^**  sync slave with master and resume display
 
 (To resume display on the slave without retransmitting the message, you must reset the slave.)
+
+### Follower control
+
+The following commands allow control of the output follower on D7. This is initially disabled; but if enabled, it provides another copy of the Morse output. This is useful, for instance, if an audio device such as a buzzer is connected as well.
+
+**>0** turns output follower off
+**>1** turns output follower on
 
 ### Change timings
 

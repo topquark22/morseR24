@@ -17,6 +17,8 @@ extern bool radioEnabled;
 
 extern bool transmitMode;
 
+extern bool followerEnabled;
+
 extern int msgBankAddr;
 
 byte message[MESSAGE_SIZE + 1];
@@ -33,7 +35,6 @@ void clearMessage() {
   message_len = 0;
 }
 
-
 void showSettings() {
   Serial.print(F("Dot duration: "));
   Serial.print(t_dot);
@@ -48,6 +49,7 @@ void prepareDevice() {
   if (NOT_SET == readIntFromEEPROM(msgBankAddr + OFFSET_ADDR_SPEED)) {
     setSpeed(t_DOT);
     setPause(t_PAUSE);
+    setFollow(false);
     EEPROM.update(msgBankAddr, 0);
   }
 }
@@ -56,6 +58,12 @@ void blinkRedLED(int ms) {
   digitalWrite(PIN_RED, HIGH);
   delay(ms);
   digitalWrite(PIN_RED, LOW);
+}
+
+// Sets the red LED and other status
+void setErrorIndicator(bool status) {
+  digitalWrite(PIN_RED, status);
+  digitalWrite(PIN_OUT2, status);
 }
 
 void setupRadio() {
@@ -80,9 +88,9 @@ void setupRadio() {
   if (!radio.isChipConnected()) {
     Serial.println(F("Radio not connected"));
     while (1) {
-      digitalWrite(PIN_RED, LOW);
+      setErrorIndicator(LOW);
       delay(250);
-      digitalWrite(PIN_RED, HIGH);
+      setErrorIndicator(HIGH);
       delay(250);
     }
   }
@@ -167,8 +175,17 @@ void readPauseFromEEPROM() {
   t_pause = readIntFromEEPROM(msgBankAddr + OFFSET_ADDR_PAUSE);
 }
 
+void writeFollowToEEPROM() {
+  writeIntToEEPROM(msgBankAddr + OFFSET_ADDR_FOLLOW, followerEnabled);
+}
+
+void readFollowFromEEPROM() {
+  followerEnabled = readIntFromEEPROM(msgBankAddr + OFFSET_ADDR_FOLLOW);
+}
+
 void errExit() {
   digitalWrite(PIN_RED, HIGH);
+  digitalWrite(PIN_OUT2, HIGH);
   delay(100); // allow time to flush serial buffer
   exit(1);
 }
@@ -182,6 +199,9 @@ void setOutput(bool value) {
   int pwmWidth = getPWM();
   analogWrite(PIN_OUT, value * pwmWidth);
   analogWrite(PIN_OUT_, 255 - (value * pwmWidth));
+  if (followerEnabled) {
+    digitalWrite(PIN_OUT2, value);
+  }
 }
 
 bool buttonPressed() {
@@ -560,4 +580,9 @@ void setPause(int t_pause_ms) {
   writePauseToEEPROM();
   Serial.print(F("-- pause set to "));
   Serial.println(t_pause);
+}
+
+void setFollow(bool follow) {
+  followerEnabled = follow;
+  writeFollowToEEPROM();
 }

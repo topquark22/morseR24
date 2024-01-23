@@ -19,12 +19,11 @@ const int PIN_DISABLE_ = 4; // wire to GND if not using radio
 
 const int PIN_XRMODE = 8; // wire to GND for recv (slave) mode; else xmit (master) mode
 
-const int PIN_TEST_ = 7; // jumper to GND for test mode
-
 const int PIN_BUTTON_ = 6; // code key switch for manual input in test mode
 
 const int PIN_OUT = 5;  // output
 const int PIN_OUT_ = 3; // inverted output
+const int PIN_OUT2 = 7; // optional output
 const int PIN_RED = 2;  // LED, hemorrhoid condition
 
 // radio output power = 2*A0 + A1
@@ -61,10 +60,11 @@ const int BAUD_RATE = 9600;
 const int NOT_SET = -1;
 
 // packet type tokens (first byte of commBuffer)
-const int TOKEN_TEST = 1;
+const int TOKEN_MANUAL = 1;
 const int TOKEN_SPEED = 2;
 const int TOKEN_PAUSE = 3;
 const int TOKEN_MESSAGE = 4;
+const int TOKEN_FOLLOWER = 5;
 
 const int SPI_SPEED = 10000000;
 
@@ -77,6 +77,7 @@ const int MSG_BANK_SIZE = 0x100;
 // EEPROM addresses (add msgBankAddr)
 const int OFFSET_ADDR_SPEED = 0xF0;
 const int OFFSET_ADDR_PAUSE = 0xF4;
+const int OFFSET_ADDR_FOLLOW = 0xF8;
 
 // commBuffer[] is used to store/receive message via radio
 // Format:
@@ -133,6 +134,10 @@ void writePauseToEEPROM();
 
 void readPauseFromEEPROM();
 
+void writeFollowToEEPROM();
+
+void readFollowFromEEPROM();
+
 int getPWM();
 
 void setOutput(bool value);
@@ -147,12 +152,17 @@ bool buttonPressed();
 
 void testRoutine();
 
+// Sets the red LED and other status
+void setErrorIndicator(bool status);
+
 /*
    Sets the duration of 1 dot in ms
 */
 void setSpeed(int t_dot_ms);
 
 void setPause(int t_pause_ms);
+
+void setFollow(bool follow);
 
 /*
  * Append commBuffer bytes to message buffer

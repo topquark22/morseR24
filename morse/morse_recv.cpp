@@ -13,6 +13,8 @@ extern RF24 radio;
 
 extern bool radioEnabled;
 
+extern bool followerEnabled;
+
 extern byte message[];
 extern int message_len;
 
@@ -54,7 +56,7 @@ void receiveMessage() {
 
 void loop_RECV() {
   if (radio.available()) {
-    digitalWrite(PIN_RED, LOW);
+    setErrorIndicator(LOW);
     radio.read(commBuffer, COMM_BUFFER_SIZE); // Read data from the nRF24L01
     switch (commBuffer[0]) {
       case TOKEN_MESSAGE: {
@@ -75,10 +77,14 @@ void loop_RECV() {
         setPause(decodeInteger());
         break;
       }
+      case TOKEN_FOLLOWER: { // follower control command received
+        setFollow(decodeInteger());
+        break;
+      }
       default: { // invalid token in commBuffer[0]
         Serial.println(F("Invalid packet received"));
-        digitalWrite(PIN_RED, HIGH);
-        delay(100);
+        setErrorIndicator(HIGH);
+        delay(100); // wait to clear serial buffer
         exit(1);
       }
     }
