@@ -41,7 +41,7 @@ void showInstructions() {
   Serial.println(F(" ^1   Turns output GPIO on"));
   Serial.println(F(" ^    Resumes message output. Syncs message with master"));
   Serial.println();
-  Serial.println(F("Output 2 (follower) control:"));
+  Serial.println(F("Secondary output control:"));
   Serial.println(F(" >0   Turns output 2 off"));
   Serial.println(F(" >1   turns output 2 on"));
 }
@@ -174,11 +174,11 @@ void processFollowerCommand() {
     byte value = line[1] - '0';
     Serial.print(F("-- "));
     Serial.print(value ? "Enabling" : "Disabling");
-    Serial.println(F(" output follower"));
+    Serial.println(F(" secondary output"));
     setFollow(value);
     transmitInteger(TOKEN_FOLLOWER, value);
   } else {
-    Serial.println(F("-- Invalid follower control command"));
+    Serial.println(F("-- Invalid secondary output control command"));
   }
 }
 

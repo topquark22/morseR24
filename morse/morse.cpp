@@ -83,8 +83,10 @@ void setupRadio() {
     Serial.println(F("Radio not connected"));
     while (1) {
       digitalWrite(PIN_RED, LOW);
+      digitalWrite(PIN_OUT2, LOW);
       delay(250);
       digitalWrite(PIN_RED, HIGH);
+      digitalWrite(PIN_OUT2, HIGH);
       delay(250);
     }
   }
@@ -577,12 +579,6 @@ void setPause(int t_pause_ms) {
 }
 
 void setFollow(bool follow) {
-  if (follow != 0  && follow != 1) {
-    Serial.println(F("Invalid follow setting"));
-    return;
-  }
   followerEnabled = follow;
   writeFollowToEEPROM();
-  Serial.print(F("-- Follower "));
-  Serial.println(follow ? F("enabled") : F("disabled"));
 }
