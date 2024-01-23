@@ -52,7 +52,7 @@ Here are the descriptions of each pin. All INPUT_PULLUP pins are active-low acco
 | A6  | unused       |                        |
 | A7  | INPUT        | sets output PWM        |
 
-\* refer to `morse.cpp:setupRadio()`
+\* see **channel setting** below
 
 ### PWM wiring (pin A7)
 
@@ -103,7 +103,15 @@ If not using a radio, see **standalone mode** below.
 
 ### Channel setting
 
-The nRF24L01 supports wireless channels 0-125. **morseR24** supports 4 channels, from 88 to 118 in increments of 10. The channel is specified using jumpers on pins A2, A3. If none of these are wired to ground, the channel defaults to 118. See the code for more details.
+The nRF24L01 supports wireless channels 0-125. **morseR24** supports 4 channels, from 88 to 118 in increments of 10. The channel is specified using jumpers on pins A2, A3. If none of these are wired to ground, the channel defaults to 118.
+
+Wiring chart:
+| A3  | A2  | radio channel |
+|-----|-----|---------------|
+| -   | -   | 118           |
+| -   | GND | 108           |
+| GND | -   | 98            |
+| GND | GND | 88            |
 
 ### Device ID setting
 
