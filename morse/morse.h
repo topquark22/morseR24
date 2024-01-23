@@ -152,6 +152,9 @@ bool buttonPressed();
 
 void testRoutine();
 
+// Sets the red LED and other status
+void setErrorIndicator(bool status);
+
 /*
    Sets the duration of 1 dot in ms
 */

@@ -60,6 +60,12 @@ void blinkRedLED(int ms) {
   digitalWrite(PIN_RED, LOW);
 }
 
+// Sets the red LED and other status
+void setErrorIndicator(bool status) {
+  digitalWrite(PIN_RED, status);
+  digitalWrite(PIN_OUT2, status);
+}
+
 void setupRadio() {
 
   uint64_t deviceID = DEVICE_ID_BASE
@@ -82,11 +88,9 @@ void setupRadio() {
   if (!radio.isChipConnected()) {
     Serial.println(F("Radio not connected"));
     while (1) {
-      digitalWrite(PIN_RED, LOW);
-      digitalWrite(PIN_OUT2, LOW);
+      setErrorIndicator(LOW);
       delay(250);
-      digitalWrite(PIN_RED, HIGH);
-      digitalWrite(PIN_OUT2, HIGH);
+      setErrorIndicator(HIGH);
       delay(250);
     }
   }
