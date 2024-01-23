@@ -58,23 +58,35 @@ void loop_RECV() {
   if (radio.available()) {
     digitalWrite(PIN_RED, LOW);
     radio.read(commBuffer, COMM_BUFFER_SIZE); // Read data from the nRF24L01
-    if (TOKEN_MESSAGE == commBuffer[0]) {
-      enableDisplay(true);
-      receiveMessage();
-    } else if (TOKEN_MANUAL == commBuffer[0]) { // special case manual transmission
-      enableDisplay(false);
-      setOutput(commBuffer[4]);
-    } else if (TOKEN_SPEED == commBuffer[0]) { // speed was transmitted
-      setSpeed(decodeInteger());
-    } else if (TOKEN_PAUSE == commBuffer[0]) { // pause was transmitted
-      setPause(decodeInteger());
-    } else if (TOKEN_FOLLOWER == commBuffer[0]) { // follower control command received
-      setFollow(decodeInteger());
-    } else { // invalid token in commBuffer[0]
-      Serial.println(F("Invalid packet received"));
-      digitalWrite(PIN_RED, HIGH);
-      delay(100);
-      exit(1);
+    switch (commBuffer[0]) {
+      case TOKEN_MESSAGE: {
+        enableDisplay(true);
+        receiveMessage();
+        break;
+      }
+      case TOKEN_MANUAL: { // special case manual transmission
+        enableDisplay(false);
+        setOutput(commBuffer[4]);
+        break;
+      }
+      case TOKEN_SPEED: { // speed was transmitted
+        setSpeed(decodeInteger());
+        break;
+      }
+      case TOKEN_PAUSE: { // pause was transmitted
+        setPause(decodeInteger());
+        break;
+      }
+      case TOKEN_FOLLOWER: { // follower control command received
+        setFollow(decodeInteger());
+        break;
+      }
+      default: { // invalid token in commBuffer[0]
+        Serial.println(F("Invalid packet received"));
+        digitalWrite(PIN_RED, HIGH);
+        delay(100);
+        exit(1);
+      }
     }
   }
   displayMessage();
