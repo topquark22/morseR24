@@ -100,6 +100,7 @@ void transmitMessage() {
     if (0 == b || dest == CHUNK_SIZE) {
       radio.write(commBuffer, COMM_BUFFER_SIZE);
       clearCommBuffer(TOKEN_MESSAGE);
+      delay(100); // allow time for receiver to process packet before sending the next
     }
   }
   // write empty chunk to signal end of transmission
