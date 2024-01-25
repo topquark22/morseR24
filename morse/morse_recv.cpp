@@ -56,7 +56,7 @@ void receiveMessage() {
 
 void loop_RECV() {
   if (radio.available()) {
-    setErrorIndicator(LOW);
+    setErrorIndicator(false);
     radio.read(commBuffer, COMM_BUFFER_SIZE); // Read data from the nRF24L01
     switch (commBuffer[0]) {
       case TOKEN_MESSAGE: {
@@ -83,7 +83,7 @@ void loop_RECV() {
       }
       default: { // invalid token in commBuffer[0]
         Serial.println(F("Invalid packet received"));
-        errExit();
+        setErrorIndicator(true);
       }
     }
   }
