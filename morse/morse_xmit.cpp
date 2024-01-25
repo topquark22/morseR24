@@ -276,6 +276,7 @@ void loop_XMIT() {
 
 void testRoutine() {
   Serial.println(F("Manual mode"));
+  followerEnabled = true; // monitor for convenience
   int prevValue = -1;
   while (1) {
     int value = buttonPressed();
