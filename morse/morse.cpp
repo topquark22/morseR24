@@ -54,7 +54,7 @@ void prepareDevice() {
   }
 }
 
-void blinkRedLED(int ms) {
+void blinkRedLED(unsigned long ms) {
   digitalWrite(PIN_RED, HIGH);
   delay(ms);
   digitalWrite(PIN_RED, LOW);

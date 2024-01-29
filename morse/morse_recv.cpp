@@ -9,6 +9,8 @@
 #include "morse.h"
 #include "morse_recv.h"
 
+const int MAX_RECV_TIME = 1000;
+
 extern RF24 radio;
 
 extern bool radioEnabled;
@@ -39,14 +41,24 @@ int decodeCommBuffer() {
   return i;
 }
 
+int messageRecvTimeout;
+
 void receiveMessage() {
   Serial.println(F("-- Receiving message"));
   // first block already in buffer
   clearMessage();
   int bytesAppended = decodeCommBuffer();
   while (bytesAppended > 0) {
-    while (!radio.available()) {
+    messageRecvTimeout = 0;
+    while (!radio.available() && messageRecvTimeout < MAX_RECV_TIME) {
       // wait for next packet
+      delay(10);
+      messageRecvTimeout += 10;
+    }
+    if (messageRecvTimeout >= MAX_RECV_TIME) {
+      Serial.println(F("Partial message timeout error"));
+      blinkRedLED(1000);
+      return;
     }
     radio.read(commBuffer, COMM_BUFFER_SIZE);
     bytesAppended = decodeCommBuffer();

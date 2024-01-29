@@ -106,6 +106,8 @@ const int CONSOLE_WIDTH = 80;
 
 const int EEPROM_LEN = 0x3F0; // leave room for speed, pause
 
+void blinkRedLED(unsigned long ms);
+
 void showSettings();
 
 void clearMessage();
