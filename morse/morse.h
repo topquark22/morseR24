@@ -82,7 +82,7 @@ const int OFFSET_ADDR_FOLLOW = 0xF8;
 // commBuffer[] is used to store/receive message via radio
 // Format:
 //   commBuffer[0] : token indicating message type (1 byte)
-//   commBuffer[0] to commBuffer[31]: data block
+//   commBuffer[1] to commBuffer[31]: data block
 const int COMM_BUFFER_SIZE = 32;
 const int CHUNK_SIZE = COMM_BUFFER_SIZE - 1;
 
