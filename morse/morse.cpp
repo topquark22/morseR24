@@ -74,8 +74,8 @@ void setupRadio() {
   Serial.print(F("Radio starting as device "));
   Serial.println((int)deviceID & 0x0f);
 
-  // power 0=MIN, 1=LOW, 2=HIGH, 3=MAX
-  uint8_t power = 2 * digitalRead(PIN_PWR2) + digitalRead(PIN_PWR1);
+ // power 0=RF24_PA_MIN, 1=RF24_PA_LOW, 2=RF24_PA_HIGH, 3=RF24_PA_MAX
+  rf24_pa_dbm_e power = 2 * digitalRead(PIN_PWR2) + digitalRead(PIN_PWR1);
   Serial.print(F("Power set to ")); Serial.println(power);
 
   int channel = CHANNEL_BASE + 10 * digitalRead(PIN_CH10) + 20 * digitalRead(PIN_CH20);
