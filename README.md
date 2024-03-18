@@ -30,7 +30,7 @@ Here are the descriptions of each pin. All INPUT_PULLUP pins are active-low acco
 
 | Pin | mode         | function               |
 |-----|--------------|------------------------|
-| D2  | OUTPUT       | status signal          |
+| D2  | OUTPUT       | error/status signal    |
 | D3  | OUTPUT       | inverted Morse signal  |
 | D4  | INPUT_PULLUP | disable radio          |
 | D5  | OUTPUT       | Morse signal           |
