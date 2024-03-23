@@ -15,39 +15,39 @@
 #include "morse_xmit.h"
 #include "morse_recv.h"
 
-const int PIN_DISABLE_ = 4; // wire to GND if not using radio
+const PROGMEM int PIN_DISABLE_ = 4; // wire to GND if not using radio
 
-const int PIN_XRMODE = 8; // wire to GND for recv (slave) mode; else xmit (master) mode
+const PROGMEM int PIN_XRMODE = 8; // wire to GND for recv (slave) mode; else xmit (master) mode
 
-const int PIN_BUTTON_ = 6; // code key switch for manual input in test mode
+const PROGMEM int PIN_BUTTON_ = 6; // code key switch for manual input in test mode
 
-const int PIN_OUT = 5;  // output
-const int PIN_OUT_ = 3; // inverted output
-const int PIN_OUT2 = 7; // optional output
-const int PIN_RED = 2;  // LED, hemorrhoid condition
+const PROGMEM int PIN_OUT = 5;  // output
+const PROGMEM int PIN_OUT_ = 3; // inverted output
+const PROGMEM int PIN_OUT2 = 7; // optional output
+const PROGMEM int PIN_RED = 2;  // LED, hemorrhoid condition
 
 // radio output power = 2*A0 + A1
-const int PIN_PWR2 = A0;
-const int PIN_PWR1 = A1;
+const PROGMEM int PIN_PWR2 = A0;
+const PROGMEM int PIN_PWR1 = A1;
 
 // Which RF channel to communicate on, 0-125
 // default 118 = 88 + 10 + 20
 const int CHANNEL_BASE = 88;
-const int PIN_CH10 = A2; // if not wired low, add 10 to CHANNEL_BASE
-const int PIN_CH20 = A3; // if not wired low, add 20 to CHANNEL_BASE
+const PROGMEM int PIN_CH10 = A2; // if not wired low, add 10 to CHANNEL_BASE
+const PROGMEM int PIN_CH20 = A3; // if not wired low, add 20 to CHANNEL_BASE
 
 // Device ID setting. Must match radio and radio
 const uint64_t DEVICE_ID_BASE = 0x600DFF2440LL;
-const int PIN_ID2 = A4; // if wired low, add 0x2 to ID_BASE
-const int PIN_ID1 = A5; // if wired low, add 0x1 to ID_BASE
+const PROGMEM int PIN_ID2 = A4; // if wired low, add 0x2 to ID_BASE
+const PROGMEM int PIN_ID1 = A5; // if wired low, add 0x1 to ID_BASE
 
 // analog input for PWM
 // Usually you would wire this to +5V (it's right next to the +5V pin)
-const int PIN_PWM = A7;
+const PROGMEM int PIN_PWM = A7;
 
 // These wirings of CE, CSN are used for integrated Nano3/nRF24l01 boards
-const int PIN_CE = 10;
-const int PIN_CSN = 9;
+const PROGMEM int PIN_CE = 10;
+const PROGMEM int PIN_CSN = 9;
 
 // defaults
 const int t_DOT = 100;
