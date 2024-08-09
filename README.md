@@ -109,8 +109,8 @@ Wiring chart:
 | A2  | A3  | radio channel |
 |-----|-----|---------------|
 | -   | -   | 118           |
-| -   | GND | 108           |
-| GND | -   | 98            |
+| GND | -   | 108           |
+| -   | GND | 98            |
 | GND | GND | 88            |
 
 ### Device ID setting
