@@ -178,6 +178,8 @@ The following commands allow control of Morse code data output to pin D7. This i
 - **>0** turns output follower off
 - **>1** turns output follower on
 
+This setting is persisted in the EEPROM and will persist over a device reset.
+
 ### Change timings
 
 The timings can be changed using the "star commands." For example:
