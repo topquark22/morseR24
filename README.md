@@ -163,15 +163,15 @@ You can change these in-line modifiers mid-text.
 
 ### Manual control
 
-The following commands entered on the serial monitor allow manual GPIO control, without erasing the current message:
+The following commands entered on the serial monitor allow manual control of the output pins, without erasing the current message:
 
-- **^0** turns the output off
-- **^1** turns the output on
+- **^0** turns the GPIO output D5 off, and inverted D3 on
+- **^1** turns the GPIO output D5 on, and inverted D3 off
 - **^**  sync slave with master and resume display
 
 (To resume display on the slave without retransmitting the message, you must reset the slave.)
 
-### Secondary code output control
+### Secondary output control
 
 The following commands allow control of Morse code data output to pin D7. This is initially disabled; but if enabled, it provides another copy of the Morse output. This is useful, for instance, if an audio device such as a buzzer is connected to the device in another room.
 
