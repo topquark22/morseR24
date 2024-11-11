@@ -82,6 +82,9 @@ Continuous fast blink:
 Solid red:
 -  Slave mode is enabled and the radio is disabled. This is an unsupported configuration.
 
+Short blink during message display:
+- Invalid character in the message. (**\*** will also be printed after the character in the serial monitor.)
+
 ## Secondary output
 
 Pin D7 serves two functions: As a code output, and a status output. In most cases you would connect it to a buzzer, which helps to monitor the unit if (say) it is located in another room.
