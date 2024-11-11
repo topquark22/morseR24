@@ -68,7 +68,7 @@ Optionally connect a red LED from pin D2 via a current-limiting resistor to grou
 
 Optionally connect pin D6 to ground via a normally-open pushbutton switch.
 
-## Red LED signals
+## Status signals (red LED)
 
 This signal is available on D2.
 
@@ -79,9 +79,6 @@ Single 1/10 second blink following reset:
 Continuous fast blink:
 - Radio is enabled but not connected properly.
 
-Short blink during message display:
-- Invalid character in the message. (**\*** will also be printed after the character in the serial monitor.)
-
 Solid red:
 -  Slave mode is enabled and the radio is disabled. This is an unsupported configuration.
 
@@ -91,7 +88,7 @@ Pin D7 serves two functions: As a code output, and a status output. In most case
 
 - As a code output, it is turned off normally. It is enabled and disabled using the '>' commands (see **message entry** below.) This setting is persisted to the EEPROM. This output does not use PWM.
 
-- As a status output, in case of an error that activates the primary status output on D2, pin D7 is also activated. This helps to alert on error conditions. This status output is always enabled, regardless of the code output being enabled/disabled.
+- As a status output, in case of an error that activates the primary status output on D2, pin D7 is also activated. This helps to alert on error conditions. This status output is always enabled, regardless of it baing enabled/disabled as a code output.
 
 ## Manual mode
 
