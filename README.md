@@ -62,11 +62,11 @@ If the voltage on pin A7 is read at less than +5V, then a warning will be printe
 
 ### Indicator LED
 
-Optionally connect a red LED from pin D2 via a current-limiting resistor to ground. This is used to indicate error and operating conditions (see below).
+Connect a red LED from pin D2 via a current-limiting resistor to ground. This is used to indicate error and operating conditions (see below).
 
 ### Code key switch
 
-Optionally connect pin D6 to ground via a normally-open pushbutton switch.
+Connect pin D6 to ground via a normally-open pushbutton switch.
 
 ## Status signals (red LED)
 
