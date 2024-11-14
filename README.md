@@ -2,7 +2,9 @@
 
 An Arduino sketch that converts text to Morse code and other formats, outputs to GPIO, and can transmit message to slave devices using an nRF24L01 radio.
 
-It supports up to 4 radio channels and 4 selectable device IDs.
+It can store 4 messages of up to 240 characters each (selectable by jumpers.)
+
+It supports 4 radio channels.
 
 ## Hardware requirements
 
