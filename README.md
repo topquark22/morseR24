@@ -10,7 +10,7 @@ This project was developed using the Arduino Nano V3, and a compatible board wit
 
 ## Software requirements
 
-You must install the RF24 library from TMRh20,Avamander version 1.4.7 or greater.
+Install the RF24 library from TMRh20,Avamander version 1.4.7 or greater.
 
 ## Initialization
 
