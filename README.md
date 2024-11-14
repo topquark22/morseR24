@@ -175,7 +175,7 @@ The following commands entered on the serial monitor allow manual control of the
 
 ### Secondary output control
 
-The following commands allow control of Morse code data output to pin D7. This is initially disabled; but if enabled, it provides another copy of the Morse output. This is useful, for instance, if an audio device such as a buzzer is connected to the device in another room.
+The following commands allow control of data output to pin D7. This is initially disabled; but if enabled, it provides another copy of the Morse output. This is useful, for instance, using a buzzer in another room for troubleshooting.
 
 - **>0** turns output follower off
 - **>1** turns output follower on
