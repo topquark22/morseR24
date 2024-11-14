@@ -4,8 +4,6 @@ An Arduino sketch that converts text to Morse code and other formats, outputs to
 
 It can store up to 4 different messages of up to 240 characters each (selectable by jumpers.)
 
-It supports 4 radio channels.
-
 ## Hardware requirements
 
 This project was developed using the Arduino Nano V3, and a compatible board with integrated nRF24L01 radio. Some other Arduinos may work, but they must have analog input pin A7. So, for instance, the Uno won't work.
