@@ -37,13 +37,13 @@ void showInstructions() {
   Serial.println(F("      changes the inter-message pause to <pause> ms"));
   Serial.println();
   Serial.println(F("Manual control:"));
-  Serial.println(F(" ^0   Turns output GPIO off"));
-  Serial.println(F(" ^1   Turns output GPIO on"));
+  Serial.println(F(" ^0   Sets output GPIO low"));
+  Serial.println(F(" ^1   Sets output GPIO high"));
   Serial.println(F(" ^    Resumes message output. Syncs message with master"));
   Serial.println();
   Serial.println(F("Secondary output control:"));
-  Serial.println(F(" >0   Turns output 2 off"));
-  Serial.println(F(" >1   turns output 2 on"));
+  Serial.println(F(" >0   Disables output 2"));
+  Serial.println(F(" >1   Enables output 2"));
 }
 
 /*
