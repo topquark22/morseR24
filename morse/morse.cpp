@@ -190,14 +190,19 @@ void errExit() {
 }
 
 int getPWM() {
-  double pwmRaw = analogRead(PIN_PWM); // 0 to 2^10 - 1
+  int pwmRaw = analogRead(PIN_PWM); // 0 to 1023
   return pwmRaw / 4;
 }
 
 void setOutput(bool value) {
   int pwmWidth = getPWM();
   analogWrite(PIN_OUT, value * pwmWidth);
-  analogWrite(PIN_OUT_, 255 - (value * pwmWidth));
+  // workaround timer 2 (OC2B) glitch to drive D3 low
+  if (1 == value) {
+    digitalWrite(PIN_OUT_, 0);
+  } else {
+    analogWrite(PIN_OUT_, 255 - (value * pwmWidth));
+  }
   if (followerEnabled) {
     digitalWrite(PIN_OUT2, value);
   }
