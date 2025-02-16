@@ -197,12 +197,7 @@ int getPWM() {
 void setOutput(bool value) {
   int pwmWidth = getPWM();
   analogWrite(PIN_OUT, value * pwmWidth);
-  // workaround timer 2 (OC2B) glitch to drive D3 low
-  if (1 == value) {
-    digitalWrite(PIN_OUT_, 0);
-  } else {
-    analogWrite(PIN_OUT_, 255 - (value * pwmWidth));
-  }
+  digitalWrite(PIN_OUT_, 1 - value);
   if (followerEnabled) {
     digitalWrite(PIN_OUT2, value);
   }

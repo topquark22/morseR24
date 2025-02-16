@@ -33,7 +33,7 @@ Here are the descriptions of each pin. All INPUT_PULLUP pins are active-low acco
 | D2  | OUTPUT       | error/status signal    |
 | D3  | OUTPUT       | inverted Morse signal  |
 | D4  | INPUT_PULLUP | disable radio          |
-| D5  | OUTPUT       | Morse signal           |
+| D5  | OUTPUT       | Morse signal (PWM)     |
 | D6  | INPUT_PULLUP | code key switch        |
 | D7  | OUTPUT       | secondary output       |
 | D8  | INPUT_PULLUP | slave (receiver) mode  |
