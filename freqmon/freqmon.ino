@@ -12,13 +12,16 @@ void setup() {
 }
 
 void loop() {
-    for (int channel = 0; channel <= 125; channel++) {
-        radio.setChannel(channel);
-        delayMicroseconds(128); // Give time to settle
-        uint8_t noise = radio.testCarrier(); // Checks if there's a signal
-        Serial.print("Channel "); Serial.print(channel);
-        Serial.print(": ");
-        Serial.println(noise ? "Interference detected" : "Clear");
+  for (int channel = 0; channel <= 125; channel++) {
+    radio.setChannel(channel);
+    delayMicroseconds(128); // Give time to settle
+    uint8_t noise = radio.testCarrier(); // Checks if there's a signal
+    if (noise) {
+      Serial.print("Channel ");
+      Serial.print(channel);
+      Serial.print(": ");
+      Serial.println("Interference detected");
     }
-    delay(2000); // Scan every 2 seconds
+  }
+  delay(2000); // Scan every 2 seconds
 }
