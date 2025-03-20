@@ -56,7 +56,7 @@ Here are the descriptions of each pin. All INPUT_PULLUP pins are active-low acco
 
 ### PWM wiring (pin A7)
 
-The output pins support PWM. This is controlled by the voltage on pin A7, which is usually wired to +5V. If you leave A7 unconnected, you will get erratic results. On the Nano V3, it is easy to wire A7 to +5V because the two pins are right next to each other. In most cases that's what you will do unless you really want to use PWM.
+The output pin D5 supports PWM. This is controlled by the voltage on pin A7, which is usually wired to +5V. If you leave A7 unconnected, you will get erratic results. On the Nano V3, it is easy to wire A7 to +5V because the two pins are right next to each other. In most cases that's what you will do unless you really want to use PWM.
 
 If the voltage on pin A7 is read at less than +5V, then a warning will be printed to the master serial console. Unlike other settings, this can be changed in real time without a device reset.
 
