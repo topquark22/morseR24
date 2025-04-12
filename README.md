@@ -72,8 +72,10 @@ Connect pin D6 to ground via a normally-open pushbutton switch.
 
 This signal is available on D2.
 
-Single 1/10 second blink following reset:
-- If seen, radio is enabled and connected properly.
+Single or double 1/10 second blink following reset:
+- If seen, radio is enabled and connected properly:
+  1. single blink: Device is in master mode.
+  2. double blink: Device is in slave mode.
 - If not seen, radio is disabled.
 
 Continuous fast blink:

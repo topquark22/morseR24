@@ -97,6 +97,10 @@ void setupRadio() {
 
   // visual indication that radio has started
   blinkRedLED(100);
+  if (!transmitMode) {
+    delay(100);
+    blinkRedLED(100);
+  }
 
   // Data rate: Can set to RF24_1MBPS, RF24_2MBPS, RF24_250KBPS (nRF24L01+ only)
   radio.setDataRate(RF24_1MBPS);
