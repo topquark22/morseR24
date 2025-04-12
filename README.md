@@ -93,7 +93,7 @@ Pin D7 serves two functions: As a code output, and a status output. In most case
 
 - As a code output, it is turned off normally. It is enabled and disabled using the '>' commands (see **message entry** below.) This setting is persisted to the EEPROM. This output does not use PWM.
 
-- As a status output, in case of an error that activates the primary status output on D2, pin D7 is also activated. This helps to alert on error conditions. This status output is always enabled, regardless of it baing enabled/disabled as a code output.
+- As a status output, in case of an error that activates the primary status output on D2, pin D7 is also activated. This helps to alert on error conditions.
 
 ## Manual mode
 
