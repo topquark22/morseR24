@@ -172,4 +172,6 @@ void setFollow(bool follow);
  */
 int decodeCommBuffer();
 
+void testRoutine();
+
 #endif

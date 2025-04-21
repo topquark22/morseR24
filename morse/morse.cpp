@@ -589,3 +589,22 @@ void setFollow(bool follow) {
   followerEnabled = follow;
   writeFollowToEEPROM();
 }
+
+
+
+void testRoutine() {
+  Serial.println(F("Manual mode"));
+  followerEnabled = true; // monitor for convenience
+  int prevValue = -1;
+  while (1) {
+    int value = buttonPressed();
+    if (value != prevValue) {
+      prevValue = value;
+      setOutput(value);
+      if (transmitMode) {
+        transmitInteger(TOKEN_MANUAL, value);
+      }
+    }
+    delay(10);
+  }
+}

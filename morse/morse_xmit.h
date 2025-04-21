@@ -52,6 +52,4 @@ void processStarCommand();
 
 void loop_XMIT();
 
-void testRoutine();
-
 #endif
