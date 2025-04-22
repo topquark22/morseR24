@@ -249,6 +249,7 @@ static bool isValidChess(char c) {
 void indicateInvalidChar() {
   Serial.print(F("*"));
   blinkRedLED(t_dot);
+  delay(2 * t_dot);
 }
 
 void displayMorse(char c) {
@@ -460,7 +461,6 @@ void displayUnary(char c) {
 void displayChess(char c) {
   if (!isValidChess(c)) {
     indicateInvalidChar();
-    delay(t_dot);
   } else {
     if (' ' == c) {
       delay(2 * t_space);
@@ -589,8 +589,6 @@ void setFollow(bool follow) {
   followerEnabled = follow;
   writeFollowToEEPROM();
 }
-
-
 
 void testRoutine() {
   Serial.println(F("Manual mode"));
