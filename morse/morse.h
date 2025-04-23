@@ -41,9 +41,12 @@ const uint64_t DEVICE_ID_BASE = 0x600DFF2440LL;
 const PROGMEM int PIN_ID2 = A4; // if wired low, add 0x2 to ID_BASE
 const PROGMEM int PIN_ID1 = A5; // if wired low, add 0x1 to ID_BASE
 
+#ifdef ARDUINO_AVR_NANO
+  #define USE_PWM
 // analog input for PWM
 // Usually you would wire this to +5V (it's right next to the +5V pin)
 const PROGMEM int PIN_PWM = A7;
+#endif
 
 // These wirings of CE, CSN are used for integrated Nano3/nRF24l01 boards
 const PROGMEM int PIN_CE = 10;
@@ -140,7 +143,9 @@ void writeFollowToEEPROM();
 
 void readFollowFromEEPROM();
 
+#ifdef USE_PWM
 int getPWM();
+#endif
 
 void setOutput(bool value);
 

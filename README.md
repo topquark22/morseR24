@@ -6,7 +6,9 @@ It can store up to 4 different messages of up to 240 characters each (selectable
 
 ## Hardware requirements
 
-This project was developed using the Arduino Nano V3, and a compatible board with integrated nRF24L01 radio. Some other Arduinos may work, but they must have analog input pin A7. So, for instance, the Uno won't work.
+This project was developed using the Arduino Nano V3, and a compatible board with integrated nRF24L01 radio.
+
+Arduino Uno will work, but lacks support for PWM output.
 
 ## Software requirements
 
@@ -50,13 +52,15 @@ Here are the descriptions of each pin. All INPUT_PULLUP pins are active-low acco
 | A4  | INPUT_PULLUP | device ID, bit 1       |
 | A5  | INPUT_PULLUP | device ID, bit 0       |
 | A6  | unused       |                        |
-| A7  | INPUT        | sets output PWM        |
+| A7  | INPUT        | sets output PWM (Nano only)|
 
 \* see **channel setting** below
 
 ### PWM wiring (pin A7)
 
-The output pin D5 supports PWM. This is controlled by the voltage on pin A7, which is usually wired to +5V. If you leave A7 unconnected, you will get erratic results. On the Nano V3, it is easy to wire A7 to +5V because the two pins are right next to each other. In most cases that's what you will do unless you really want to use PWM.
+On the Uno, we do not use PWM, because the Uno does not have analog input pin A7 to control it. Ensure that the board is set correctly at compile time.
+
+On the Nano, the output pin D5 supports PWM. This is controlled by the voltage on pin A7, which is usually wired to +5V. If you leave A7 unconnected, you will get erratic results. On the Nano V3, it is easy to wire A7 to +5V because the two pins are right next to each other. In most cases that's what you will do unless you really want to use PWM.
 
 If the voltage on pin A7 is read at less than +5V, then a warning will be printed to the master serial console. Unlike other settings, this can be changed in real time without a device reset.
 

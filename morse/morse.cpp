@@ -193,14 +193,20 @@ void errExit() {
   exit(1);
 }
 
+#ifdef USE_PWM
 int getPWM() {
   int pwmRaw = analogRead(PIN_PWM); // 0 to 1023
   return pwmRaw / 4;
 }
+#endif
 
 void setOutput(bool value) {
+#ifdef USE_PWM
   int pwmWidth = getPWM();
   analogWrite(PIN_OUT, value * pwmWidth);
+#else
+  digitalWrite(PIN_OUT, value);
+#endif
   digitalWrite(PIN_OUT_, 1 - value);
   if (followerEnabled) {
     digitalWrite(PIN_OUT2, value);
