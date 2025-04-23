@@ -67,13 +67,13 @@ On the Nano, we can provide PWM output on D5. This is controlled by the voltage 
   and a warning is printed to the master serial console.
 - If using PWM: Wire A7 to a voltage divider. Unlike other settings, PWM can be adjusted in real time without a device reset.
 
-### Indicator LED
-
-Connect a red LED from pin D2 via a current-limiting resistor to ground. This is used to indicate error and operating conditions (see below).
-
 ### Code key switch
 
 Connect pin D6 to ground via a normally-open pushbutton switch.
+
+### Indicator LED
+
+Connect a red LED from pin D2 via a current-limiting resistor to ground. This is used to indicate error and operating conditions (see below).
 
 ## Status signals (red LED)
 
