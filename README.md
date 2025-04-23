@@ -52,17 +52,20 @@ Here are the descriptions of each pin. All INPUT_PULLUP pins are active-low acco
 | A4  | INPUT_PULLUP | device ID, bit 1       |
 | A5  | INPUT_PULLUP | device ID, bit 0       |
 | A6  | unused       |                        |
-| A7  | INPUT        | sets output PWM (Nano only)|
+| A7  | INPUT        | sets PWM (Nano only)   |
 
 \* see **channel setting** below
 
 ### PWM wiring (pin A7)
 
-On the Uno, we do not use PWM, because the Uno does not have analog input pin A7 to control it. Ensure that the board is set correctly at compile time.
+We cannot use PWM on the Uno, because the board does not have analog input pin A7 to control it.
+Ensure that the board is set correctly at compile time.
 
-On the Nano, the output pin D5 supports PWM. This is controlled by the voltage on pin A7, which is usually wired to +5V. If you leave A7 unconnected, you will get erratic results. On the Nano V3, it is easy to wire A7 to +5V because the two pins are right next to each other. In most cases that's what you will do unless you really want to use PWM.
+On the Nano, we can provide PWM output on D5. This is controlled by the voltage on pin A7:
 
-If the voltage on pin A7 is read at less than +5V, then a warning will be printed to the master serial console. Unlike other settings, this can be changed in real time without a device reset.
+- If not using PWM: Wire A7 to +5V (neighbouring pin). If A7 is left floating, you will get erratic results,
+  and a warning is printed to the master serial console.
+- If using PWM: Wire A7 to a voltage divider. Unlike other settings, PWM can be adjusted in real time without a device reset.
 
 ### Indicator LED
 
