@@ -154,6 +154,8 @@ void processManualCommand() {
   if (0 == line[1]) {
     // "^" was entered
     Serial.println(F("-- Resuming message output"));
+    setOutput(LOW); // in case of previous ^1 command
+    delay(t_space); // in case of previous ^1 command
     transmitMessage();
     return;
   }
