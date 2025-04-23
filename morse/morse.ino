@@ -52,8 +52,6 @@ void setup() {
   if (pwm < 255) {
     Serial.print(F("Warning: PWM = ")); Serial.println(pwm);
   }
-#else
-  Serial.println(F("Compiled without PWM support"));
 #endif
 
   // channel jumpers
