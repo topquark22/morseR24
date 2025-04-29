@@ -48,7 +48,7 @@ const PROGMEM int PIN_ID1 = A5; // if wired low, add 0x1 to ID_BASE
 #endif
 
 #ifdef USE_PWM
-// analog input for PWM duty cicle. In most cases you would wire this HIGH
+// analog input for PWM duty cycle. In most cases you would wire this HIGH
 // (it's right next to the +5V pin), or else connect to a POT/voltage divider.
 const PROGMEM int PIN_PWM = A7;
 #endif
