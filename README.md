@@ -58,14 +58,14 @@ Here are the descriptions of each pin. All INPUT_PULLUP pins are active-low acco
 
 ### PWM wiring (pin A7)
 
-We cannot use PWM on the Uno, or any board that lacks the analog input pin A7 to control it.
-Ensure that the board is set correctly at compile time.
-
-On the Nano, we support PWM output on D5. This is controlled by the voltage on pin A7:
+**On the Nano,** we support PWM output on D5. This is controlled by the voltage on pin A7:
 
 - If not using PWM, wire A7 to +5V (neighbouring pin). If A7 is left floating, you will get erratic results,
   and a warning is printed to the serial console.
 - If using PWM, connect A7 to a voltage divider. Unlike other settings, PWM can be adjusted in real time without a device reset.
+
+**We cannot use PWM on the Uno,** or any board that lacks the analog input pin A7 to control it.
+Ensure that the board is set correctly at compile time.
 
 ### Code key switch
 
