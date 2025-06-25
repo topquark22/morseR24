@@ -610,5 +610,9 @@ void testRoutine() {
       }
     }
     delay(10);
+    if (Serial.available()) {
+      Serial.println(F("Exiting manual mode"));
+      return;
+    }
   }
 }

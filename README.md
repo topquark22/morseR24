@@ -16,7 +16,7 @@ Install the RF24 library from TMRh20,Avamander version 1.4.7 or greater.
 
 ## Initialization
 
-Upload **morse.ino**. The sketch will work initially with Arduino factory settings (EEPROM set to all 0xFF). If it is a used Arduino, the safest thing to is, upload **eeprom_reset.ino** first to reset the EEPROM. Then reupload **morse.ino**.
+Upload **moree/morse.ino**. The sketch will work initially with Arduino factory settings (EEPROM set to all 0xFF). If it is a used Arduino, the safest thing to is, upload **eeprom_reset/eeprom_reset.ino** first to reset the EEPROM. Then reupload **morse.ino**.
 
 ## CE and CSN pins
 
@@ -105,7 +105,7 @@ Pin D7 serves two functions: As a code output, and a status output. In most case
 
 Pressing and holding the pushbutton enters manual mode. The button will subsequently act as a code key for manual input.
 
-In order to exit manual mode, you must reset the transmitter. Then use the '^' command to restart the display on the receiver.
+In order to exit manual mode, you can reset the transmitter. Or else enter a new message, or use the '^' command to restart the existing message display on the receiver.
 
 ## Radio configuration
 
