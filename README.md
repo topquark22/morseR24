@@ -123,6 +123,8 @@ Wiring chart:
 | -   | GND | 98            |
 | GND | GND | 88            |
 
+A utility **freqmon/freqmon.ino** is included to identify channels with potential interference.
+
 ### Device ID setting
 
 Configured by jumpers on pins A4, A5. This selects both:
