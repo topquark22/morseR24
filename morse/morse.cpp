@@ -95,7 +95,8 @@ void setupRadio() {
     }
   }
 
-  // visual indication that radio has started
+  // visual indication that radio has started:
+  // single blink for transmitter (master), double blink for receiver (slave)
   blinkRedLED(100);
   if (!transmitMode) {
     delay(100);
