@@ -41,16 +41,18 @@ const uint64_t DEVICE_ID_BASE = 0x600DFF2440LL;
 const PROGMEM int PIN_ID2 = A4; // if wired low, add 0x2 to ID_BASE
 const PROGMEM int PIN_ID1 = A5; // if wired low, add 0x1 to ID_BASE
 
-// PWM support always enabled for Nano. If you have any other board that
-// supports analog INPUT on A7, then define USE_PWM as a compiler option.
-#ifdef ARDUINO_AVR_NANO
+// Detect boards having support for analog input on A6, A7
+#if NUM_ANALOG_INPUTS >= 8 && !defined(NO_PWM)
   #define USE_PWM
 #endif
 
 #ifdef USE_PWM
+  #warning Compiled with PWM support. You can use -D NO_PWM to disable it.
 // analog input for PWM duty cycle. In most cases you would wire this HIGH
 // (it's right next to the +5V pin), or else connect to a POT/voltage divider.
 const PROGMEM int PIN_PWM = A7;
+#else
+  #warning Compiled without PWM support. You can use -D USE_PWM to force it.
 #endif
 
 // These wirings of CE, CSN are used for integrated Nano3/nRF24l01 boards

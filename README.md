@@ -56,15 +56,17 @@ Here are the descriptions of each pin. All INPUT_PULLUP pins are active-low acco
 
 \* see **channel setting** below
 
-### PWM wiring (pin A7)
+### PWM support and pin A7
 
-**On the Nano,** we support PWM output on D5. This is controlled by the voltage on analog INPUT pin A7:
-
-- If not using PWM, you must physically wire A7 to +5V (neighbouring pin). If A7 is left floating, you will get erratic results, and a warning is printed to the serial console.
-- If using PWM, connect A7 to a voltage divider. Unlike other settings, PWM can be adjusted in real time without a device reset.
-
-**We cannot use PWM on the Uno,** or any board that lacks the analog input pin A7 to control it.
 Ensure that the board is set correctly at compile time.
+
+On boards that support analog INPUT pin A7 (such as the Nano,) we support PWM output on D5. The pulse width is controlled by the voltage on A7. On boards (such as the Uno) that do not have this, it is disabled by default.
+
+Support for A7 is detected at compile time depending on the characteristics of your board. On boards that do have it, PWM is enabled by default. If you do not want to use this feature, then either:
+* Physically wire A7 to +5V (neighbouring pin). If A7 is left floating, you will get erratic results, and a warning is printed to the serial console at run time.
+* Define NO_PWM at compile time.
+
+If using PWM, connect A7 to a voltage divider. Unlike other settings, the pulse width can be adjusted in real time without a device reset.
 
 ### Code key switch
 
