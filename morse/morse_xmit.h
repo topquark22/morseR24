@@ -29,15 +29,13 @@ void clearCommBuffer();
 
 void previewMessage();
 
-void transmitInteger(int tokenType, int value);
+void transmitInteger(int tokenType, uint32_t value);
 
 void transmitMessage();
 
 void printLine();
 
-int decodeInteger();
-
-void transmitInteger(int tokenType, int value);
+uint32_t decodeInteger();
 
 /*
  * Read a line from serial console

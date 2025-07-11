@@ -74,7 +74,7 @@ void previewMessage() {
   Serial.println(F("<\n"));
 }
 
-void transmitInteger(int tokenType, int value) {
+void transmitInteger(int tokenType, uint32_t value) {
   if (!radioEnabled) {
     return;
   }
@@ -115,8 +115,12 @@ void printLine() {
   Serial.println();
 }
 
-int decodeInteger() {
-  return (commBuffer[1] << 24) + (commBuffer[2] << 16) + (commBuffer[3] << 8) + commBuffer[4];
+uint32_t decodeInteger() {
+  uint32_t value = commBuffer[1];
+  value = (value << 8) | commBuffer[2];
+  value = (value << 8) | commBuffer[3];
+  value = (value << 8) | commBuffer[4];
+  return value;
 }
 
 /*

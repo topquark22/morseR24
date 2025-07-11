@@ -145,7 +145,7 @@ void readMessageFromEEPROM() {
   message[message_len] = 0;
 }
 
-void writeIntToEEPROM(int addr, int value) {
+void writeIntToEEPROM(int addr, uint32_t value) {
   EEPROM.update(addr, value & 0xFF);
   value >>= 8;
   EEPROM.update(addr + 1, value & 0xFF);
@@ -155,8 +155,8 @@ void writeIntToEEPROM(int addr, int value) {
   EEPROM.update(addr + 3, value & 0xFF);
 }
 
-int readIntFromEEPROM(int addr) {
-  int value = EEPROM.read(addr + 3);
+uint32_t readIntFromEEPROM(int addr) {
+  uint32_t value = EEPROM.read(addr + 3);
   value = (value << 8) | EEPROM.read(addr + 2);
   value = (value << 8) | EEPROM.read(addr + 1);
   value = (value << 8) | EEPROM.read(addr);

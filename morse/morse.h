@@ -10,7 +10,7 @@
 #include <RF24_config.h>
 #include <nRF24L01.h>
 #include <RF24.h>
-#import <EEPROM.h>
+#include <EEPROM.h>
 
 #include "morse_xmit.h"
 #include "morse_recv.h"
@@ -47,7 +47,7 @@ const PROGMEM int PIN_ID1 = A5; // if wired low, add 0x1 to ID_BASE
 #endif
 
 #ifdef __USE_PWM
-  #warning Compiled with PWM support. You can use -D NO_PWM to disable it.
+  #warning Compiled with PWM support. You can use -D MORSER24_NO_PWM to disable it.
 // analog input for PWM duty cycle. In most cases you would wire this HIGH
 // (it's right next to the +5V pin), or else connect to a POT/voltage divider.
 const PROGMEM int PIN_PWM = A7;
@@ -74,7 +74,7 @@ const int TOKEN_PAUSE = 3;
 const int TOKEN_MESSAGE = 4;
 const int TOKEN_FOLLOWER = 5;
 
-const int SPI_SPEED = 10000000;
+const uint32_t SPI_SPEED = 8000000;
 
 // full message buffer
 const int MESSAGE_SIZE = 240;
@@ -124,17 +124,15 @@ void prepareDevice();
 
 void setupRadio();
 
-int decodeInteger();
-
 void printMessage();
 
 void writeMessageToEEPROM();
 
 void readMessageFromEEPROM();
 
-void writeIntToEEPROM(int addr, int value);
+void writeIntToEEPROM(int addr, uint32_t value);
 
-int readIntFromEEPROM(int addr);
+uint32_t readIntFromEEPROM(int addr);
 
 void writeSpeedToEEPROM();
 
@@ -148,7 +146,7 @@ void writeFollowToEEPROM();
 
 void readFollowFromEEPROM();
 
-#ifdef USE_PWM
+#ifdef __USE_PWM
 int getPWM();
 #endif
 
