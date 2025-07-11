@@ -65,7 +65,7 @@ On boards that support analog INPUT pin A7 (such as the Nano), we support PWM ou
 Support for A7 is detected at compile time depending on the characteristics of your board. On boards that do have it, PWM is enabled by default. If you do not want to use this feature, then either:
 
 - (Recommended:) Physically wire A7 to +5V (neighbouring pin). If A7 is left floating, you will get erratic results, and a warning is printed to the serial console at run time.
-- Define NO_PWM at compile time.
+- Define MORSER24_NO_PWM at compile time, by by editing `platform.local.txt` (in the same directory as `platform.txt`, typically `~/.arduino15/packages/arduino/hardware/avr/1.8.6/` for AVR boards) and adding `compiler.cpp.extra_flags=-DMORSER24_NO_PWM`
 
 If using PWM, connect A7 to a voltage divider. Unlike other settings, the pulse width can be adjusted in real time without a device reset.
 
