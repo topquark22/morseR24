@@ -47,7 +47,7 @@ const PROGMEM int PIN_ID1 = A5; // if wired low, add 0x1 to ID_BASE
 #endif
 
 #ifdef __USE_PWM
-  #warning Compiled with PWM support. You can use -D NO_PWM to disable it.
+  #warning Compiled with PWM support. You can use -DMORSER24_NO_PWM to disable it.
 // analog input for PWM duty cycle. In most cases you would wire this HIGH
 // (it's right next to the +5V pin), or else connect to a POT/voltage divider.
 const PROGMEM int PIN_PWM = A7;
@@ -148,7 +148,7 @@ void writeFollowToEEPROM();
 
 void readFollowFromEEPROM();
 
-#ifdef USE_PWM
+#ifdef __USE_PWM
 int getPWM();
 #endif
 
