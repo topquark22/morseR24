@@ -23,7 +23,7 @@ void showInstructions();
 /*
  * Parse a star command, either *s<num> or *p<num>
  */
-int parseIntFromLine();
+uint32_t parseIntFromLine();
 
 void clearCommBuffer();
 

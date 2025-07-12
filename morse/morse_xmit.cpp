@@ -49,8 +49,8 @@ void showInstructions() {
 /*
  * Parse a star command, either *s<num> or *p<num>
  */
-int parseIntFromLine() {
-  int res = 0;
+uint32_t parseIntFromLine() {
+  uint32_t res = 0;
   for (int i = 2; i < line_len; i++) {
     char c = line[i];
     if (c >= '0' && c <= '9') {

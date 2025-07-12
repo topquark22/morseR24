@@ -418,7 +418,6 @@ void displayHex(char c) {
       delay(t_space);
       return;
     }
-    char C = toUpperCase(c);
     int n = ascToHex(c);
     if (n < 0) {
       Serial.print(F("Invalid nybble ")); Serial.print(c);
