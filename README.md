@@ -60,7 +60,7 @@ Here are the descriptions of each pin. All INPUT_PULLUP pins are active-low acco
 
 Ensure that the board is set correctly at compile time.
 
-On boards that support analog INPUT pin A7 (such as the Nano), we support PWM output on D5. The pulse width is controlled by the voltage on A7. On boards (such as the Uno) that do not have this, it is disabled by default.
+On boards that support analog INPUT pin A7 (such as the Nano), we support PWM output on D5. The pulse width is controlled by the voltage on A7, and it is enabled by default. On boards (such as the Uno) that do not have this A7 input, it is disabled by default.
 
 Support for A7 is detected at compile time depending on the characteristics of your board. On boards that do have it, PWM is enabled by default. If you do not want to use this feature, then either:
 
