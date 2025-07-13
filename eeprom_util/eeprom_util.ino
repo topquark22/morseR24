@@ -4,7 +4,7 @@ void setup() {
   Serial.begin(9600);
   for (int i = 0; i < 0x400; i++) {
     byte c = EEPROM.read(i);
-    Serial.print(i);
+    Serial.print(i, HEX);
     Serial.print("\t");
     Serial.print("0x");
     Serial.print(c < 0x10 ? "0" : "");
