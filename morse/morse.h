@@ -32,7 +32,7 @@ const PROGMEM int PIN_PWR1 = A1;
 
 // Which RF channel to communicate on, 0-125
 // default 118 = 88 + 10 + 20
-const int CHANNEL_BASE = 88;100
+const int CHANNEL_BASE = 88;
 const PROGMEM int PIN_CH10 = A2; // if not wired low, add 10 to CHANNEL_BASE
 const PROGMEM int PIN_CH20 = A3; // if not wired low, add 20 to CHANNEL_BASE
 

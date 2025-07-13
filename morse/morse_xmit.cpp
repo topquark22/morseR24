@@ -4,10 +4,10 @@
 #include <string.h> //needed for memcpy
 #include "morse.h"
 
-extern int t_dot;
-extern int t_dash;
-extern int t_space;
-extern int t_pause;
+extern uint32_t t_dot;
+extern uint32_t t_dash;
+extern uint32_t t_space;
+extern uint32_t t_pause;
 
 extern bool radioEnabled;
 
