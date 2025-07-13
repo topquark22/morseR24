@@ -8,10 +8,10 @@
 
 #include "morse.h"
 
-int t_dot;
-int t_dash;
-int t_space;
-int t_pause;
+uint32_t t_dot;
+uint32_t t_dash;
+uint32_t t_space;
+uint32_t t_pause;
 
 extern bool radioEnabled;
 
@@ -75,7 +75,7 @@ void setupRadio() {
   Serial.println((int)deviceID & 0x0f);
 
  // power 0=RF24_PA_MIN, 1=RF24_PA_LOW, 2=RF24_PA_HIGH, 3=RF24_PA_MAX
-  rf24_pa_dbm_e power = 2 * digitalRead(PIN_PWR2) + digitalRead(PIN_PWR1);
+  rf24_pa_dbm_e power = (rf24_pa_dbm_e) (2 * digitalRead(PIN_PWR2) + digitalRead(PIN_PWR1));
   Serial.print(F("Power set to ")); Serial.println(power);
 
   int channel = CHANNEL_BASE + 10 * digitalRead(PIN_CH10) + 20 * digitalRead(PIN_CH20);
@@ -567,7 +567,7 @@ void displayMessage() {
 /*
    Sets the duration of 1 dot in ms
 */
-void setSpeed(int t_dot_ms) {
+void setSpeed(uint32_t t_dot_ms) {
   if (t_dot_ms <= 0) {
     Serial.println(F("Invalid speed"));
     return;
@@ -580,7 +580,7 @@ void setSpeed(int t_dot_ms) {
   Serial.println(t_dot);
 }
 
-void setPause(int t_pause_ms) {
+void setPause(uint32_t t_pause_ms) {
   if (t_pause_ms <= 0) {
     Serial.println(F("invalid pause"));
     return;

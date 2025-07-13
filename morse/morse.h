@@ -32,7 +32,7 @@ const PROGMEM int PIN_PWR1 = A1;
 
 // Which RF channel to communicate on, 0-125
 // default 118 = 88 + 10 + 20
-const int CHANNEL_BASE = 88;
+const int CHANNEL_BASE = 88;100
 const PROGMEM int PIN_CH10 = A2; // if not wired low, add 10 to CHANNEL_BASE
 const PROGMEM int PIN_CH20 = A3; // if not wired low, add 20 to CHANNEL_BASE
 
@@ -58,14 +58,14 @@ const PROGMEM int PIN_CE = 10;
 const PROGMEM int PIN_CSN = 9;
 
 // defaults
-const int t_DOT = 100;
-const int t_PAUSE = 3000;
+const uint32_t t_DOT = 100;
+const uint32_t t_PAUSE = 3000;
 
 // Serial transmission rate
 const int BAUD_RATE = 9600;
 
 // special value indicating that an int in EEPROM has not been set
-const int NOT_SET = -1;
+const uint8_t NOT_SET = 0xFF;
 
 // packet type tokens (first byte of commBuffer)
 const int TOKEN_MANUAL = 1;
@@ -168,9 +168,9 @@ void setErrorIndicator(bool status);
 /*
    Sets the duration of 1 dot in ms
 */
-void setSpeed(int t_dot_ms);
+void setSpeed(uint32_t t_dot_ms);
 
-void setPause(int t_pause_ms);
+void setPause(uint32_t t_pause_ms);
 
 void setFollow(bool follow);
 

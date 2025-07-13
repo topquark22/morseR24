@@ -191,7 +191,7 @@ void processFollowerCommand() {
 
 void processStarCommand() {
   if ('s' == line[1]) { // speed change
-    int speed = parseIntFromLine();
+    uint32_t speed = parseIntFromLine();
     if (speed > 0) {
       setSpeed(speed);
       transmitInteger(TOKEN_SPEED, t_dot);
@@ -199,7 +199,7 @@ void processStarCommand() {
       Serial.println(F("-- Invalid speed"));
     }
   } else if ('p' == line[1]) { // pause change
-    int pause = parseIntFromLine();
+    uint32_t pause = parseIntFromLine();
     if (pause > 0) {
       setPause(pause);
       transmitInteger(TOKEN_PAUSE, t_pause);
