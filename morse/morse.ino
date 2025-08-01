@@ -45,7 +45,7 @@ void setup() {
   pinMode(PIN_XRMODE, INPUT_PULLUP);
   transmitMode = digitalRead(PIN_XRMODE);
   
-#ifdef USE_PWM
+#ifdef __USE_PWM
   pinMode(PIN_PWM, INPUT);
 
   int pwm = getPWM();
