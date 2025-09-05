@@ -45,7 +45,7 @@ void setup() {
   pinMode(PIN_XRMODE, INPUT_PULLUP);
   transmitMode = digitalRead(PIN_XRMODE);
   
-#ifdef __USE_PWM
+#ifdef _MORSER24_USE_PWM
   pinMode(PIN_PWM, INPUT);
 
   int pwm = getPWM();

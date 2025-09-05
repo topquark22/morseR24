@@ -194,7 +194,7 @@ void errExit() {
   exit(1);
 }
 
-#ifdef __USE_PWM
+#ifdef _MORSER24_USE_PWM
 int getPWM() {
   int pwmRaw = analogRead(PIN_PWM); // 0 to 1023
   return pwmRaw / 4;
@@ -202,7 +202,7 @@ int getPWM() {
 #endif
 
 void setOutput(bool value) {
-#ifdef __USE_PWM
+#ifdef _MORSER24_USE_PWM
   int pwmWidth = getPWM();
   analogWrite(PIN_OUT, value * pwmWidth);
 #else
