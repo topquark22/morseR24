@@ -30,14 +30,23 @@ const PROGMEM int PIN_RED = 2;  // LED, hemorrhoid condition
 const PROGMEM int PIN_PWR2 = A0;
 const PROGMEM int PIN_PWR1 = A1;
 
+// radio channel (allow to override at compile time)
 // Which RF channel to communicate on, 0-125
 // default 118 = 88 + 10 + 20
-const int CHANNEL_BASE = 88;
+// Normally you would not need to change this.
+#ifndef MORSER24_RADIO_CHANNEL_BASE
+  #define MORSER24_RADIO_CHANNEL_BASE 88
+#endif
+const int CHANNEL_BASE = MORSER24_RADIO_CHANNEL_BASE;
 const PROGMEM int PIN_CH10 = A2; // if not wired low, add 10 to CHANNEL_BASE
 const PROGMEM int PIN_CH20 = A3; // if not wired low, add 20 to CHANNEL_BASE
 
 // Device ID setting. Must match radio and radio
-const uint64_t DEVICE_ID_BASE = 0x600DFF2440LL;
+// radio device ID (allow to override at compile time)
+#ifndef MORSER24_DEVICE_ID
+  #define MORSER24_DEVICE_ID 0x600DFF2440LL
+#endif
+const uint64_t DEVICE_ID_BASE = MORSER24_DEVICE_ID;
 const PROGMEM int PIN_ID2 = A4; // if wired low, add 0x2 to ID_BASE
 const PROGMEM int PIN_ID1 = A5; // if wired low, add 0x1 to ID_BASE
 
