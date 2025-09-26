@@ -55,7 +55,7 @@ const PROGMEM int PIN_ID1 = A5; // if wired low, add 0x1 to ID_BASE
 #endif
 
 #ifdef _MORSER24_USE_PWM
-  #warning IMPORTANT: Compiled with PWM support (see docs). You can use -DMORSER24_NO_PWM to disable it.
+  #warning Compiled with PWM support
 // analog input for PWM duty cycle. In most cases you would wire this HIGH
 // (it's right next to the +5V pin), or else connect to a POT/voltage divider.
 const PROGMEM int PIN_PWM = A7;
