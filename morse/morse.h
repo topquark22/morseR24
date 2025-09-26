@@ -10,7 +10,6 @@
 #include <RF24_config.h>
 #include <nRF24L01.h>
 #include <RF24.h>
-#include <EEPROM.h>
 
 #include "morse_xmit.h"
 #include "morse_recv.h"
@@ -56,12 +55,12 @@ const PROGMEM int PIN_ID1 = A5; // if wired low, add 0x1 to ID_BASE
 #endif
 
 #ifdef _MORSER24_USE_PWM
-  #warning Compiled with PWM support. You can use -DMORSER24_NO_PWM to disable it.
+  #warning IMPORTANT: Compiled with PWM support (see docs). You can use -DMORSER24_NO_PWM to disable it.
 // analog input for PWM duty cycle. In most cases you would wire this HIGH
 // (it's right next to the +5V pin), or else connect to a POT/voltage divider.
 const PROGMEM int PIN_PWM = A7;
 #else
-  #warning Compiled without PWM support.
+  #warning Compiled without PWM support
 #endif
 
 // These wirings of CE, CSN are used for integrated Nano3/nRF24l01 boards

@@ -6,6 +6,7 @@
  @author topquark22
 */
 
+#include <EEPROM.h>
 #include "morse.h"
 
 uint32_t t_dot;
