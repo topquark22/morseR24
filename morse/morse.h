@@ -22,7 +22,7 @@ const PROGMEM int PIN_BUTTON_ = 6; // code key switch for manual input in test m
 
 const PROGMEM int PIN_OUT = 5;  // output
 const PROGMEM int PIN_OUT_ = 3; // inverted output
-const PROGMEM int PIN_OUT2 = 7; // optional output
+const PROGMEM int PIN_OUT2 = 7; // secondary output
 const PROGMEM int PIN_RED = 2;  // LED, hemorrhoid condition
 
 // radio output power = 2*A0 + A1
