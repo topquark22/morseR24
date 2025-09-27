@@ -32,7 +32,6 @@ const PROGMEM int PIN_PWR1 = A1;
 // radio channel (allow to override at compile time)
 // Which RF channel to communicate on, 0-125
 // default 118 = 88 + 10 + 20
-// Normally you would not need to change this.
 #ifndef MORSER24_RADIO_CHANNEL_BASE
   #define MORSER24_RADIO_CHANNEL_BASE 88
 #endif
