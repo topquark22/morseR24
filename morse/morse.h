@@ -89,12 +89,12 @@ const uint32_t SPI_SPEED = 8000000;
 const int MESSAGE_SIZE = 240;
 
 // determines location of message banks in EEPROM
-const int MSG_BANK_SIZE = 0x100;
+const uint16_t MSG_BANK_SIZE = 0x100;
 
 // EEPROM addresses (add msgBankAddr)
-const int OFFSET_ADDR_SPEED = 0xF0;
-const int OFFSET_ADDR_PAUSE = 0xF4;
-const int OFFSET_ADDR_FOLLOW = 0xF8;
+const uint16_t OFFSET_ADDR_SPEED = 0xF0;
+const uint16_t OFFSET_ADDR_PAUSE = 0xF4;
+const uint16_t OFFSET_ADDR_FOLLOW = 0xF8;
 
 // commBuffer[] is used to store/receive message via radio
 // Format:
@@ -131,7 +131,7 @@ void clearMessage();
 
 void prepareDevice();
 
-void setupRadio();
+void setupRadio(uint64_t deviceID, rf24_pa_dbm_e power);
 
 void printMessage();
 
@@ -139,9 +139,9 @@ void writeMessageToEEPROM();
 
 void readMessageFromEEPROM();
 
-void writeIntToEEPROM(int addr, uint32_t value);
+void writeIntToEEPROM(uint16_t addr, uint32_t value);
 
-uint32_t readIntFromEEPROM(int addr);
+uint32_t readIntFromEEPROM(uint16_t addr);
 
 void writeSpeedToEEPROM();
 

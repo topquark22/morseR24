@@ -20,7 +20,8 @@ extern bool transmitMode;
 
 extern bool followerEnabled;
 
-extern int msgBankAddr;
+extern uint8_t msgBankId;
+extern uint16_t msgBankAddr;
 
 byte message[MESSAGE_SIZE + 1];
 int message_len;
@@ -47,7 +48,9 @@ void showSettings() {
 }
 
 void prepareDevice() {
-  if (NOT_SET == readIntFromEEPROM(msgBankAddr + OFFSET_ADDR_SPEED)) {
+  if (NOT_SET == EEPROM.read(msgBankAddr)) {
+    Serial.print(F("Initializing unused message bank "));
+    Serial.println(msgBankId);
     setSpeed(t_DOT);
     setPause(t_PAUSE);
     setFollow(false);
@@ -67,16 +70,14 @@ void setErrorIndicator(bool status) {
   digitalWrite(PIN_OUT2, status);
 }
 
-void setupRadio() {
+void setupRadio(uint64_t deviceID, rf24_pa_dbm_e power) {
 
-  uint64_t deviceID = DEVICE_ID_BASE
-                + 0x1 * !digitalRead(PIN_ID1)
-                + 0x2 * !digitalRead(PIN_ID2);
-  Serial.print(F("Radio starting as device "));
-  Serial.println((int)deviceID & 0x0f);
+  Serial.print(F("Radio starting as device ID 0x"));
+  Serial.print((uint32_t)(deviceID >> 32), HEX);
+  Serial.println((uint32_t)(deviceID & 0xFFFFFFFF), HEX);
 
  // power 0=RF24_PA_MIN, 1=RF24_PA_LOW, 2=RF24_PA_HIGH, 3=RF24_PA_MAX
-  rf24_pa_dbm_e power = (rf24_pa_dbm_e) (2 * digitalRead(PIN_PWR2) + digitalRead(PIN_PWR1));
+
   Serial.print(F("Power set to ")); Serial.println(power);
 
   int channel = CHANNEL_BASE + 10 * digitalRead(PIN_CH10) + 20 * digitalRead(PIN_CH20);
@@ -146,7 +147,7 @@ void readMessageFromEEPROM() {
   message[message_len] = 0;
 }
 
-void writeIntToEEPROM(int addr, uint32_t value) {
+void writeIntToEEPROM(uint16_t addr, uint32_t value) {
   EEPROM.update(addr, value & 0xFF);
   value >>= 8;
   EEPROM.update(addr + 1, value & 0xFF);
@@ -156,7 +157,7 @@ void writeIntToEEPROM(int addr, uint32_t value) {
   EEPROM.update(addr + 3, value & 0xFF);
 }
 
-uint32_t readIntFromEEPROM(int addr) {
+uint32_t readIntFromEEPROM(uint16_t addr) {
   uint32_t value = EEPROM.read(addr + 3);
   value = (value << 8) | EEPROM.read(addr + 2);
   value = (value << 8) | EEPROM.read(addr + 1);

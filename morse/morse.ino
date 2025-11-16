@@ -14,8 +14,9 @@ bool radioEnabled;
 
 bool followerEnabled = false;
 
+uint8_t msgBankId;
 // offset into EEPROM where message is stored
-int msgBankAddr;
+uint16_t msgBankAddr;
 
 void setup() {
 
@@ -61,15 +62,14 @@ void setup() {
     // device ID jumpers
   pinMode(PIN_ID1, INPUT_PULLUP);
   pinMode(PIN_ID2, INPUT_PULLUP);
-
-  int msgBankId =  2 * !digitalRead(PIN_ID2) + !digitalRead(PIN_ID1);
+  msgBankId =  2 * !digitalRead(PIN_ID2) + !digitalRead(PIN_ID1);
   msgBankAddr = MSG_BANK_SIZE * msgBankId;
 
   prepareDevice();
   
-  Serial.print(F("Device #"));
-  Serial.println(msgBankId);
-  
+  -Serial.print(F("DMessage bank #"));
+-  Serial.println(msgBankId);
+
   readSpeedFromEEPROM();
   readPauseFromEEPROM();
   readFollowFromEEPROM();
@@ -80,7 +80,9 @@ void setup() {
   pinMode(PIN_PWR1, INPUT_PULLUP);
   
   if (radioEnabled) {
-    setupRadio();
+    uint64_t deviceID = DEVICE_ID_BASE + msgBankId;
+  rf24_pa_dbm_e power = (rf24_pa_dbm_e) (2 * digitalRead(PIN_PWR2) + digitalRead(PIN_PWR1));
+    setupRadio(deviceID, power);
   } else {
     Serial.println(F("Radio disabled"));
   }
