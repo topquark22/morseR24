@@ -73,6 +73,8 @@ If using PWM, connect A7 to a voltage divider. Unlike other settings, the pulse 
 
 Connect pin D6 to ground via a normally-open pushbutton switch.
 
+(Recommended:) Also connect D6 to ground via a 100nF (0.1 µF) ceramic capacitor. Together with the Arduino's internal pullup resistor and Schmitt-trigger input feature, this will provide 10ms-resolution debouncing of the switch.
+
 ### Indicator LED
 
 Connect a red LED from pin D2 via a current-limiting resistor to ground. This is used to indicate error and operating conditions (see below).
