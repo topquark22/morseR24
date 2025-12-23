@@ -52,7 +52,7 @@ Here are the descriptions of each pin. All INPUT_PULLUP pins are active-low acco
 
 \[note 1\]  see **channel setting** below
 
-\[note 2\] Integrated Nano + nRF24l01 boards: There are at least two versions of integrated boards out there. The one on which this project was built has CE on pin 10 and CSN on pin 9, so that's how we've designed this project. The other one we've seen has **RF-NANO** printed on the board, and it uses pin 7 for CE and 8 for CSN. Make changes accordingly.
+\[note 2\] There are at least two versions of integrated Nano + nRF24l01 boards out there. The one for which this project was built has CE on pin 10 and CSN on pin 9. The other one we've seen has **RF-NANO** printed on the board, and it uses pin 7 for CE and 8 for CSN. Make changes accordingly.
 
 ### PWM support and pin A7
 
