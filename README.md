@@ -18,11 +18,7 @@ Install the RF24 library from TMRh20,Avamander version 1.4.7 or greater.
 
 Upload **morse/morse.ino**. The sketch will work initially with Arduino factory settings (EEPROM set to all 0xFF). If it is a used Arduino, the safest thing to is, upload **eeprom_reset/eeprom_reset.ino** first to reset the EEPROM. Then reupload **morse/morse.ino**.
 
-## CE and CSN pins
-
-If using an external radio, wire CE to pin 10 and CSN to pin 9. This sketch supports integrated boards, and that's what they use. _Note this is reversed from what it says in most online sources._
-
-## Circuit considerations
+## Wiring
 
 The output pin is D5 and the inverted output is D3.
 
@@ -39,22 +35,28 @@ Here are the descriptions of each pin. All INPUT_PULLUP pins are active-low acco
 | D6  | INPUT_PULLUP | code key switch        |
 | D7  | OUTPUT       | secondary output       |
 | D8  | INPUT_PULLUP | slave (receiver) mode  |
-| D9  | SPI          | CSN to external radio  |
-| D10 | SPI          | CE to external radio   |
+| D9  | SPI          | CSN \[note 2\]         |
+| D10 | SPI          | CE \[note 2\]          |
 | D11 | SPI          | MOSI to external radio |
 | D12 | SPI          | MISO to external radio |
 | D13 | SPI          | SCK to external radio  |
 | 3v3 | power        | to external radio      |
 | A0  | INPUT_PULLUP | radio power, bit 1     |
 | A1  | INPUT PULLUP | radio power, bit 0     |
-| A2  | INPUT_PULLUP | radio channel select*  |
-| A3  | INPUT_PULLUP | radio channel select*  |
+| A2  | INPUT_PULLUP | radio channel select \[note 1\]  |
+| A3  | INPUT_PULLUP | radio channel select \[note 1\]  |
 | A4  | INPUT_PULLUP | device ID, bit 1       |
 | A5  | INPUT_PULLUP | device ID, bit 0       |
 | A6  | unused       |                        |
 | A7  | INPUT        | sets PWM (Nano only)   |
 
-\* see **channel setting** below
+\[note 1\]  see **channel setting** below
+
+\[note 2\] Integrated Nano + nRF24l01 boards:
+
+There are at least two versions of integrated boards out there. The one on which this project was built has CE on pin 10 and CSN on pin 9, so that's how we've designed the wiring for this project/
+
+The other one I've seen has **RF-NANO** printed on the board uses pin 7 for CE, and 8 for CSN. Make changes accordingly.
 
 ### PWM support and pin A7
 
