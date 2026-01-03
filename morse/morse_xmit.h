@@ -1,3 +1,5 @@
+#pragma once
+
 /**
  Send Morse code to GPIO pin.
 
@@ -5,9 +7,6 @@
 
  @author topquark22
 */
-
-#ifndef MORSE_XMIT_H
-#define MORSE_XMIT_H
 
 #include "morse.h"
 
@@ -49,5 +48,3 @@ void appendLineToMessage();
 void processStarCommand();
 
 void loop_XMIT();
-
-#endif

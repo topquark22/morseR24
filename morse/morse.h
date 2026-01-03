@@ -1,9 +1,8 @@
+#pragma once
+
 /**
  * General includes
 */
-
-#ifndef MORSE_H
-#define MORSE_H
 
 #include <Arduino.h>
 #include <string.h>  // needed for memcpy
@@ -190,5 +189,3 @@ void setFollow(bool follow);
 int decodeCommBuffer();
 
 void testRoutine();
-
-#endif
