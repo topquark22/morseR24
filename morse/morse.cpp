@@ -73,8 +73,7 @@ void setErrorIndicator(bool status) {
 void setupRadio(uint64_t deviceID, rf24_pa_dbm_e power) {
 
   Serial.print(F("Radio starting as device ID 0x"));
-  Serial.print((uint32_t)(deviceID >> 32), HEX);
-  Serial.println((uint32_t)(deviceID & 0xFFFFFFFF), HEX);
+  Serial.println((uint32_t) deviceID, HEX);
 
  // power 0=RF24_PA_MIN, 1=RF24_PA_LOW, 2=RF24_PA_HIGH, 3=RF24_PA_MAX
 
