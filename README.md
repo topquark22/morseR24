@@ -33,8 +33,8 @@ Here are the descriptions of each pin. All INPUT_PULLUP pins are active-low acco
 | D4  | INPUT_PULLUP | disable radio          |
 | D5  | OUTPUT       | Morse signal (PWM)     |
 | D6  | INPUT_PULLUP | code key switch        |
-| D7  | OUTPUT       | secondary output       |
-| D8  | INPUT_PULLUP | slave (receiver) mode  |
+| D7  | OUTPUT       | secondary output \[note 2\]      |
+| D8  | INPUT_PULLUP | slave (receiver) mode \[note 2\] |
 | D9  | SPI          | CSN \[note 2\]         |
 | D10 | SPI          | CE \[note 2\]          |
 | D11 | SPI          | MOSI to external radio |
@@ -52,7 +52,8 @@ Here are the descriptions of each pin. All INPUT_PULLUP pins are active-low acco
 
 \[note 1\]  see **channel setting** below
 
-\[note 2\] There are at least two versions of integrated Nano + nRF24l01 boards out there. The one for which this project was built has CE on pin 10 and CSN on pin 9. The other one we've seen has **RF-NANO** printed on the board, and it uses pin 7 for CE and 8 for CSN. Make changes accordingly.
+\[note 2\] There are at least two versions of integrated Nano + nRF24l01 boards out there. The one for which this project was built has CE on pin 10 and CSN on pin 9. The other one we've seen has **RF-NANO** printed on the board, and it uses pin 7 for CE and 8 for CSN. If you have one of these boards, then define `RF_NANO` at compile time.
+
 
 ### PWM support and pin A7
 

@@ -15,14 +15,27 @@
 
 const PROGMEM int PIN_DISABLE_ = 4; // wire to GND if not using radio
 
-const PROGMEM int PIN_XRMODE = 8; // wire to GND for recv (slave) mode; else xmit (master) mode
 
 const PROGMEM int PIN_BUTTON_ = 6; // code key switch for manual input in test mode
 
 const PROGMEM int PIN_OUT = 5;  // output
 const PROGMEM int PIN_OUT_ = 3; // inverted output
-const PROGMEM int PIN_OUT2 = 7; // secondary output
+
 const PROGMEM int PIN_RED = 2;  // LED, hemorrhoid condition
+
+#ifdef MORSER24_RF_NANO
+// boards with RF-NANO printed on them
+const PROGMEM int PIN_CE = 7;
+const PROGMEM int PIN_CSN = 8;
+const PROGMEM int PIN_OUT2 = 9; // secondary output
+const PROGMEM int PIN_XRMODE = 10; // wire to GND for recv (slave) mode; else xmit (master) mode
+#else
+// the recommended integrated boards
+const PROGMEM int PIN_CE = 10;
+const PROGMEM int PIN_CSN = 9;
+const PROGMEM int PIN_OUT2 = 7; // secondary output
+const PROGMEM int PIN_XRMODE = 8; // wire to GND for recv (slave) mode; else xmit (master) mode
+#endif
 
 // radio output power = 2*A0 + A1
 const PROGMEM int PIN_PWR2 = A0;
@@ -60,10 +73,6 @@ const PROGMEM int PIN_PWM = A7;
 #else
   #warning Compiled without PWM support
 #endif
-
-// These wirings of CE, CSN are used for integrated Nano3/nRF24l01 boards
-const PROGMEM int PIN_CE = 10;
-const PROGMEM int PIN_CSN = 9;
 
 // defaults
 const uint32_t t_DOT = 100;
