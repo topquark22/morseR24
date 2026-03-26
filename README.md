@@ -52,7 +52,7 @@ Here are the descriptions of each pin. All INPUT_PULLUP pins are active-low acco
 
 \[note 1\]  see **channel setting** below
 
-\[note 2\] There are at least two versions of integrated Nano + nRF24l01 boards out there. The one for which this project was built has CE on pin 10 and CSN on pin 9. The other one we've seen has **RF-NANO** printed on the board, and it uses pin 7 for CE and 8 for CSN. If you have one of these boards, then define `RF_NANO` at compile time.
+\[note 2\] There are at least two versions of integrated Nano + nRF24l01 boards out there. The one for which this project was built (and that we recommend) has CE on pin 10 and CSN on pin 9. The other one we've seen has **RF-NANO** printed on the board, and it uses pin 7 for CE and 8 for CSN. If you have one of these boards, then define `MORSER24_RF_NANO` at compile time. Then the secondary output becomes pin 9, and the slave/receiver setting is pin 10.
 
 
 ### PWM support and pin A7
